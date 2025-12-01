@@ -6,7 +6,11 @@ interface ComponentSEOProps {
     slug: string;
 }
 
-export function generateComponentMetadata({ name, description, slug }: ComponentSEOProps): Metadata {
+export function generateComponentMetadata({
+    name,
+    description,
+    slug,
+}: ComponentSEOProps): Metadata {
     const title = `${name} - Brutalist UI Component`;
     const fullDescription = `${description} Free Neo-Brutalism styled React ${name} component with TypeScript support.`;
 

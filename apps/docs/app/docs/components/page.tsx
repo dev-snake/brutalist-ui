@@ -4,11 +4,20 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'All Components - Brutalist UI | 22+ Neo-Brutalism React Components',
-    description: 'Browse 22+ Neo-Brutalism React components: Button, Card, Dialog, Toast, Table, Tabs, and more. Accessible, customizable, with bold borders and offset shadows.',
-    keywords: ['brutalist ui components', 'neo-brutalism components', 'react ui components', 'brutalism button', 'brutalism card', 'radix ui components'],
+    description:
+        'Browse 22+ Neo-Brutalism React components: Button, Card, Dialog, Toast, Table, Tabs, and more. Accessible, customizable, with bold borders and offset shadows.',
+    keywords: [
+        'brutalist ui components',
+        'neo-brutalism components',
+        'react ui components',
+        'brutalism button',
+        'brutalism card',
+        'radix ui components',
+    ],
     openGraph: {
         title: 'All Components - Brutalist UI',
-        description: 'Browse 22+ Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
+        description:
+            'Browse 22+ Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
         url: 'https://brutalistui.site/docs/components',
     },
     alternates: {

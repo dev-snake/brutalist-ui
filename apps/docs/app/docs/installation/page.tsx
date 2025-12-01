@@ -3,11 +3,19 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Installation Guide - Brutalist UI | Setup Neo-Brutalism Components',
-    description: 'Install Brutalist UI in your React or Next.js project. Step-by-step guide for npm, pnpm, yarn with Tailwind CSS configuration and TypeScript support.',
-    keywords: ['install brutalist-ui', 'brutalist ui setup', 'neo-brutalism npm', 'react brutalism install', 'tailwind brutalism plugin'],
+    description:
+        'Install Brutalist UI in your React or Next.js project. Step-by-step guide for npm, pnpm, yarn with Tailwind CSS configuration and TypeScript support.',
+    keywords: [
+        'install brutalist-ui',
+        'brutalist ui setup',
+        'neo-brutalism npm',
+        'react brutalism install',
+        'tailwind brutalism plugin',
+    ],
     openGraph: {
         title: 'Installation Guide - Brutalist UI',
-        description: 'Install Brutalist UI in your React or Next.js project with npm, pnpm, or yarn.',
+        description:
+            'Install Brutalist UI in your React or Next.js project with npm, pnpm, or yarn.',
         url: 'https://brutalistui.site/docs/installation',
     },
     alternates: {
