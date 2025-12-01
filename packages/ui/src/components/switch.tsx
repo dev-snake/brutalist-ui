@@ -1,61 +1,37 @@
-import * as React from 'react';
-import { cn } from '../lib/utils';
+"use client";
 
-export interface SwitchProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    onCheckedChange?: (checked: boolean) => void;
-}
+import * as React from "react";
+import * as SwitchPrimitive from "@radix-ui/react-switch";
+import { cn } from "../lib/utils";
 
-const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
-    ({ className, onCheckedChange, checked, defaultChecked, ...props }, ref) => {
-        const [isChecked, setIsChecked] = React.useState(defaultChecked || false);
-        const actualChecked = checked !== undefined ? checked : isChecked;
-
-        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const newChecked = event.target.checked;
-            if (checked === undefined) {
-                setIsChecked(newChecked);
-            }
-            onCheckedChange?.(newChecked);
-        };
-
-        return (
-            <label
-                className={cn(
-                    'relative inline-flex cursor-pointer items-center',
-                    props.disabled && 'cursor-not-allowed opacity-50',
-                    className
-                )}
-            >
-                <input
-                    type="checkbox"
-                    ref={ref}
-                    checked={actualChecked}
-                    onChange={handleChange}
-                    className="sr-only peer"
-                    {...props}
-                />
-                <div
-                    className={cn(
-                        'h-7 w-12 p-0.5',
-                        'border-3 border-black dark:border-white bg-white dark:bg-gray-900',
-                        'transition-colors duration-150',
-                        'peer-checked:bg-[#7FB069]',
-                        'peer-focus:ring-2 peer-focus:ring-black dark:peer-focus:ring-white peer-focus:ring-offset-2'
-                    )}
-                >
-                    <div
-                        className={cn(
-                            'h-full aspect-square',
-                            'bg-black dark:bg-white',
-                            'transition-transform duration-150',
-                            actualChecked ? 'translate-x-5' : 'translate-x-0'
-                        )}
-                    />
-                </div>
-            </label>
-        );
-    }
-);
-Switch.displayName = 'Switch';
+const Switch = React.forwardRef<
+    React.ElementRef<typeof SwitchPrimitive.Root>,
+    React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>
+>(({ className, ...props }, ref) => (
+    <SwitchPrimitive.Root
+        className={cn(
+            "peer inline-flex h-7 w-12 shrink-0 cursor-pointer items-center",
+            "border-3 border-black dark:border-white",
+            "transition-colors duration-150",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2",
+            "disabled:cursor-not-allowed disabled:opacity-50",
+            "data-[state=checked]:bg-[#7FB069] data-[state=unchecked]:bg-white dark:data-[state=unchecked]:bg-gray-900",
+            className
+        )}
+        {...props}
+        ref={ref}
+    >
+        <SwitchPrimitive.Thumb
+            className={cn(
+                "pointer-events-none block h-5 w-5",
+                "bg-black dark:bg-white",
+                "shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)]",
+                "transition-transform duration-150",
+                "data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0.5"
+            )}
+        />
+    </SwitchPrimitive.Root>
+));
+Switch.displayName = SwitchPrimitive.Root.displayName;
 
 export { Switch };

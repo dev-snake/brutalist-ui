@@ -1,68 +1,68 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { Badge } from "../../components/badge";
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { Badge } from '../../components/badge';
 
-describe("Badge", () => {
-    it("renders correctly", () => {
+describe('Badge', () => {
+    it('renders correctly', () => {
         render(<Badge>New</Badge>);
-        expect(screen.getByText("New")).toBeInTheDocument();
+        expect(screen.getByText('New')).toBeInTheDocument();
     });
 
-    it("renders with default variant", () => {
+    it('renders with default variant', () => {
         render(<Badge data-testid="badge">Default</Badge>);
-        const badge = screen.getByTestId("badge");
-        expect(badge).toHaveClass("bg-white");
+        const badge = screen.getByTestId('badge');
+        expect(badge).toHaveClass('bg-white');
     });
 
-    it("renders with primary variant", () => {
+    it('renders with primary variant', () => {
         render(
             <Badge variant="primary" data-testid="badge">
                 Primary
             </Badge>
         );
-        expect(screen.getByTestId("badge")).toHaveClass("bg-[#FF6B6B]");
+        expect(screen.getByTestId('badge')).toHaveClass('bg-[#FF6B6B]');
     });
 
-    it("renders with secondary variant", () => {
+    it('renders with secondary variant', () => {
         render(
             <Badge variant="secondary" data-testid="badge">
                 Secondary
             </Badge>
         );
-        expect(screen.getByTestId("badge")).toHaveClass("bg-[#4ECDC4]");
+        expect(screen.getByTestId('badge')).toHaveClass('bg-[#4ECDC4]');
     });
 
-    it("renders with accent variant", () => {
+    it('renders with accent variant', () => {
         render(
             <Badge variant="accent" data-testid="badge">
                 Accent
             </Badge>
         );
-        expect(screen.getByTestId("badge")).toHaveClass("bg-[#FFE66D]");
+        expect(screen.getByTestId('badge')).toHaveClass('bg-[#FFE66D]');
     });
 
-    it("renders with outline variant", () => {
+    it('renders with outline variant', () => {
         render(
             <Badge variant="outline" data-testid="badge">
                 Outline
             </Badge>
         );
-        expect(screen.getByTestId("badge")).toHaveClass("bg-transparent");
+        expect(screen.getByTestId('badge')).toHaveClass('bg-transparent');
     });
 
-    it("applies custom className", () => {
+    it('applies custom className', () => {
         render(
             <Badge className="custom-badge" data-testid="badge">
                 Custom
             </Badge>
         );
-        expect(screen.getByTestId("badge")).toHaveClass("custom-badge");
+        expect(screen.getByTestId('badge')).toHaveClass('custom-badge');
     });
 
-    it("has neo-brutalism border styles", () => {
+    it('has neo-brutalism border styles', () => {
         render(<Badge data-testid="badge">Styled</Badge>);
-        const badge = screen.getByTestId("badge");
-        expect(badge).toHaveClass("border-2");
-        expect(badge).toHaveClass("border-black");
+        const badge = screen.getByTestId('badge');
+        expect(badge).toHaveClass('border-2');
+        expect(badge).toHaveClass('border-black');
     });
 });
