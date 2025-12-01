@@ -40,30 +40,42 @@ export default function DocsPage() {
             <h2>Why Neo-Brutalism UI?</h2>
 
             <div className="grid gap-4 my-6">
-                <Card variant="flat" padding="default">
+                <Card
+                    variant="flat"
+                    padding="default"
+                    className="dark:bg-gray-900 dark:border-white"
+                >
                     <CardContent>
                         <h3 className="font-black mb-2">🎯 Accessible</h3>
-                        <p className="text-sm">
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
                             Built on Radix UI primitives with full keyboard navigation and screen
                             reader support.
                         </p>
                     </CardContent>
                 </Card>
 
-                <Card variant="flat" padding="default">
+                <Card
+                    variant="flat"
+                    padding="default"
+                    className="dark:bg-gray-900 dark:border-white"
+                >
                     <CardContent>
                         <h3 className="font-black mb-2">🎨 Customizable</h3>
-                        <p className="text-sm">
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
                             Custom Tailwind plugin with nb-* utilities. Easy to extend and match
                             your brand.
                         </p>
                     </CardContent>
                 </Card>
 
-                <Card variant="flat" padding="default">
+                <Card
+                    variant="flat"
+                    padding="default"
+                    className="dark:bg-gray-900 dark:border-white"
+                >
                     <CardContent>
                         <h3 className="font-black mb-2">📦 Modern</h3>
-                        <p className="text-sm">
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
                             TypeScript first, tree-shakeable, and compatible with React 18+ and
                             Next.js 14+.
                         </p>
@@ -72,7 +84,7 @@ export default function DocsPage() {
             </div>
 
             <h2>Quick Example</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
                 {`import { Button, Card } from 'brutalist-ui';
 
 function MyComponent() {

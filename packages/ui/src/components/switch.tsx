@@ -37,16 +37,16 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
                 <div
                     className={cn(
                         'h-7 w-12 p-0.5',
-                        'border-3 border-black bg-white',
+                        'border-3 border-black dark:border-white bg-white dark:bg-gray-900',
                         'transition-colors duration-150',
                         'peer-checked:bg-[#7FB069]',
-                        'peer-focus:ring-2 peer-focus:ring-black peer-focus:ring-offset-2'
+                        'peer-focus:ring-2 peer-focus:ring-black dark:peer-focus:ring-white peer-focus:ring-offset-2'
                     )}
                 >
                     <div
                         className={cn(
                             'h-full aspect-square',
-                            'bg-black',
+                            'bg-black dark:bg-white',
                             'transition-transform duration-150',
                             actualChecked ? 'translate-x-5' : 'translate-x-0'
                         )}

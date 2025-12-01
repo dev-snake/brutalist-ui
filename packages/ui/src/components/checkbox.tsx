@@ -37,11 +37,11 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
                 <div
                     className={cn(
                         'h-6 w-6 flex items-center justify-center',
-                        'border-3 border-black bg-white',
+                        'border-3 border-black dark:border-white bg-white dark:bg-gray-900',
                         'transition-all duration-150',
                         'peer-checked:bg-[#7FB069]',
-                        'peer-focus:ring-2 peer-focus:ring-black peer-focus:ring-offset-2',
-                        'peer-checked:shadow-[2px_2px_0px_0px_#000000]'
+                        'peer-focus:ring-2 peer-focus:ring-black dark:peer-focus:ring-white peer-focus:ring-offset-2',
+                        'peer-checked:shadow-[2px_2px_0px_0px_#000000] dark:peer-checked:shadow-[2px_2px_0px_0px_#FFFFFF]'
                     )}
                 >
                     {actualChecked && (

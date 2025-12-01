@@ -18,7 +18,7 @@ export default function InstallationPage() {
             </ul>
 
             <h2>Install the Package</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
                 {`# Using npm
 npm install brutalist-ui
 
@@ -33,7 +33,7 @@ yarn add brutalist-ui`}
             <p>
                 Add the library to your Tailwind CSS content paths and include the Brutalism plugin:
             </p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto text-sm">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
                 {`// tailwind.config.js
 module.exports = {
   content: [
@@ -60,7 +60,7 @@ module.exports = {
 
             <h2>Import Components</h2>
             <p>Import and use components in your React application:</p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto text-sm">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
                 {`import { Button, Card, Dialog } from 'brutalist-ui';
 
 function App() {
@@ -80,7 +80,7 @@ function App() {
                 Neo-Brutalism UI is written in TypeScript and includes full type definitions. No
                 additional setup is required.
             </p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto text-sm">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
                 {`import { Button, type ButtonProps } from 'brutalist-ui';
 
 // Full type inference for props
@@ -91,7 +91,7 @@ const MyButton = (props: ButtonProps) => {
 
             <h2>Next.js Setup</h2>
             <p>For Next.js projects, add the package to your transpilePackages config:</p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto text-sm">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
                 {`// next.config.js
 module.exports = {
   transpilePackages: ['brutalist-ui'],

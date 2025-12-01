@@ -2,32 +2,39 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../lib/utils';
 
-const cardVariants = cva(['border-3 border-black', 'bg-white', 'transition-all duration-150'], {
-    variants: {
-        variant: {
-            default: 'shadow-[4px_4px_0px_0px_#000000]',
-            elevated: 'shadow-[6px_6px_0px_0px_#000000]',
-            flat: 'shadow-none',
-            interactive: [
-                'shadow-[4px_4px_0px_0px_#000000]',
-                'hover:shadow-[6px_6px_0px_0px_#000000] hover:-translate-x-0.5 hover:-translate-y-0.5',
-                'cursor-pointer',
-            ],
-            primary: 'shadow-[4px_4px_0px_0px_#FF6B6B] border-[#FF6B6B]',
-            secondary: 'shadow-[4px_4px_0px_0px_#4ECDC4] border-[#4ECDC4]',
+const cardVariants = cva(
+    [
+        'border-3 border-black dark:border-white',
+        'bg-white dark:bg-gray-900 dark:text-white',
+        'transition-all duration-150',
+    ],
+    {
+        variants: {
+            variant: {
+                default: 'shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#FFFFFF]',
+                elevated: 'shadow-[6px_6px_0px_0px_#000000] dark:shadow-[6px_6px_0px_0px_#FFFFFF]',
+                flat: 'shadow-none',
+                interactive: [
+                    'shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#FFFFFF]',
+                    'hover:shadow-[6px_6px_0px_0px_#000000] dark:hover:shadow-[6px_6px_0px_0px_#FFFFFF] hover:-translate-x-0.5 hover:-translate-y-0.5',
+                    'cursor-pointer',
+                ],
+                primary: 'shadow-[4px_4px_0px_0px_#FF6B6B] border-[#FF6B6B]',
+                secondary: 'shadow-[4px_4px_0px_0px_#4ECDC4] border-[#4ECDC4]',
+            },
+            padding: {
+                none: 'p-0',
+                sm: 'p-3',
+                default: 'p-5',
+                lg: 'p-8',
+            },
         },
-        padding: {
-            none: 'p-0',
-            sm: 'p-3',
-            default: 'p-5',
-            lg: 'p-8',
+        defaultVariants: {
+            variant: 'default',
+            padding: 'default',
         },
-    },
-    defaultVariants: {
-        variant: 'default',
-        padding: 'default',
-    },
-});
+    }
+);
 
 export interface CardProps
     extends React.HTMLAttributes<HTMLDivElement>,
@@ -62,7 +69,11 @@ const CardDescription = React.forwardRef<
     HTMLParagraphElement,
     React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-    <p ref={ref} className={cn('text-sm text-gray-600 font-medium', className)} {...props} />
+    <p
+        ref={ref}
+        className={cn('text-sm text-gray-600 dark:text-gray-400 font-medium', className)}
+        {...props}
+    />
 ));
 CardDescription.displayName = 'CardDescription';
 
@@ -75,7 +86,10 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     ({ className, ...props }, ref) => (
         <div
             ref={ref}
-            className={cn('flex items-center pt-4 border-t-3 border-black', className)}
+            className={cn(
+                'flex items-center pt-4 border-t-3 border-black dark:border-white',
+                className
+            )}
             {...props}
         />
     )

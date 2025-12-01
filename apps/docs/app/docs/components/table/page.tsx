@@ -1,14 +1,6 @@
 'use client';
 
-import {
-    Table,
-    TableHeader,
-    TableBody,
-    TableHead,
-    TableRow,
-    TableCell,
-    Badge,
-} from 'brutalist-ui';
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell, Badge } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
 
 const invoices = [
@@ -66,7 +58,7 @@ export default function TablePage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
                 {`import {
   Table,
   TableHeader,
@@ -78,7 +70,7 @@ export default function TablePage() {
             </pre>
 
             <h2>Usage</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto text-sm">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
                 {`<Table>
   <TableHeader>
     <TableRow>

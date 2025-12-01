@@ -10,10 +10,10 @@ const labelVariants = cva(
     {
         variants: {
             variant: {
-                default: 'text-black',
+                default: 'text-black dark:text-white',
                 error: 'text-[#EF476F]',
                 success: 'text-[#7FB069]',
-                muted: 'text-gray-500',
+                muted: 'text-gray-500 dark:text-gray-400',
             },
         },
         defaultVariants: {

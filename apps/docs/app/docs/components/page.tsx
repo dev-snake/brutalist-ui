@@ -59,7 +59,7 @@ export default function ComponentsPage() {
                                 <CardTitle className="text-lg">{component.name}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-sm text-gray-600 font-medium">
+                                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                                     {component.description}
                                 </p>
                             </CardContent>

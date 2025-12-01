@@ -29,7 +29,7 @@ export default function BadgePage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
                 {`import { Badge } from "brutalist-ui";`}
             </pre>
 
@@ -43,7 +43,7 @@ export default function BadgePage() {
             </ComponentPreview>
 
             <h2>Usage</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black shadow-brutal overflow-x-auto">
+            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
                 {`<Badge variant="primary" size="default">
   Badge Text
 </Badge>`}

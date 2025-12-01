@@ -15,11 +15,11 @@ const SelectTrigger = React.forwardRef<
         ref={ref}
         className={cn(
             'flex h-11 w-full items-center justify-between px-4 py-2',
-            'bg-white border-3 border-black',
+            'bg-white dark:bg-gray-900 border-3 border-black dark:border-white dark:text-white',
             'font-bold placeholder:text-gray-400',
-            'shadow-[4px_4px_0px_0px_#000000]',
+            'shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#FFFFFF]',
             'transition-all duration-150',
-            'focus:outline-none focus:shadow-[6px_6px_0px_0px_#000000] focus:-translate-x-0.5 focus:-translate-y-0.5',
+            'focus:outline-none focus:shadow-[6px_6px_0px_0px_#000000] dark:focus:shadow-[6px_6px_0px_0px_#FFFFFF] focus:-translate-x-0.5 focus:-translate-y-0.5',
             'disabled:cursor-not-allowed disabled:opacity-50',
             '[&>span]:line-clamp-1',
             className
@@ -40,7 +40,10 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SelectPrimitive.ScrollUpButton
         ref={ref}
-        className={cn('flex cursor-default items-center justify-center py-1 bg-white', className)}
+        className={cn(
+            'flex cursor-default items-center justify-center py-1 bg-white dark:bg-gray-900',
+            className
+        )}
         {...props}
     >
         <ChevronUp className="h-4 w-4 stroke-[3]" />
@@ -54,7 +57,10 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SelectPrimitive.ScrollDownButton
         ref={ref}
-        className={cn('flex cursor-default items-center justify-center py-1 bg-white', className)}
+        className={cn(
+            'flex cursor-default items-center justify-center py-1 bg-white dark:bg-gray-900',
+            className
+        )}
         {...props}
     >
         <ChevronDown className="h-4 w-4 stroke-[3]" />
@@ -71,7 +77,7 @@ const SelectContent = React.forwardRef<
             ref={ref}
             className={cn(
                 'relative z-50 max-h-96 min-w-[8rem] overflow-hidden',
-                'bg-white border-3 border-black shadow-[4px_4px_0px_0px_#000000]',
+                'bg-white dark:bg-gray-900 border-3 border-black dark:border-white shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#FFFFFF] dark:text-white',
                 'data-[state=open]:animate-in data-[state=closed]:animate-out',
                 'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
                 'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
@@ -125,6 +131,7 @@ const SelectItem = React.forwardRef<
             'font-bold outline-none',
             'focus:bg-[#FFE66D] focus:text-black',
             'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+            'dark:hover:bg-gray-800',
             className
         )}
         {...props}
@@ -145,7 +152,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SelectPrimitive.Separator
         ref={ref}
-        className={cn('-mx-1 my-1 h-[3px] bg-black', className)}
+        className={cn('-mx-1 my-1 h-[3px] bg-black dark:bg-white', className)}
         {...props}
     />
 ));

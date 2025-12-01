@@ -20,8 +20,8 @@ const DropdownMenuSubTrigger = React.forwardRef<
         ref={ref}
         className={cn(
             'flex cursor-pointer select-none items-center px-3 py-2',
-            'font-bold outline-none',
-            'focus:bg-[#FFE66D] data-[state=open]:bg-[#FFE66D]',
+            'font-bold outline-none dark:text-white',
+            'focus:bg-[#FFE66D] focus:text-black data-[state=open]:bg-[#FFE66D] data-[state=open]:text-black',
             inset && 'pl-8',
             className
         )}
@@ -41,7 +41,7 @@ const DropdownMenuSubContent = React.forwardRef<
         ref={ref}
         className={cn(
             'z-50 min-w-[8rem] overflow-hidden p-1',
-            'bg-white border-3 border-black shadow-[4px_4px_0px_0px_#000000]',
+            'bg-white dark:bg-gray-900 border-3 border-black dark:border-white shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#FFFFFF] dark:text-white',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
@@ -66,7 +66,7 @@ const DropdownMenuContent = React.forwardRef<
             sideOffset={sideOffset}
             className={cn(
                 'z-50 min-w-[8rem] overflow-hidden p-1',
-                'bg-white border-3 border-black shadow-[4px_4px_0px_0px_#000000]',
+                'bg-white dark:bg-gray-900 border-3 border-black dark:border-white shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#FFFFFF] dark:text-white',
                 'data-[state=open]:animate-in data-[state=closed]:animate-out',
                 'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
                 'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
@@ -95,6 +95,7 @@ const DropdownMenuItem = React.forwardRef<
             'font-bold outline-none transition-colors',
             'focus:bg-[#FFE66D] focus:text-black',
             'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+            'dark:hover:bg-gray-800',
             inset && 'pl-8',
             className
         )}
@@ -174,7 +175,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DropdownMenuPrimitive.Separator
         ref={ref}
-        className={cn('-mx-1 my-1 h-[3px] bg-black', className)}
+        className={cn('-mx-1 my-1 h-[3px] bg-black dark:bg-white', className)}
         {...props}
     />
 ));
