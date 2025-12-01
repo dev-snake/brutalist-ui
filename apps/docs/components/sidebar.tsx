@@ -28,6 +28,10 @@ const navigation = [
             { name: 'Badge', href: '/docs/components/badge' },
             { name: 'Switch', href: '/docs/components/switch' },
             { name: 'Checkbox', href: '/docs/components/checkbox' },
+            { name: 'Pagination', href: '/docs/components/pagination' },
+            { name: 'Spinner', href: '/docs/components/spinner' },
+            { name: 'Toast', href: '/docs/components/toast' },
+            { name: 'Skeleton', href: '/docs/components/skeleton' },
         ],
     },
 ];

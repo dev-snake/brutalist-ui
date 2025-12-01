@@ -36,6 +36,22 @@ const components = [
     { name: 'Badge', href: '/docs/components/badge', description: 'Status indicators and labels' },
     { name: 'Switch', href: '/docs/components/switch', description: 'Toggle switch control' },
     { name: 'Checkbox', href: '/docs/components/checkbox', description: 'Checkbox input control' },
+    {
+        name: 'Pagination',
+        href: '/docs/components/pagination',
+        description: 'Page navigation component',
+    },
+    {
+        name: 'Spinner',
+        href: '/docs/components/spinner',
+        description: 'Loading spinner indicators',
+    },
+    { name: 'Toast', href: '/docs/components/toast', description: 'Toast notification messages' },
+    {
+        name: 'Skeleton',
+        href: '/docs/components/skeleton',
+        description: 'Loading placeholder skeletons',
+    },
 ];
 
 export default function ComponentsPage() {
