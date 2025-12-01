@@ -21,6 +21,7 @@ export * from './components/pagination';
 export * from './components/spinner';
 export * from './components/toast';
 export * from './components/skeleton';
+export * from './components/calendar';
 
 // Utilities
 export * from './lib/utils';

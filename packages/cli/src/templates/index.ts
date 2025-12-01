@@ -4,6 +4,7 @@ import { inputTemplate } from './input.js';
 import { badgeTemplate } from './badge.js';
 import { alertTemplate } from './alert.js';
 import { avatarTemplate } from './avatar.js';
+import { calendarTemplate } from './calendar.js';
 import { checkboxTemplate } from './checkbox.js';
 import { dialogTemplate } from './dialog.js';
 import { dropdownMenuTemplate } from './dropdown-menu.js';
@@ -28,6 +29,7 @@ const templates: Record<string, (utilsAlias: string) => string> = {
     badge: badgeTemplate,
     alert: alertTemplate,
     avatar: avatarTemplate,
+    calendar: calendarTemplate,
     checkbox: checkboxTemplate,
     dialog: dialogTemplate,
     'dropdown-menu': dropdownMenuTemplate,
