@@ -14,16 +14,16 @@ export default function SponsorPage() {
                         Support Brutalist UI
                     </h1>
                     <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                        Help us keep this project alive and growing. Your support enables us to add new components, 
-                        fix bugs, and maintain documentation.
+                        Help us keep this project alive and growing. Your support enables us to add
+                        new components, fix bugs, and maintain documentation.
                     </p>
                 </div>
 
                 {/* Sponsor Options */}
                 <div className="grid md:grid-cols-2 gap-6 mb-16">
                     {/* GitHub Sponsors */}
-                    <a 
-                        href="https://github.com/sponsors/dev-snake" 
+                    <a
+                        href="https://github.com/sponsors/dev-snake"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group block p-8 bg-white dark:bg-gray-800 border-3 border-black dark:border-white hover:shadow-[8px_8px_0px_0px_#000] dark:hover:shadow-[8px_8px_0px_0px_#fff] transition-all duration-200 hover:-translate-y-1"
@@ -35,7 +35,8 @@ export default function SponsorPage() {
                             <h2 className="text-2xl font-black dark:text-white">GitHub Sponsors</h2>
                         </div>
                         <p className="text-gray-600 dark:text-gray-300 mb-4">
-                            The best way to support open source. Get exclusive updates and recognition.
+                            The best way to support open source. Get exclusive updates and
+                            recognition.
                         </p>
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EA4AAA] text-white font-bold border-2 border-black group-hover:shadow-[4px_4px_0px_0px_#000] transition-all">
                             <Heart className="w-4 h-4" />
@@ -44,8 +45,8 @@ export default function SponsorPage() {
                     </a>
 
                     {/* Buy Me A Coffee */}
-                    <a 
-                        href="https://buymeacoffee.com/devsnake" 
+                    <a
+                        href="https://buymeacoffee.com/devsnake"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group block p-8 bg-white dark:bg-gray-800 border-3 border-black dark:border-white hover:shadow-[8px_8px_0px_0px_#000] dark:hover:shadow-[8px_8px_0px_0px_#fff] transition-all duration-200 hover:-translate-y-1"
@@ -76,7 +77,9 @@ export default function SponsorPage() {
                             </div>
                             <div>
                                 <h3 className="font-bold text-black">Active Development</h3>
-                                <p className="text-sm text-gray-800">New components and features regularly</p>
+                                <p className="text-sm text-gray-800">
+                                    New components and features regularly
+                                </p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">
@@ -85,7 +88,9 @@ export default function SponsorPage() {
                             </div>
                             <div>
                                 <h3 className="font-bold text-black">Priority Support</h3>
-                                <p className="text-sm text-gray-800">Get help faster with your issues</p>
+                                <p className="text-sm text-gray-800">
+                                    Get help faster with your issues
+                                </p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">
@@ -94,7 +99,9 @@ export default function SponsorPage() {
                             </div>
                             <div>
                                 <h3 className="font-bold text-black">Exclusive Access</h3>
-                                <p className="text-sm text-gray-800">Early access to Pro components</p>
+                                <p className="text-sm text-gray-800">
+                                    Early access to Pro components
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -102,9 +109,11 @@ export default function SponsorPage() {
 
                 {/* Other Ways */}
                 <div className="text-center">
-                    <h2 className="text-2xl font-black mb-6 dark:text-white">Other Ways to Support</h2>
+                    <h2 className="text-2xl font-black mb-6 dark:text-white">
+                        Other Ways to Support
+                    </h2>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <a 
+                        <a
                             href="https://github.com/dev-snake/brutalist-ui"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -113,7 +122,7 @@ export default function SponsorPage() {
                             <Star className="w-5 h-5" />
                             Star on GitHub
                         </a>
-                        <a 
+                        <a
                             href="https://twitter.com/intent/tweet?text=Check%20out%20Brutalist%20UI%20-%20A%20Neo-Brutalism%20styled%20React%20component%20library!%20https://github.com/dev-snake/brutalist-ui"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -129,7 +138,7 @@ export default function SponsorPage() {
 
                 {/* Back to Docs */}
                 <div className="mt-16 text-center">
-                    <Link 
+                    <Link
                         href="/docs/components"
                         className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white font-medium"
                     >

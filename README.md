@@ -174,6 +174,8 @@ The brutalism plugin adds these utilities:
 ```css
 .nb-border    /* 3px solid black border */
 /* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
 .nb-shadow    /* 4px offset shadow */
 .nb-shadow-sm /* 2px offset shadow */
 .nb-shadow-lg /* 6px offset shadow */
@@ -247,27 +249,27 @@ MIT © [dev-snake](https://github.com/dev-snake)
 
 We're constantly improving Brutalist UI. Here's what's coming:
 
-- [x] ~~Core components (22+ components)~~
-- [x] ~~Dark mode support~~
-- [x] ~~TypeScript support~~
-- [x] ~~Tailwind CSS plugin~~
-- [ ] **More components**: DatePicker, DataTable, Drawer, Command Palette
-- [ ] **Animations**: Framer Motion integration
-- [ ] **Themes**: Multiple brutalist color themes
-- [ ] **Templates**: Dashboard, Landing page, Admin panel
-- [ ] **Figma Kit**: Design files for designers
+-   [x] ~~Core components (22+ components)~~
+-   [x] ~~Dark mode support~~
+-   [x] ~~TypeScript support~~
+-   [x] ~~Tailwind CSS plugin~~
+-   [ ] **More components**: DatePicker, DataTable, Drawer, Command Palette
+-   [ ] **Animations**: Framer Motion integration
+-   [ ] **Themes**: Multiple brutalist color themes
+-   [ ] **Templates**: Dashboard, Landing page, Admin panel
+-   [ ] **Figma Kit**: Design files for designers
 
 ### 💎 Pro Components (Coming Soon)
 
 Premium components for serious projects:
 
-| Component | Description | Status |
-|-----------|-------------|--------|
-| DataTable Pro | Advanced data table with sorting, filtering, pagination | 🔜 Soon |
-| DatePicker | Date & time picker with range selection | 🔜 Soon |
-| Drawer | Slide-out panel component | 🔜 Soon |
-| Command Palette | Spotlight-style command menu | 🔜 Soon |
-| Dashboard Kit | Complete admin dashboard template | 🔜 Soon |
+| Component       | Description                                             | Status  |
+| --------------- | ------------------------------------------------------- | ------- |
+| DataTable Pro   | Advanced data table with sorting, filtering, pagination | 🔜 Soon |
+| DatePicker      | Date & time picker with range selection                 | 🔜 Soon |
+| Drawer          | Slide-out panel component                               | 🔜 Soon |
+| Command Palette | Spotlight-style command menu                            | 🔜 Soon |
+| Dashboard Kit   | Complete admin dashboard template                       | 🔜 Soon |
 
 ---
 

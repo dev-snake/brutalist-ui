@@ -145,11 +145,7 @@ export default function Home() {
                             </Button>
                         </a>
                         <Link href="/sponsor" className="w-full sm:w-auto">
-                            <Button
-                                variant="danger"
-                                size="lg"
-                                className="w-full sm:w-auto"
-                            >
+                            <Button variant="danger" size="lg" className="w-full sm:w-auto">
                                 ❤️ Sponsor
                             </Button>
                         </Link>
