@@ -16,7 +16,7 @@
 [![Sponsor](https://img.shields.io/badge/❤️_Sponsor-FF6B6B?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/dev-snake)
 [![Buy Me A Coffee](https://img.shields.io/badge/☕_Buy_Me_A_Coffee-FFE66D?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/devsnake)
 
-[Documentation](https://brutalist-ui.vercel.app) · [NPM Package](https://www.npmjs.com/package/brutalist-ui) · [Report Bug](https://github.com/dev-snake/brutalist-ui/issues)
+[Documentation](https://brutalistui.site) · [NPM Package](https://www.npmjs.com/package/brutalist-ui) · [Report Bug](https://github.com/dev-snake/brutalist-ui/issues)
 
 </div>
 
@@ -290,6 +290,6 @@ Support the development of Brutalist UI and get your name/logo here!
   <p>
     <a href="https://www.npmjs.com/package/brutalist-ui">NPM</a> •
     <a href="https://github.com/dev-snake/brutalist-ui">GitHub</a> •
-    <a href="https://brutalist-ui.vercel.app">Docs</a>
+    <a href="https://brutalistui.site">Docs</a>
   </p>
 </div>

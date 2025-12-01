@@ -200,4 +200,4 @@ MIT © [dev-snake](https://github.com/dev-snake)
 
 -   [NPM Package](https://www.npmjs.com/package/brutalist-ui)
 -   [GitHub Repository](https://github.com/dev-snake/brutalist-ui)
--   [Documentation](https://brutalist-ui.vercel.app)
+- [Documentation](https://brutalistui.site)
