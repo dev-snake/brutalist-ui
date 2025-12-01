@@ -28,7 +28,7 @@ export default function CalendarPage() {
             {/* Installation */}
             <section className="space-y-4">
                 <h2 className="text-2xl font-black">Installation</h2>
-                <InstallationTabs componentName="calendar" dependencies={["react-day-picker"]} />
+                <InstallationTabs componentName="calendar" dependencies={['react-day-picker']} />
             </section>
 
             {/* Basic Calendar */}
