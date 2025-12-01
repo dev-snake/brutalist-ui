@@ -14,6 +14,7 @@ import {
     Badge,
 } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
+import { InstallationTabs } from '@/components/installation-tabs';
 import { User, Settings, LogOut, CreditCard } from 'lucide-react';
 import * as React from 'react';
 
@@ -64,16 +65,7 @@ export default function DropdownMenuPage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from "brutalist-ui";`}
-            </pre>
+            <InstallationTabs componentName="dropdown-menu" />
 
             <h2>With Checkboxes</h2>
             <ComponentPreview>

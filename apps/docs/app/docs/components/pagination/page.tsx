@@ -2,6 +2,7 @@
 
 import { Pagination, Badge } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
+import { InstallationTabs } from '@/components/installation-tabs';
 import * as React from 'react';
 
 export default function PaginationPage() {
@@ -28,9 +29,7 @@ export default function PaginationPage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import { Pagination } from "brutalist-ui";`}
-            </pre>
+            <InstallationTabs componentName="pagination" />
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">

@@ -11,6 +11,7 @@ import {
     Badge,
 } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
+import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function CardPage() {
     return (
@@ -47,16 +48,7 @@ export default function CardPage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "brutalist-ui";`}
-            </pre>
+            <InstallationTabs componentName="card" />
 
             <h2>Variants</h2>
             <div className="grid gap-4 my-4">

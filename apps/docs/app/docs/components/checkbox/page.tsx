@@ -2,6 +2,7 @@
 
 import { Checkbox, Label, Badge } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
+import { InstallationTabs } from '@/components/installation-tabs';
 import * as React from 'react';
 
 export default function CheckboxPage() {
@@ -19,15 +20,17 @@ export default function CheckboxPage() {
             <h2>Preview</h2>
             <ComponentPreview>
                 <div className="flex items-center gap-3">
-                    <Checkbox id="terms" checked={checked} onCheckedChange={setChecked} />
+                    <Checkbox
+                        id="terms"
+                        checked={checked}
+                        onCheckedChange={(value) => setChecked(value === true)}
+                    />
                     <Label htmlFor="terms">Accept terms and conditions</Label>
                 </div>
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import { Checkbox, Label } from "brutalist-ui";`}
-            </pre>
+            <InstallationTabs componentName="checkbox" />
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">

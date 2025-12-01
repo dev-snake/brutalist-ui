@@ -1,5 +1,6 @@
 import { Button, Card, CardContent, Badge } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
+import { InstallationTabs } from '@/components/installation-tabs';
 import { Mail, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function ButtonPage() {
@@ -28,9 +29,7 @@ export default function ButtonPage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import { Button } from "brutalist-ui";`}
-            </pre>
+            <InstallationTabs componentName="button" />
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">

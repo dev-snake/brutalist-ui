@@ -1,6 +1,7 @@
 'use client';
 
 import { Separator } from 'brutalist-ui';
+import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function SeparatorPage() {
     return (
@@ -11,6 +12,12 @@ export default function SeparatorPage() {
                     A visual divider to separate content sections.
                 </p>
             </div>
+
+            {/* Installation */}
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold">Installation</h2>
+                <InstallationTabs componentName="separator" />
+            </section>
 
             {/* Basic Example */}
             <section className="space-y-4">

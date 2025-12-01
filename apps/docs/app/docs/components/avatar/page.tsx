@@ -1,6 +1,7 @@
 'use client';
 
 import { Avatar, AvatarImage, AvatarFallback } from 'brutalist-ui';
+import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function AvatarPage() {
     return (
@@ -11,6 +12,12 @@ export default function AvatarPage() {
                     An image element with a fallback for representing the user.
                 </p>
             </div>
+
+            {/* Installation */}
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold">Installation</h2>
+                <InstallationTabs componentName="avatar" />
+            </section>
 
             {/* Basic Example */}
             <section className="space-y-4">

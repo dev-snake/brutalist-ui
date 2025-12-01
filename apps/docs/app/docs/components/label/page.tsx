@@ -1,6 +1,7 @@
 'use client';
 
 import { Label, Input, Checkbox } from 'brutalist-ui';
+import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function LabelPage() {
     return (
@@ -11,6 +12,12 @@ export default function LabelPage() {
                     A label component for form inputs with accessible styling.
                 </p>
             </div>
+
+            {/* Installation */}
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold">Installation</h2>
+                <InstallationTabs componentName="label" />
+            </section>
 
             {/* Basic Example */}
             <section className="space-y-4">

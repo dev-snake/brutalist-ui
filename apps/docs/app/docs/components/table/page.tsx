@@ -2,6 +2,7 @@
 
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell, Badge } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
+import { InstallationTabs } from '@/components/installation-tabs';
 
 const invoices = [
     { invoice: 'INV001', status: 'Paid', method: 'Credit Card', amount: '$250.00' },
@@ -58,16 +59,7 @@ export default function TablePage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "brutalist-ui";`}
-            </pre>
+            <InstallationTabs componentName="table" />
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">

@@ -12,6 +12,7 @@ import {
     Label,
 } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
+import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function SelectPage() {
     return (
@@ -49,15 +50,7 @@ export default function SelectPage() {
             </ComponentPreview>
 
             <h2>Installation</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "brutalist-ui";`}
-            </pre>
+            <InstallationTabs componentName="select" />
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
