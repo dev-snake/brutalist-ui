@@ -61,7 +61,14 @@ export default function AlertPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`<Alert variant="success">
+                {`import {
+  Alert,
+  AlertTitle,
+  AlertDescription,
+} from "@/components/ui/alert"
+import { CheckCircle } from "lucide-react"
+
+<Alert variant="success">
   <CheckCircle className="h-5 w-5" />
   <AlertTitle>Success!</AlertTitle>
   <AlertDescription>

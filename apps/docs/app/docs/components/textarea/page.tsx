@@ -26,7 +26,9 @@ export default function TextareaPage() {
                     <Textarea placeholder="Enter your message..." />
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
-                    <code>{`<Textarea placeholder="Enter your message..." />`}</code>
+                    <code>{`import { Textarea } from "@/components/ui/textarea"
+
+<Textarea placeholder="Enter your message..." />`}</code>
                 </pre>
             </section>
 

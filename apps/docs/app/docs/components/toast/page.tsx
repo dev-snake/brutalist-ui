@@ -114,7 +114,9 @@ export default function ToastPage() {
 
             <h2>Usage with Hook</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`const { toasts, addToast, removeToast } = useToast();
+                {`import { Toast, ToastContainer, useToast } from "@/components/ui/toast"
+
+const { toasts, addToast, removeToast } = useToast();
 
 // Add a toast
 addToast({

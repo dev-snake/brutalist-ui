@@ -29,7 +29,10 @@ export default function LabelPage() {
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
-                    <code>{`<Label htmlFor="email">Email</Label>
+                    <code>{`import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+
+<Label htmlFor="email">Email</Label>
 <Input id="email" type="email" placeholder="Enter your email" />`}</code>
                 </pre>
             </section>

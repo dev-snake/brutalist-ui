@@ -42,7 +42,13 @@ export default function AvatarPage() {
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
-                    <code>{`<Avatar>
+                    <code>{`import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/components/ui/avatar"
+
+<Avatar>
   <AvatarImage src="https://i.pravatar.cc/150?img=32" alt="User" />
   <AvatarFallback>JD</AvatarFallback>
 </Avatar>`}</code>

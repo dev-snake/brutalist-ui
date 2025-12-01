@@ -33,7 +33,9 @@ export default function ButtonPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`<Button variant="primary">Click me</Button>`}
+                {`import { Button } from "@/components/ui/button"
+
+<Button variant="primary">Click me</Button>`}
             </pre>
 
             <h2>Variants</h2>

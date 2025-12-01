@@ -56,7 +56,18 @@ export default function DialogPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`<Dialog>
+                {`import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+
+<Dialog>
   <DialogTrigger asChild>
     <Button>Open Dialog</Button>
   </DialogTrigger>

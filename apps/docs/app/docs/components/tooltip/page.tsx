@@ -41,7 +41,15 @@ export default function TooltipPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`<TooltipProvider>
+                {`import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip"
+import { Button } from "@/components/ui/button"
+
+<TooltipProvider>
   <Tooltip>
     <TooltipTrigger asChild>
       <Button>Hover</Button>

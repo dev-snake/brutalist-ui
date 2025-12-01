@@ -33,7 +33,9 @@ export default function PaginationPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`const [currentPage, setCurrentPage] = React.useState(1);
+                {`import { Pagination } from "@/components/ui/pagination"
+
+const [currentPage, setCurrentPage] = React.useState(1);
 
 <Pagination
   currentPage={currentPage}

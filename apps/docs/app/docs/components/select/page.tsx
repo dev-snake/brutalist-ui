@@ -54,7 +54,15 @@ export default function SelectPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`<Select>
+                {`import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
+
+<Select>
   <SelectTrigger>
     <SelectValue placeholder="Select option" />
   </SelectTrigger>

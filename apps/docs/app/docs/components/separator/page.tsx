@@ -30,7 +30,9 @@ export default function SeparatorPage() {
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
-                    <code>{`<p>Content above separator</p>
+                    <code>{`import { Separator } from "@/components/ui/separator"
+
+<p>Content above separator</p>
 <Separator />
 <p>Content below separator</p>`}</code>
                 </pre>

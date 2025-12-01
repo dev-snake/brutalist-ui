@@ -63,7 +63,16 @@ export default function TablePage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`<Table>
+                {`import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table"
+
+<Table>
   <TableHeader>
     <TableRow>
       <TableHead>Name</TableHead>

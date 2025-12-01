@@ -29,7 +29,10 @@ export default function InputPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`<div>
+                {`import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+<div>
   <Label htmlFor="email">Email</Label>
   <Input id="email" type="email" placeholder="you@example.com" />
 </div>`}

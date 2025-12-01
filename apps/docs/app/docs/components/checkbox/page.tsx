@@ -34,7 +34,10 @@ export default function CheckboxPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`const [checked, setChecked] = React.useState(false);
+                {`import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+
+const [checked, setChecked] = React.useState(false);
 
 <div className="flex items-center gap-3">
   <Checkbox

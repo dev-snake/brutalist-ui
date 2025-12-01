@@ -46,7 +46,14 @@ export default function PopoverPage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`<Popover>
+                {`import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover"
+import { Button } from "@/components/ui/button"
+
+<Popover>
   <PopoverTrigger asChild>
     <Button>Open</Button>
   </PopoverTrigger>

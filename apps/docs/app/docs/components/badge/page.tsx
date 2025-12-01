@@ -43,7 +43,9 @@ export default function BadgePage() {
 
             <h2>Usage</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`<Badge variant="primary" size="default">
+                {`import { Badge } from "@/components/ui/badge"
+
+<Badge variant="primary" size="default">
   Badge Text
 </Badge>`}
             </pre>
