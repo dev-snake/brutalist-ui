@@ -69,6 +69,33 @@
     .dark .shadow-brutal-xl {
         box-shadow: 8px 8px 0px 0px #FFFFFF;
     }
+
+    /* 3D Concrete Text Effect */
+    .text-3d-concrete {
+        position: relative;
+        display: inline-block;
+    }
+
+    .text-3d-concrete::before,
+    .text-3d-concrete::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        -webkit-text-stroke: 3px #1a1a1a;
+    }
+
+    .text-3d-concrete::before {
+        transform: translate(6px, 6px);
+        color: #4a4a4a;
+        z-index: -2;
+    }
+
+    .text-3d-concrete::after {
+        transform: translate(3px, 3px);
+        color: #6a6a6a;
+        z-index: -1;
+    }
 }
 
 /* MDX Content Styles */

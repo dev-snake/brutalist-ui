@@ -16,10 +16,101 @@ export default function Home() {
                     <Badge variant="primary" size="lg" className="mb-4 sm:mb-6">
                         v0.1.1
                     </Badge>
-                    <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-4 sm:mb-6">
-                        Brutalist
-                        <span className="block text-[#FF6B6B]">UI</span>
-                    </h1>
+
+                    {/* 3D Brutalist Logo Text */}
+                    <div className="relative mb-6 sm:mb-8">
+                        {/* BRUTALIST text */}
+                        <div className="relative inline-block">
+                            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter select-none">
+                                {/* Deep shadow - darkest */}
+                                <span
+                                    className="absolute text-black"
+                                    style={{
+                                        transform: 'translate(8px, 8px)',
+                                    }}
+                                    aria-hidden="true"
+                                >
+                                    Brutalist
+                                </span>
+                                {/* Mid shadow - coral red */}
+                                <span
+                                    className="absolute text-[#FF6B6B]"
+                                    style={{
+                                        transform: 'translate(5px, 5px)',
+                                    }}
+                                    aria-hidden="true"
+                                >
+                                    Brutalist
+                                </span>
+                                {/* Light shadow - teal */}
+                                <span
+                                    className="absolute text-[#4ECDC4]"
+                                    style={{
+                                        transform: 'translate(2px, 2px)',
+                                    }}
+                                    aria-hidden="true"
+                                >
+                                    Brutalist
+                                </span>
+                                {/* Main text - yellow */}
+                                <span
+                                    className="relative text-[#FFE66D]"
+                                    style={{
+                                        WebkitTextStroke: '2px #000',
+                                        paintOrder: 'stroke fill',
+                                    }}
+                                >
+                                    Brutalist
+                                </span>
+                            </h1>
+                        </div>
+
+                        {/* UI text */}
+                        <div className="relative -mt-2 sm:-mt-6 md:-mt-8 inline-block">
+                            <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] font-black tracking-tighter select-none">
+                                {/* Deep shadow - darkest */}
+                                <span
+                                    className="absolute text-black"
+                                    style={{
+                                        transform: 'translate(10px, 10px)',
+                                    }}
+                                    aria-hidden="true"
+                                >
+                                    UI
+                                </span>
+                                {/* Mid shadow - teal */}
+                                <span
+                                    className="absolute text-[#4ECDC4]"
+                                    style={{
+                                        transform: 'translate(6px, 6px)',
+                                    }}
+                                    aria-hidden="true"
+                                >
+                                    UI
+                                </span>
+                                {/* Light shadow - yellow */}
+                                <span
+                                    className="absolute text-[#FFE66D]"
+                                    style={{
+                                        transform: 'translate(3px, 3px)',
+                                    }}
+                                    aria-hidden="true"
+                                >
+                                    UI
+                                </span>
+                                {/* Main text - coral red */}
+                                <span
+                                    className="relative text-[#FF6B6B]"
+                                    style={{
+                                        WebkitTextStroke: '3px #000',
+                                        paintOrder: 'stroke fill',
+                                    }}
+                                >
+                                    UI
+                                </span>
+                            </h1>
+                        </div>
+                    </div>
                     <p className="text-lg sm:text-xl md:text-2xl font-bold max-w-2xl mb-6 sm:mb-8 text-gray-700 dark:text-gray-300 px-2">
                         Bold, blocky, and beautiful React components. Built with Radix UI, styled
                         with Tailwind CSS, and designed for maximum impact.

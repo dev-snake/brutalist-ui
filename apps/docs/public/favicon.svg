@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Shadow layer 3 (back) -->
+  <rect x="14" y="14" width="44" height="44" fill="#FF6B6B" stroke="#000" stroke-width="3"/>
+  <!-- Shadow layer 2 -->
+  <rect x="9" y="9" width="44" height="44" fill="#4ECDC4" stroke="#000" stroke-width="3"/>
+  <!-- Main block -->
+  <rect x="4" y="4" width="44" height="44" fill="#FFE66D" stroke="#000" stroke-width="3"/>
+  <!-- Text BU -->
+  <text x="26" y="35" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" text-anchor="middle" fill="#000">BU</text>
+</svg>

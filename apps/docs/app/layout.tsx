@@ -8,6 +8,10 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
     title: 'Brutalist UI',
     description: 'A Neo-Brutalism styled React UI component library',
+    icons: {
+        icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+        apple: '/favicon.svg',
+    },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
