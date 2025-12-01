@@ -35,13 +35,19 @@ export default function SeparatorPage() {
                 <div className="p-6 bg-white dark:bg-gray-900 border-3 border-black dark:border-white">
                     <div className="space-y-4">
                         <h3 className="font-bold text-lg">Section 1</h3>
-                        <p className="text-gray-600 dark:text-gray-300">Some content for section 1.</p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                            Some content for section 1.
+                        </p>
                         <Separator orientation="horizontal" />
                         <h3 className="font-bold text-lg">Section 2</h3>
-                        <p className="text-gray-600 dark:text-gray-300">Some content for section 2.</p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                            Some content for section 2.
+                        </p>
                         <Separator orientation="horizontal" />
                         <h3 className="font-bold text-lg">Section 3</h3>
-                        <p className="text-gray-600 dark:text-gray-300">Some content for section 3.</p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                            Some content for section 3.
+                        </p>
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
