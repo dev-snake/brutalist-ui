@@ -1,27 +1,189 @@
-# Brutalist UI
+<div align="center">
+  <img src="apps/docs/public/favicon.svg" alt="Brutalist UI Logo" width="120" height="120" />
+  
+  # Brutalist UI
+  
+  **A Neo-Brutalism styled React UI component library**
+  
+  Bold. Raw. Unapologetic.
 
-A Neo-Brutalism styled React UI component library inspired by shadcn/ui.
+[![npm version](https://img.shields.io/npm/v/brutalist-ui.svg?style=flat-square&color=FF6B6B)](https://www.npmjs.com/package/brutalist-ui)
+[![License: MIT](https://img.shields.io/badge/License-MIT-4ECDC4.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-FFE66D.svg?style=flat-square)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB.svg?style=flat-square)](https://reactjs.org/)
 
-[![npm version](https://img.shields.io/npm/v/brutalist-ui.svg)](https://www.npmjs.com/package/brutalist-ui)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[Documentation](https://brutalist-ui.vercel.app) · [NPM Package](https://www.npmjs.com/package/brutalist-ui) · [Report Bug](https://github.com/dev-snake/brutalist-ui/issues)
 
-## Features
+</div>
 
--   🎨 **Neo-Brutalism Design** - Bold borders, offset shadows, heavy fonts
--   📦 **Monorepo Structure** - Powered by PNPM workspaces
--   🧱 **Radix Primitives** - Accessible, unstyled components
--   🎯 **TypeScript** - Full type safety
--   🎨 **Tailwind CSS** - Utility-first styling
--   🔧 **CVA** - Class variance authority for variants
+---
 
-## Getting Started
+## ✨ Features
 
-### Prerequisites
+| Feature                     | Description                                      |
+| --------------------------- | ------------------------------------------------ |
+| 🎨 **Neo-Brutalism Design** | Bold 3px borders, offset shadows, vibrant colors |
+| 🧱 **22+ Components**       | Comprehensive UI kit for modern applications     |
+| 🌙 **Dark Mode**            | Full dark mode support out of the box            |
+| ♿ **Accessible**           | Built on Radix UI primitives for A11y            |
+| 📱 **Responsive**           | Mobile-first, responsive design                  |
+| 🎯 **TypeScript**           | Full type safety and IntelliSense                |
+| 🎨 **Tailwind CSS**         | Custom plugin with brutalism utilities           |
+| ⚡ **Tree-shakeable**       | Import only what you need                        |
 
--   Node.js 18+
--   PNPM 8+
+## 📦 Installation
 
-### Installation
+```bash
+# npm
+npm install brutalist-ui
+
+# pnpm
+pnpm add brutalist-ui
+
+# yarn
+yarn add brutalist-ui
+```
+
+## 🚀 Quick Start
+
+### 1. Configure Tailwind CSS
+
+```js
+// tailwind.config.js
+module.exports = {
+    content: [
+        // ... your content paths
+        './node_modules/brutalist-ui/**/*.{js,mjs}',
+    ],
+    darkMode: 'class',
+    plugins: [require('brutalist-ui/brutalism-plugin')],
+};
+```
+
+### 2. Import Styles (Optional)
+
+```tsx
+// In your app entry point
+import 'brutalist-ui/styles.css';
+```
+
+### 3. Use Components
+
+```tsx
+import { Button, Card, CardHeader, CardContent, Badge } from 'brutalist-ui';
+
+function App() {
+    return (
+        <Card>
+            <CardHeader>
+                <h2>Welcome to Brutalist UI</h2>
+                <Badge variant="success">New</Badge>
+            </CardHeader>
+            <CardContent>
+                <p>Bold, raw, and beautiful components.</p>
+                <Button variant="primary" size="lg">
+                    Get Started
+                </Button>
+            </CardContent>
+        </Card>
+    );
+}
+```
+
+## 🧩 Components
+
+### Layout & Containers
+
+| Component   | Description                                     |
+| ----------- | ----------------------------------------------- |
+| `Card`      | Container with header, content, footer sections |
+| `Separator` | Visual divider between content                  |
+
+### Forms & Inputs
+
+| Component  | Description                                              |
+| ---------- | -------------------------------------------------------- |
+| `Button`   | Primary, secondary, outline, ghost, destructive variants |
+| `Input`    | Text input with brutalist styling                        |
+| `Textarea` | Multi-line text input                                    |
+| `Checkbox` | Toggle checkbox with checkmark                           |
+| `Switch`   | Toggle switch control                                    |
+| `Select`   | Dropdown select menu                                     |
+| `Label`    | Form input labels                                        |
+
+### Feedback & Status
+
+| Component  | Description                                     |
+| ---------- | ----------------------------------------------- |
+| `Alert`    | Info, success, warning, error notifications     |
+| `Badge`    | Status indicators and labels                    |
+| `Toast`    | Toast notifications system                      |
+| `Spinner`  | Loading spinners (brutalist, dots, pulse, bars) |
+| `Skeleton` | Loading placeholder animations                  |
+
+### Overlay & Popups
+
+| Component      | Description                |
+| -------------- | -------------------------- |
+| `Dialog`       | Modal dialog windows       |
+| `Popover`      | Floating content panels    |
+| `Tooltip`      | Hover tooltips             |
+| `DropdownMenu` | Context and dropdown menus |
+
+### Navigation & Data
+
+| Component    | Description                                |
+| ------------ | ------------------------------------------ |
+| `Tabs`       | Tabbed content navigation                  |
+| `Table`      | Data tables with brutalist styling         |
+| `Pagination` | Page navigation with first/last, prev/next |
+| `Avatar`     | User avatars with fallback                 |
+
+## 🎨 Tailwind Plugin Utilities
+
+The brutalism plugin adds these utilities:
+
+```css
+.nb-border    /* 3px solid black border */
+/* 3px solid black border */
+.nb-shadow    /* 4px offset shadow */
+.nb-shadow-sm /* 2px offset shadow */
+.nb-shadow-lg /* 6px offset shadow */
+.nb-press     /* Pressed state effect */
+.nb-font; /* Bold 900 weight typography */
+```
+
+### Color Palette
+
+| Color        | Hex       | Usage                        |
+| ------------ | --------- | ---------------------------- |
+| 🔴 Coral Red | `#FF6B6B` | Primary actions, destructive |
+| 🟢 Teal      | `#4ECDC4` | Success, secondary           |
+| 🟡 Yellow    | `#FFE66D` | Warning, highlights          |
+| ⚫ Black     | `#000000` | Borders, text                |
+| ⚪ White     | `#FFFFFF` | Backgrounds                  |
+
+## 🏗️ Project Structure
+
+```
+brutalist-ui/
+├── apps/
+│   └── docs/              # Next.js 14 documentation site
+│       ├── app/           # App router pages
+│       ├── components/    # Doc site components
+│       └── public/        # Static assets
+├── packages/
+│   └── ui/                # UI component library
+│       ├── src/
+│       │   ├── components/  # 22 React components
+│       │   ├── lib/         # Utilities (cn, etc.)
+│       │   └── brutalism-plugin.ts
+│       └── dist/          # Built output
+├── pnpm-workspace.yaml
+└── package.json
+```
+
+## 🛠️ Development
 
 ```bash
 # Clone the repository
@@ -32,101 +194,34 @@ cd brutalist-ui
 pnpm install
 
 # Build the UI library
-cd packages/ui && pnpm build
+pnpm --filter brutalist-ui build
 
-# Start the docs development server
-cd apps/docs && pnpm dev
+# Start docs dev server
+pnpm --filter docs dev
 ```
 
-## Project Structure
+### Scripts
 
-```
-brutalist-ui/
-├── apps/
-│   └── docs/           # Next.js documentation site
-├── packages/
-│   └── ui/             # UI component library (npm: brutalist-ui)
-├── pnpm-workspace.yaml
-└── package.json
-```
+| Command                            | Description               |
+| ---------------------------------- | ------------------------- |
+| `pnpm --filter brutalist-ui build` | Build the library         |
+| `pnpm --filter brutalist-ui dev`   | Watch mode                |
+| `pnpm --filter docs dev`           | Start docs server         |
+| `pnpm --filter docs build`         | Build docs for production |
 
-## Usage
-
-Install the package:
-
-```bash
-npm install brutalist-ui
-```
-
-Configure Tailwind:
-
-```js
-// tailwind.config.js
-module.exports = {
-    content: [
-        // ... your content
-        './node_modules/brutalist-ui/**/*.{js,mjs}',
-    ],
-    plugins: [require('brutalist-ui/brutalism-plugin')],
-};
-```
-
-Import components:
-
-```tsx
-import { Button, Card, Dialog } from 'brutalist-ui';
-
-function App() {
-    return (
-        <Card>
-            <Button variant="primary">Click me!</Button>
-        </Card>
-    );
-}
-```
-
-## Components
-
--   **Button** - Multiple variants and sizes
--   **Card** - Container with header, content, footer
--   **Input / Textarea** - Form inputs
--   **Dialog** - Modal dialogs
--   **Popover** - Floating content
--   **Tooltip** - Hover tooltips
--   **DropdownMenu** - Context menus
--   **Select** - Dropdown select
--   **Tabs** - Tabbed content
--   **Table** - Data tables
--   **Badge** - Status indicators
--   **Alert** - Notification banners
--   **Checkbox / Switch** - Toggle inputs
-
-## Brutalism Plugin Classes
-
-The library includes custom Tailwind utilities:
-
--   `.nb-border` - 3px solid black border
--   `.nb-shadow` - 4px offset shadow
--   `.nb-press` - Pressed state (translateY + no shadow)
--   `.nb-font` - Bold 900 weight with letter spacing
-
-## Scripts
-
-```bash
-# packages/ui
-pnpm build            # Build the library
-pnpm dev              # Watch mode
-
-# apps/docs
-pnpm dev              # Start dev server
-pnpm build            # Build for production
-```
-
-## License
+## 📄 License
 
 MIT © [dev-snake](https://github.com/dev-snake)
 
-## Links
+---
 
--   [NPM Package](https://www.npmjs.com/package/brutalist-ui)
--   [GitHub](https://github.com/dev-snake/brutalist-ui)
+<div align="center">
+  <p>
+    <strong>Made with 💛 and bold borders</strong>
+  </p>
+  <p>
+    <a href="https://www.npmjs.com/package/brutalist-ui">NPM</a> •
+    <a href="https://github.com/dev-snake/brutalist-ui">GitHub</a> •
+    <a href="https://brutalist-ui.vercel.app">Docs</a>
+  </p>
+</div>
