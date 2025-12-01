@@ -1,6 +1,6 @@
 {
     "name": "brutalist-ui-cli",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "CLI for adding Brutalist UI components to your project",
     "bin": {
         "brutalist-ui": "dist/index.js"
