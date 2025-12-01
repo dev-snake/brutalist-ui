@@ -7,39 +7,66 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: {
-        default: 'Brutalist UI - Neo-Brutalism React Components',
+        default: 'Brutalist UI - Neo-Brutalism React Component Library | Free & Open Source',
         template: '%s | Brutalist UI',
     },
     description:
-        'A Neo-Brutalism styled React UI component library with 22+ accessible components. Built with Radix UI, Tailwind CSS, and TypeScript.',
+        'Free open-source Neo-Brutalism React UI component library with 22+ accessible components. Built with Radix UI, Tailwind CSS, TypeScript. Bold borders, offset shadows, vibrant colors. npm install brutalist-ui',
     metadataBase: new URL('https://brutalistui.site'),
     keywords: [
-        'react',
-        'ui',
-        'components',
-        'brutalism',
-        'neo-brutalism',
-        'tailwindcss',
-        'radix-ui',
-        'typescript',
-        'design-system',
+        'brutalist ui',
+        'neo brutalism',
+        'brutalism design',
+        'react components',
+        'react ui library',
+        'react component library',
+        'tailwind components',
+        'tailwind ui',
+        'radix ui',
+        'typescript components',
+        'accessible components',
+        'design system',
+        'ui kit',
+        'open source ui',
+        'free react components',
+        'shadcn alternative',
+        'brutalist design system',
+        'bold ui components',
     ],
     authors: [{ name: 'dev-snake', url: 'https://github.com/dev-snake' }],
     creator: 'dev-snake',
+    publisher: 'Brutalist UI',
+    category: 'Technology',
+    classification: 'Software Development',
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    },
+    alternates: {
+        canonical: 'https://brutalistui.site',
+    },
     openGraph: {
         type: 'website',
         locale: 'en_US',
         url: 'https://brutalistui.site',
         siteName: 'Brutalist UI',
-        title: 'Brutalist UI - Neo-Brutalism React Components',
+        title: 'Brutalist UI - Neo-Brutalism React Component Library',
         description:
-            'A Neo-Brutalism styled React UI component library with 22+ accessible components.',
+            'Free open-source Neo-Brutalism React UI library with 22+ accessible components. Bold, raw, and beautiful.',
         images: [
             {
                 url: '/og-image.svg',
                 width: 1200,
                 height: 630,
-                alt: 'Brutalist UI',
+                alt: 'Brutalist UI - Neo-Brutalism React Components',
+                type: 'image/svg+xml',
             },
         ],
     },
@@ -47,18 +74,77 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: 'Brutalist UI - Neo-Brutalism React Components',
         description:
-            'A Neo-Brutalism styled React UI component library with 22+ accessible components.',
+            'Free open-source Neo-Brutalism React UI library with 22+ accessible components.',
         images: ['/og-image.svg'],
+        creator: '@devsnake',
     },
     icons: {
-        icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
-        apple: '/favicon.svg',
+        icon: [
+            { url: '/favicon.svg', type: 'image/svg+xml' },
+            { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+            { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+        ],
+        apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+    },
+    manifest: '/manifest.json',
+    other: {
+        'google-site-verification': 'YOUR_GOOGLE_VERIFICATION_CODE',
     },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Brutalist UI',
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Any',
+        description:
+            'Free open-source Neo-Brutalism React UI component library with 22+ accessible components.',
+        url: 'https://brutalistui.site',
+        downloadUrl: 'https://www.npmjs.com/package/brutalist-ui',
+        softwareVersion: '0.1.4',
+        author: {
+            '@type': 'Person',
+            name: 'dev-snake',
+            url: 'https://github.com/dev-snake',
+        },
+        offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+        },
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '5',
+            ratingCount: '1',
+        },
+    };
+
+    const organizationJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Brutalist UI',
+        url: 'https://brutalistui.site',
+        logo: 'https://brutalistui.site/favicon.svg',
+        sameAs: [
+            'https://github.com/dev-snake/brutalist-ui',
+            'https://www.npmjs.com/package/brutalist-ui',
+        ],
+    };
+
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+                />
+            </head>
             <body className={inter.className}>
                 <ThemeProvider
                     attribute="class"

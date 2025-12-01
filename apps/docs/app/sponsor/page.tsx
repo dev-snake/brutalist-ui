@@ -1,5 +1,20 @@
 import Link from 'next/link';
 import { Heart, Coffee, Github, Star, Zap, Gift } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Sponsor Brutalist UI | Support Open Source Neo-Brutalism Components',
+    description: 'Support the development of Brutalist UI, the open-source Neo-Brutalism React component library. Sponsor on GitHub or Buy Me a Coffee.',
+    keywords: ['sponsor brutalist ui', 'support open source', 'github sponsors', 'buy me a coffee'],
+    openGraph: {
+        title: 'Sponsor Brutalist UI',
+        description: 'Support the development of Brutalist UI open-source component library.',
+        url: 'https://brutalistui.site/sponsor',
+    },
+    alternates: {
+        canonical: 'https://brutalistui.site/sponsor',
+    },
+};
 
 export default function SponsorPage() {
     return (

@@ -1,4 +1,19 @@
 import { Card, CardContent, Badge } from 'brutalist-ui';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Documentation - Brutalist UI | Neo-Brutalism React Component Library',
+    description: 'Learn how to use Brutalist UI, the Neo-Brutalism React component library. Built on Radix UI and Tailwind CSS with bold borders, offset shadows, and vibrant colors.',
+    keywords: ['brutalist ui docs', 'neo-brutalism guide', 'react component library tutorial', 'brutalism css documentation', 'radix ui brutalism'],
+    openGraph: {
+        title: 'Documentation - Brutalist UI',
+        description: 'Learn how to use Brutalist UI, the Neo-Brutalism React component library.',
+        url: 'https://brutalistui.site/docs',
+    },
+    alternates: {
+        canonical: 'https://brutalistui.site/docs',
+    },
+};
 
 export default function DocsPage() {
     return (

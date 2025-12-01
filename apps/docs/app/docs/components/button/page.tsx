@@ -1,5 +1,3 @@
-'use client';
-
 import { Button, Card, CardContent, Badge } from 'brutalist-ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { Mail, ArrowRight, Loader2 } from 'lucide-react';
