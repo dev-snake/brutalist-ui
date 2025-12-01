@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        tab-size: 4;
+    }
+
+    body {
+        margin: 0;
+        line-height: inherit;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+@layer components {
+
+    /* Neo-Brutalism base styles */
+    .nb-border {
+        border-width: 3px;
+        border-style: solid;
+        border-color: #000000;
+    }
+
+    .nb-shadow {
+        box-shadow: 4px 4px 0px 0px #000000;
+    }
+
+    .nb-press {
+        transform: translateY(2px);
+        box-shadow: none;
+    }
+
+    .nb-font {
+        font-weight: 900;
+        letter-spacing: 0.025em;
+    }
+}
+
+@layer utilities {
+    .border-3 {
+        border-width: 3px;
+    }
+
+    .shadow-brutal {
+        box-shadow: 4px 4px 0px 0px #000000;
+    }
+
+    .shadow-brutal-sm {
+        box-shadow: 2px 2px 0px 0px #000000;
+    }
+
+    .shadow-brutal-lg {
+        box-shadow: 6px 6px 0px 0px #000000;
+    }
+
+    .shadow-brutal-xl {
+        box-shadow: 8px 8px 0px 0px #000000;
+    }
+}
+
+/* Animation keyframes for Radix */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-4px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-4px);
+        opacity: 0;
+    }
+}

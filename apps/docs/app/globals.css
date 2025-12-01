@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-white text-black font-brutal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+    }
+}
+
+@layer components {
+    .container-brutal {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+}
+
+@layer utilities {
+    .border-3 {
+        border-width: 3px;
+    }
+
+    .shadow-brutal {
+        box-shadow: 4px 4px 0px 0px #000000;
+    }
+
+    .shadow-brutal-sm {
+        box-shadow: 2px 2px 0px 0px #000000;
+    }
+
+    .shadow-brutal-lg {
+        box-shadow: 6px 6px 0px 0px #000000;
+    }
+
+    .shadow-brutal-xl {
+        box-shadow: 8px 8px 0px 0px #000000;
+    }
+}
+
+/* MDX Content Styles */
+.mdx-content h1 {
+    @apply text-3xl sm:text-4xl font-black tracking-tight mb-4;
+}
+
+.mdx-content h2 {
+    @apply text-xl sm:text-2xl font-black tracking-tight mt-6 sm:mt-8 mb-4 pb-2 border-b-3 border-black;
+}
+
+.mdx-content h3 {
+    @apply text-lg sm:text-xl font-bold mt-4 sm:mt-6 mb-3;
+}
+
+.mdx-content p {
+    @apply mb-4 font-medium leading-relaxed text-sm sm:text-base;
+}
+
+.mdx-content code:not(pre code) {
+    @apply bg-gray-100 px-1 sm:px-1.5 py-0.5 font-mono text-xs sm:text-sm border-2 border-black break-all;
+}
+
+.mdx-content pre {
+    @apply p-3 sm:p-4 overflow-x-auto border-3 border-black shadow-brutal bg-gray-900 text-white my-4 text-xs sm:text-sm;
+}
+
+.mdx-content ul {
+    @apply list-disc list-inside mb-4 ml-2 sm:ml-4;
+}
+
+.mdx-content ol {
+    @apply list-decimal list-inside mb-4 ml-2 sm:ml-4;
+}
+
+.mdx-content li {
+    @apply mb-1 font-medium text-sm sm:text-base;
+}
+
+.mdx-content blockquote {
+    @apply border-l-4 border-black pl-3 sm:pl-4 italic my-4 bg-yellow-100 py-2 text-sm sm:text-base;
+}
+
+/* Responsive table wrapper */
+.mdx-content .table-wrapper {
+    @apply overflow-x-auto -mx-4 sm:mx-0;
+}
+
+.mdx-content table {
+    @apply w-full border-3 border-black text-sm;
+}
+
+.mdx-content th,
+.mdx-content td {
+    @apply px-2 sm:px-4 py-2 text-left;
+}
