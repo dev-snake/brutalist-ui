@@ -18,7 +18,10 @@ export default function AvatarPage() {
                 <div className="p-6 bg-white dark:bg-gray-900 border-3 border-black dark:border-white">
                     <div className="flex items-center gap-4">
                         <Avatar>
-                            <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" alt="User" />
+                            <AvatarImage
+                                src="https://avatars.githubusercontent.com/u/124599?v=4"
+                                alt="User"
+                            />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                         <Avatar>
@@ -95,28 +98,45 @@ export default function AvatarPage() {
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold">Fallback</h2>
                 <p className="text-gray-600 dark:text-gray-300">
-                    When the image fails to load, the fallback content is displayed.
+                    When no image is provided or the image fails to load, the fallback content is
+                    displayed. You can customize the fallback with colors and initials.
                 </p>
                 <div className="p-6 bg-white dark:bg-gray-900 border-3 border-black dark:border-white">
                     <div className="flex items-center gap-4">
                         <Avatar size="lg">
-                            <AvatarImage src="/broken-image.jpg" alt="User" />
-                            <AvatarFallback className="bg-[#FF6B6B] text-white">JD</AvatarFallback>
+                            <AvatarFallback className="bg-[#FF6B6B] text-white font-bold">
+                                JD
+                            </AvatarFallback>
                         </Avatar>
                         <Avatar size="lg">
-                            <AvatarImage src="/broken-image.jpg" alt="User" />
-                            <AvatarFallback className="bg-[#4ECDC4] text-white">AB</AvatarFallback>
+                            <AvatarFallback className="bg-[#4ECDC4] text-white font-bold">
+                                AB
+                            </AvatarFallback>
                         </Avatar>
                         <Avatar size="lg">
-                            <AvatarImage src="/broken-image.jpg" alt="User" />
-                            <AvatarFallback className="bg-[#FFE66D] text-black">XY</AvatarFallback>
+                            <AvatarFallback className="bg-[#FFE66D] text-black font-bold">
+                                XY
+                            </AvatarFallback>
+                        </Avatar>
+                        <Avatar size="lg">
+                            <AvatarFallback className="bg-purple-500 text-white font-bold">
+                                👤
+                            </AvatarFallback>
                         </Avatar>
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
-                    <code>{`<Avatar>
-  <AvatarImage src="/broken-image.jpg" alt="User" />
-  <AvatarFallback className="bg-[#FF6B6B] text-white">JD</AvatarFallback>
+                    <code>{`{/* Only fallback - no image */}
+<Avatar>
+  <AvatarFallback className="bg-[#FF6B6B] text-white font-bold">
+    JD
+  </AvatarFallback>
+</Avatar>
+
+{/* With image that may fail */}
+<Avatar>
+  <AvatarImage src="/user-avatar.jpg" alt="User" />
+  <AvatarFallback className="bg-[#4ECDC4] text-white">AB</AvatarFallback>
 </Avatar>`}</code>
                 </pre>
             </section>
