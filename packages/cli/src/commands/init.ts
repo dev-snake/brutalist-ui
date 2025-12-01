@@ -136,7 +136,7 @@ export function cn(...inputs: ClassValue[]) {
         const tailwindConfigPath = config.tailwind.config;
         if (await fs.pathExists(tailwindConfigPath)) {
             let tailwindConfig = await fs.readFile(tailwindConfigPath, 'utf-8');
-            
+
             // Add brutalism plugin info
             if (!tailwindConfig.includes('brutalism')) {
                 spinner.info('Remember to add brutalism styles to your tailwind config!');
@@ -147,7 +147,7 @@ export function cn(...inputs: ClassValue[]) {
         const cssPath = config.tailwind.css;
         if (await fs.pathExists(cssPath)) {
             let cssContent = await fs.readFile(cssPath, 'utf-8');
-            
+
             const brutalismStyles = `
 /* Brutalist UI Styles */
 .border-3 {

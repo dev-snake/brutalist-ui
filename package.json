@@ -5,12 +5,15 @@
     "description": "Neo-Brutalism UI Library Monorepo",
     "scripts": {
         "dev": "pnpm --filter docs dev",
-        "build": "pnpm --filter ui build && pnpm --filter docs build",
-        "build:ui": "pnpm --filter ui build",
+        "build": "pnpm --filter brutalist-ui build && pnpm --filter docs build",
+        "build:ui": "pnpm --filter brutalist-ui build",
         "build:docs": "pnpm --filter docs build",
         "lint": "pnpm -r lint",
         "clean": "pnpm -r clean",
-        "typecheck": "pnpm -r typecheck"
+        "typecheck": "pnpm -r typecheck",
+        "test": "pnpm --filter brutalist-ui test",
+        "test:watch": "pnpm --filter brutalist-ui test:watch",
+        "test:coverage": "pnpm --filter brutalist-ui test:coverage"
     },
     "devDependencies": {
         "typescript": "^5.3.3"
