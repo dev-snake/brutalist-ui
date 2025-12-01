@@ -62,12 +62,22 @@
     },
     "keywords": [
         "react",
+        "react-components",
         "ui",
+        "ui-library",
+        "ui-components",
         "components",
         "brutalism",
         "neo-brutalism",
+        "brutalist",
+        "design-system",
         "tailwindcss",
-        "radix-ui"
+        "tailwind",
+        "radix-ui",
+        "typescript",
+        "frontend",
+        "accessible",
+        "dark-mode"
     ],
     "author": "dev-snake",
     "license": "MIT",

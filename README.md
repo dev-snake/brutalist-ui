@@ -8,13 +8,41 @@
   Bold. Raw. Unapologetic.
 
 [![npm version](https://img.shields.io/npm/v/brutalist-ui.svg?style=flat-square&color=FF6B6B)](https://www.npmjs.com/package/brutalist-ui)
+[![npm downloads](https://img.shields.io/npm/dm/brutalist-ui.svg?style=flat-square&color=4ECDC4)](https://www.npmjs.com/package/brutalist-ui)
 [![License: MIT](https://img.shields.io/badge/License-MIT-4ECDC4.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-FFE66D.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg?style=flat-square)](https://reactjs.org/)
 
+[![Sponsor](https://img.shields.io/badge/❤️_Sponsor-FF6B6B?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sponsors/dev-snake)
+[![Buy Me A Coffee](https://img.shields.io/badge/☕_Buy_Me_A_Coffee-FFE66D?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/devsnake)
+
 [Documentation](https://brutalist-ui.vercel.app) · [NPM Package](https://www.npmjs.com/package/brutalist-ui) · [Report Bug](https://github.com/dev-snake/brutalist-ui/issues)
 
 </div>
+
+---
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/dev-snake/brutalist-ui/main/apps/docs/public/demo-preview.svg" alt="Brutalist UI Demo" width="800" />
+</div>
+
+---
+
+## 💖 Support This Project
+
+If you find Brutalist UI useful, please consider supporting its development:
+
+<a href="https://github.com/sponsors/dev-snake">
+  <img src="https://img.shields.io/badge/Sponsor_on_GitHub-❤️-EA4AAA?style=for-the-badge&logo=github" alt="Sponsor on GitHub" />
+</a>
+<a href="https://buymeacoffee.com/devsnake">
+  <img src="https://img.shields.io/badge/Buy_Me_A_Coffee-☕-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee" />
+</a>
+<a href="https://ko-fi.com/devsnake">
+  <img src="https://img.shields.io/badge/Support_on_Ko--fi-❤️-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi" />
+</a>
+
+Your support helps keep this project alive and growing! 🚀
 
 ---
 
@@ -212,6 +240,44 @@ pnpm --filter docs dev
 ## 📄 License
 
 MIT © [dev-snake](https://github.com/dev-snake)
+
+---
+
+## 🗺️ Roadmap
+
+We're constantly improving Brutalist UI. Here's what's coming:
+
+- [x] ~~Core components (22+ components)~~
+- [x] ~~Dark mode support~~
+- [x] ~~TypeScript support~~
+- [x] ~~Tailwind CSS plugin~~
+- [ ] **More components**: DatePicker, DataTable, Drawer, Command Palette
+- [ ] **Animations**: Framer Motion integration
+- [ ] **Themes**: Multiple brutalist color themes
+- [ ] **Templates**: Dashboard, Landing page, Admin panel
+- [ ] **Figma Kit**: Design files for designers
+
+### 💎 Pro Components (Coming Soon)
+
+Premium components for serious projects:
+
+| Component | Description | Status |
+|-----------|-------------|--------|
+| DataTable Pro | Advanced data table with sorting, filtering, pagination | 🔜 Soon |
+| DatePicker | Date & time picker with range selection | 🔜 Soon |
+| Drawer | Slide-out panel component | 🔜 Soon |
+| Command Palette | Spotlight-style command menu | 🔜 Soon |
+| Dashboard Kit | Complete admin dashboard template | 🔜 Soon |
+
+---
+
+## 💖 Sponsors
+
+<a href="https://github.com/sponsors/dev-snake">
+  <img src="https://img.shields.io/badge/Become_a_Sponsor-❤️-EA4AAA?style=for-the-badge&logo=github" alt="Become a Sponsor" />
+</a>
+
+Support the development of Brutalist UI and get your name/logo here!
 
 ---
 

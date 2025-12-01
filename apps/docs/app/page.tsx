@@ -144,6 +144,15 @@ export default function Home() {
                                 GitHub
                             </Button>
                         </a>
+                        <Link href="/sponsor" className="w-full sm:w-auto">
+                            <Button
+                                variant="danger"
+                                size="lg"
+                                className="w-full sm:w-auto"
+                            >
+                                ❤️ Sponsor
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </section>

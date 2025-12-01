@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#FFFBF5"/>
+  
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e5e5e5" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#grid)"/>
+  
+  <!-- Title -->
+  <text x="400" y="60" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" text-anchor="middle" fill="#000">
+    Brutalist UI Components
+  </text>
+  
+  <!-- Button Examples -->
+  <g transform="translate(50, 100)">
+    <!-- Primary Button -->
+    <rect x="4" y="4" width="140" height="44" fill="#000"/>
+    <rect x="0" y="0" width="140" height="44" fill="#FF6B6B" stroke="#000" stroke-width="3"/>
+    <text x="70" y="28" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">Primary</text>
+    
+    <!-- Secondary Button -->
+    <rect x="164" y="4" width="140" height="44" fill="#000"/>
+    <rect x="160" y="0" width="140" height="44" fill="#4ECDC4" stroke="#000" stroke-width="3"/>
+    <text x="230" y="28" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">Secondary</text>
+    
+    <!-- Outline Button -->
+    <rect x="324" y="4" width="140" height="44" fill="#000"/>
+    <rect x="320" y="0" width="140" height="44" fill="#fff" stroke="#000" stroke-width="3"/>
+    <text x="390" y="28" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">Outline</text>
+  </g>
+  
+  <!-- Card Example -->
+  <g transform="translate(50, 180)">
+    <rect x="6" y="6" width="320" height="180" fill="#000"/>
+    <rect x="0" y="0" width="320" height="180" fill="#fff" stroke="#000" stroke-width="3"/>
+    
+    <!-- Card Header -->
+    <rect x="0" y="0" width="320" height="50" fill="#FFE66D" stroke="#000" stroke-width="3"/>
+    <text x="20" y="32" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#000">Card Title</text>
+    
+    <!-- Badge -->
+    <rect x="248" y="14" width="52" height="24" fill="#4ECDC4" stroke="#000" stroke-width="2"/>
+    <text x="274" y="30" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#000">New</text>
+    
+    <!-- Card Content -->
+    <text x="20" y="80" font-family="Arial, sans-serif" font-size="13" fill="#333">Beautiful brutalist components</text>
+    <text x="20" y="100" font-family="Arial, sans-serif" font-size="13" fill="#333">for your React projects.</text>
+    
+    <!-- Card Button -->
+    <rect x="24" y="124" width="100" height="36" fill="#000"/>
+    <rect x="20" y="120" width="100" height="36" fill="#FF6B6B" stroke="#000" stroke-width="3"/>
+    <text x="70" y="143" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#000">Learn More</text>
+  </g>
+  
+  <!-- Input Example -->
+  <g transform="translate(400, 180)">
+    <rect x="4" y="4" width="350" height="44" fill="#000"/>
+    <rect x="0" y="0" width="350" height="44" fill="#fff" stroke="#000" stroke-width="3"/>
+    <text x="16" y="28" font-family="Arial, sans-serif" font-size="14" fill="#999">Enter your email...</text>
+  </g>
+  
+  <!-- Badge Examples -->
+  <g transform="translate(400, 250)">
+    <rect x="0" y="0" width="70" height="28" fill="#FF6B6B" stroke="#000" stroke-width="2"/>
+    <text x="35" y="18" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#000">Primary</text>
+    
+    <rect x="80" y="0" width="70" height="28" fill="#4ECDC4" stroke="#000" stroke-width="2"/>
+    <text x="115" y="18" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#000">Success</text>
+    
+    <rect x="160" y="0" width="70" height="28" fill="#FFE66D" stroke="#000" stroke-width="2"/>
+    <text x="195" y="18" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="#000">Warning</text>
+  </g>
+  
+  <!-- Alert Example -->
+  <g transform="translate(400, 300)">
+    <rect x="4" y="4" width="350" height="60" fill="#000"/>
+    <rect x="0" y="0" width="350" height="60" fill="#4ECDC4" stroke="#000" stroke-width="3"/>
+    <text x="16" y="24" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#000">✓ Success!</text>
+    <text x="16" y="44" font-family="Arial, sans-serif" font-size="12" fill="#333">Your changes have been saved.</text>
+  </g>
+  
+  <!-- Switch & Checkbox -->
+  <g transform="translate(50, 390)">
+    <!-- Checkbox -->
+    <rect x="0" y="0" width="24" height="24" fill="#FF6B6B" stroke="#000" stroke-width="3"/>
+    <text x="12" y="18" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#000">✓</text>
+    <text x="34" y="18" font-family="Arial, sans-serif" font-size="14" fill="#000">Checkbox</text>
+    
+    <!-- Switch -->
+    <rect x="140" y="0" width="48" height="24" rx="12" fill="#4ECDC4" stroke="#000" stroke-width="3"/>
+    <circle cx="164" cy="12" r="8" fill="#fff" stroke="#000" stroke-width="2"/>
+    <text x="200" y="18" font-family="Arial, sans-serif" font-size="14" fill="#000">Switch</text>
+  </g>
+  
+  <!-- Table Preview -->
+  <g transform="translate(400, 390)">
+    <rect x="4" y="4" width="350" height="80" fill="#000"/>
+    <rect x="0" y="0" width="350" height="80" fill="#fff" stroke="#000" stroke-width="3"/>
+    
+    <!-- Table Header -->
+    <rect x="0" y="0" width="350" height="28" fill="#000"/>
+    <text x="20" y="18" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fff">Name</text>
+    <text x="150" y="18" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fff">Status</text>
+    <text x="280" y="18" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#fff">Role</text>
+    
+    <!-- Table Row 1 -->
+    <text x="20" y="48" font-family="Arial, sans-serif" font-size="12" fill="#000">John Doe</text>
+    <rect x="145" y="36" width="50" height="18" fill="#4ECDC4" stroke="#000" stroke-width="1"/>
+    <text x="170" y="48" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#000">Active</text>
+    <text x="280" y="48" font-family="Arial, sans-serif" font-size="12" fill="#000">Admin</text>
+    
+    <!-- Table Row 2 -->
+    <text x="20" y="68" font-family="Arial, sans-serif" font-size="12" fill="#000">Jane Smith</text>
+    <rect x="145" y="56" width="50" height="18" fill="#FFE66D" stroke="#000" stroke-width="1"/>
+    <text x="170" y="68" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#000">Pending</text>
+    <text x="280" y="68" font-family="Arial, sans-serif" font-size="12" fill="#000">User</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="400" y="485" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#666">
+    22+ Neo-Brutalism Components • React • TypeScript • Tailwind CSS
+  </text>
+</svg>

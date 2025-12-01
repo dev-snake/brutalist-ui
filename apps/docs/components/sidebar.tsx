@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from 'brutalist-ui';
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Heart } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
 const navigation = [
@@ -115,6 +115,23 @@ export function Sidebar() {
                             )}
                         </div>
                     ))}
+
+                    {/* Sponsor Button */}
+                    <div className="pt-4 mt-4 border-t-2 border-gray-200 dark:border-gray-700">
+                        <Link
+                            href="/sponsor"
+                            onClick={closeSidebar}
+                            className={cn(
+                                'flex items-center gap-2 px-3 py-2 font-bold transition-all border-3',
+                                pathname === '/sponsor'
+                                    ? 'bg-[#FF6B6B] text-white border-black shadow-[2px_2px_0px_0px_#000000]'
+                                    : 'bg-[#FF6B6B] text-white border-black hover:shadow-[4px_4px_0px_0px_#000000] hover:-translate-y-0.5'
+                            )}
+                        >
+                            <Heart className="w-4 h-4" fill="white" />
+                            Sponsor
+                        </Link>
+                    </div>
                 </nav>
             </aside>
         </>
