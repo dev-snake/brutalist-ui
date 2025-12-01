@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from 'brutalist-ui';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { ThemeToggle } from './theme-toggle';
 
 const navigation = [
     { name: 'Getting Started', href: '/docs' },
@@ -43,11 +44,16 @@ export function Sidebar() {
             {/* Mobile Menu Button */}
             <button
                 onClick={toggleSidebar}
-                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white border-3 border-black shadow-brutal"
+                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-gray-900 border-3 border-black dark:border-white shadow-brutal"
                 aria-label="Toggle menu"
             >
                 {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
+
+            {/* Theme Toggle for Mobile */}
+            <div className="lg:hidden fixed top-4 right-4 z-50">
+                <ThemeToggle />
+            </div>
 
             {/* Overlay for mobile */}
             {isOpen && (
@@ -57,13 +63,18 @@ export function Sidebar() {
             {/* Sidebar */}
             <aside
                 className={cn(
-                    'fixed lg:sticky top-0 left-0 z-40 w-64 border-r-3 border-black min-h-screen h-screen overflow-y-auto p-6 bg-white transition-transform duration-300 ease-in-out',
+                    'fixed lg:sticky top-0 left-0 z-40 w-64 border-r-3 border-black dark:border-white min-h-screen h-screen overflow-y-auto p-6 bg-white dark:bg-gray-950 transition-transform duration-300 ease-in-out',
                     isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
                 )}
             >
-                <Link href="/" className="block mb-8" onClick={closeSidebar}>
-                    <h1 className="text-xl font-black">Brutalist UI</h1>
-                </Link>
+                <div className="flex items-center justify-between mb-8">
+                    <Link href="/" className="block" onClick={closeSidebar}>
+                        <h1 className="text-xl font-black">Brutalist UI</h1>
+                    </Link>
+                    <div className="hidden lg:block">
+                        <ThemeToggle />
+                    </div>
+                </div>
                 <nav className="space-y-2 pb-8">
                     {navigation.map((item) => (
                         <div key={item.name}>
@@ -73,8 +84,8 @@ export function Sidebar() {
                                 className={cn(
                                     'block px-3 py-2 font-bold transition-colors border-3 border-transparent',
                                     pathname === item.href
-                                        ? 'bg-[#FFE66D] border-black shadow-[2px_2px_0px_0px_#000000]'
-                                        : 'hover:bg-gray-100'
+                                        ? 'bg-[#FFE66D] text-black border-black shadow-[2px_2px_0px_0px_#000000]'
+                                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
                                 )}
                             >
                                 {item.name}
@@ -89,8 +100,8 @@ export function Sidebar() {
                                             className={cn(
                                                 'block px-3 py-1.5 text-sm font-medium transition-colors',
                                                 pathname === child.href
-                                                    ? 'bg-[#FFE66D] border-2 border-black'
-                                                    : 'hover:bg-gray-100'
+                                                    ? 'bg-[#FFE66D] text-black border-2 border-black'
+                                                    : 'hover:bg-gray-100 dark:hover:bg-gray-800'
                                             )}
                                         >
                                             {child.name}

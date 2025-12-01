@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
+    darkMode: 'class',
     content: [
         './pages/**/*.{js,ts,jsx,tsx,mdx}',
         './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -30,6 +31,9 @@ const config: Config = {
                 'brutal-sm': '2px 2px 0px 0px #000000',
                 'brutal-lg': '6px 6px 0px 0px #000000',
                 'brutal-xl': '8px 8px 0px 0px #000000',
+                'brutal-dark': '4px 4px 0px 0px #FFFFFF',
+                'brutal-dark-sm': '2px 2px 0px 0px #FFFFFF',
+                'brutal-dark-lg': '6px 6px 0px 0px #FFFFFF',
             },
             borderWidth: {
                 3: '3px',

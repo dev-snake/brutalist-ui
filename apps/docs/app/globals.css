@@ -20,6 +20,11 @@
         -moz-osx-font-smoothing: grayscale;
         overflow-x: hidden;
     }
+
+    .dark body,
+    html.dark body {
+        @apply bg-gray-950 text-white;
+    }
 }
 
 @layer components {
@@ -48,6 +53,22 @@
     .shadow-brutal-xl {
         box-shadow: 8px 8px 0px 0px #000000;
     }
+
+    .dark .shadow-brutal {
+        box-shadow: 4px 4px 0px 0px #FFFFFF;
+    }
+
+    .dark .shadow-brutal-sm {
+        box-shadow: 2px 2px 0px 0px #FFFFFF;
+    }
+
+    .dark .shadow-brutal-lg {
+        box-shadow: 6px 6px 0px 0px #FFFFFF;
+    }
+
+    .dark .shadow-brutal-xl {
+        box-shadow: 8px 8px 0px 0px #FFFFFF;
+    }
 }
 
 /* MDX Content Styles */
@@ -56,7 +77,7 @@
 }
 
 .mdx-content h2 {
-    @apply text-xl sm:text-2xl font-black tracking-tight mt-6 sm:mt-8 mb-4 pb-2 border-b-3 border-black;
+    @apply text-xl sm:text-2xl font-black tracking-tight mt-6 sm:mt-8 mb-4 pb-2 border-b-3 border-black dark:border-white;
 }
 
 .mdx-content h3 {
@@ -64,15 +85,15 @@
 }
 
 .mdx-content p {
-    @apply mb-4 font-medium leading-relaxed text-sm sm:text-base;
+    @apply mb-4 font-medium leading-relaxed text-sm sm:text-base text-gray-700 dark:text-gray-300;
 }
 
 .mdx-content code:not(pre code) {
-    @apply bg-gray-100 px-1 sm:px-1.5 py-0.5 font-mono text-xs sm:text-sm border-2 border-black break-all;
+    @apply bg-gray-100 dark:bg-gray-800 px-1 sm:px-1.5 py-0.5 font-mono text-xs sm:text-sm border-2 border-black dark:border-white break-all;
 }
 
 .mdx-content pre {
-    @apply p-3 sm:p-4 overflow-x-auto border-3 border-black shadow-brutal bg-gray-900 text-white my-4 text-xs sm:text-sm;
+    @apply p-3 sm:p-4 overflow-x-auto border-3 border-black dark:border-white shadow-brutal bg-gray-900 text-white my-4 text-xs sm:text-sm;
 }
 
 .mdx-content ul {
@@ -84,11 +105,11 @@
 }
 
 .mdx-content li {
-    @apply mb-1 font-medium text-sm sm:text-base;
+    @apply mb-1 font-medium text-sm sm:text-base text-gray-700 dark:text-gray-300;
 }
 
 .mdx-content blockquote {
-    @apply border-l-4 border-black pl-3 sm:pl-4 italic my-4 bg-yellow-100 py-2 text-sm sm:text-base;
+    @apply border-l-4 border-black dark:border-white pl-3 sm:pl-4 italic my-4 bg-yellow-100 dark:bg-yellow-900/30 py-2 text-sm sm:text-base;
 }
 
 /* Responsive table wrapper */
@@ -97,7 +118,7 @@
 }
 
 .mdx-content table {
-    @apply w-full border-3 border-black text-sm;
+    @apply w-full border-3 border-black dark:border-white text-sm;
 }
 
 .mdx-content th,
