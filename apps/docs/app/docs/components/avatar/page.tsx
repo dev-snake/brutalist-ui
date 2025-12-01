@@ -18,15 +18,23 @@ export default function AvatarPage() {
                 <div className="p-6 bg-white dark:bg-gray-900 border-3 border-black dark:border-white">
                     <div className="flex items-center gap-4">
                         <Avatar>
-                            <AvatarImage src="https://github.com/shadcn.png" alt="User" />
+                            <AvatarImage src="https://avatars.githubusercontent.com/u/124599?v=4" alt="User" />
                             <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        <Avatar>
+                            <AvatarImage src="https://i.pravatar.cc/150?img=32" alt="User" />
+                            <AvatarFallback>JD</AvatarFallback>
+                        </Avatar>
+                        <Avatar>
+                            <AvatarImage src="https://i.pravatar.cc/150?img=47" alt="User" />
+                            <AvatarFallback>AB</AvatarFallback>
                         </Avatar>
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
                     <code>{`<Avatar>
-  <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-  <AvatarFallback>CN</AvatarFallback>
+  <AvatarImage src="https://i.pravatar.cc/150?img=32" alt="User" />
+  <AvatarFallback>JD</AvatarFallback>
 </Avatar>`}</code>
                 </pre>
             </section>
@@ -37,24 +45,28 @@ export default function AvatarPage() {
                 <div className="p-6 bg-white dark:bg-gray-900 border-3 border-black dark:border-white">
                     <div className="flex items-center gap-4">
                         <Avatar size="sm">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=1" alt="User" />
                             <AvatarFallback>SM</AvatarFallback>
                         </Avatar>
                         <Avatar size="default">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=2" alt="User" />
                             <AvatarFallback>MD</AvatarFallback>
                         </Avatar>
                         <Avatar size="lg">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=3" alt="User" />
                             <AvatarFallback>LG</AvatarFallback>
                         </Avatar>
                         <Avatar size="xl">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=4" alt="User" />
                             <AvatarFallback>XL</AvatarFallback>
                         </Avatar>
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
-                    <code>{`<Avatar size="sm"><AvatarFallback>SM</AvatarFallback></Avatar>
-<Avatar size="default"><AvatarFallback>MD</AvatarFallback></Avatar>
-<Avatar size="lg"><AvatarFallback>LG</AvatarFallback></Avatar>
-<Avatar size="xl"><AvatarFallback>XL</AvatarFallback></Avatar>`}</code>
+                    <code>{`<Avatar size="sm"><AvatarImage src="..." /><AvatarFallback>SM</AvatarFallback></Avatar>
+<Avatar size="default"><AvatarImage src="..." /><AvatarFallback>MD</AvatarFallback></Avatar>
+<Avatar size="lg"><AvatarImage src="..." /><AvatarFallback>LG</AvatarFallback></Avatar>
+<Avatar size="xl"><AvatarImage src="..." /><AvatarFallback>XL</AvatarFallback></Avatar>`}</code>
                 </pre>
             </section>
 
@@ -64,16 +76,18 @@ export default function AvatarPage() {
                 <div className="p-6 bg-white dark:bg-gray-900 border-3 border-black dark:border-white">
                     <div className="flex items-center gap-4">
                         <Avatar shape="square" size="lg">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=11" alt="User" />
                             <AvatarFallback>SQ</AvatarFallback>
                         </Avatar>
                         <Avatar shape="rounded" size="lg">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=12" alt="User" />
                             <AvatarFallback>RD</AvatarFallback>
                         </Avatar>
                     </div>
                 </div>
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
-                    <code>{`<Avatar shape="square"><AvatarFallback>SQ</AvatarFallback></Avatar>
-<Avatar shape="rounded"><AvatarFallback>RD</AvatarFallback></Avatar>`}</code>
+                    <code>{`<Avatar shape="square"><AvatarImage src="..." /><AvatarFallback>SQ</AvatarFallback></Avatar>
+<Avatar shape="rounded"><AvatarImage src="..." /><AvatarFallback>RD</AvatarFallback></Avatar>`}</code>
                 </pre>
             </section>
 
@@ -113,12 +127,15 @@ export default function AvatarPage() {
                 <div className="p-6 bg-white dark:bg-gray-900 border-3 border-black dark:border-white">
                     <div className="flex -space-x-3">
                         <Avatar className="border-4 border-white dark:border-gray-900">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=20" alt="User A" />
                             <AvatarFallback className="bg-[#FF6B6B] text-white">A</AvatarFallback>
                         </Avatar>
                         <Avatar className="border-4 border-white dark:border-gray-900">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=21" alt="User B" />
                             <AvatarFallback className="bg-[#4ECDC4] text-white">B</AvatarFallback>
                         </Avatar>
                         <Avatar className="border-4 border-white dark:border-gray-900">
+                            <AvatarImage src="https://i.pravatar.cc/150?img=22" alt="User C" />
                             <AvatarFallback className="bg-[#FFE66D] text-black">C</AvatarFallback>
                         </Avatar>
                         <Avatar className="border-4 border-white dark:border-gray-900">
@@ -129,9 +146,11 @@ export default function AvatarPage() {
                 <pre className="p-4 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white overflow-x-auto">
                     <code>{`<div className="flex -space-x-3">
   <Avatar className="border-4 border-white">
+    <AvatarImage src="https://i.pravatar.cc/150?img=20" alt="User" />
     <AvatarFallback className="bg-[#FF6B6B] text-white">A</AvatarFallback>
   </Avatar>
   <Avatar className="border-4 border-white">
+    <AvatarImage src="https://i.pravatar.cc/150?img=21" alt="User" />
     <AvatarFallback className="bg-[#4ECDC4] text-white">B</AvatarFallback>
   </Avatar>
   {/* ... */}
