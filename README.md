@@ -176,6 +176,10 @@ The brutalism plugin adds these utilities:
 /* 3px solid black border */
 /* 3px solid black border */
 /* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
 .nb-shadow    /* 4px offset shadow */
 .nb-shadow-sm /* 2px offset shadow */
 .nb-shadow-lg /* 6px offset shadow */
