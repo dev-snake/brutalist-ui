@@ -2,14 +2,22 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from 'brutalist-ui';
+import { cn, ScrollArea } from 'brutalist-ui';
 import { useState } from 'react';
 import { Menu, X, Heart } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 
 const navigation = [
     { name: 'Getting Started', href: '/docs' },
-    { name: 'Installation', href: '/docs/installation' },
+    {
+        name: 'Installation',
+        href: '/docs/installation',
+        children: [
+            { name: 'Next.js', href: '/docs/installation/nextjs' },
+            { name: 'Vite', href: '/docs/installation/vite' },
+            { name: 'Manual', href: '/docs/installation/manual' },
+        ],
+    },
     {
         name: 'Components',
         href: '/docs/components',
@@ -29,6 +37,7 @@ const navigation = [
             { name: 'Label', href: '/docs/components/label' },
             { name: 'Pagination', href: '/docs/components/pagination' },
             { name: 'Popover', href: '/docs/components/popover' },
+            { name: 'Scroll Area', href: '/docs/components/scroll-area' },
             { name: 'Select', href: '/docs/components/select' },
             { name: 'Separator', href: '/docs/components/separator' },
             { name: 'Skeleton', href: '/docs/components/skeleton' },
@@ -74,11 +83,11 @@ export function Sidebar() {
             {/* Sidebar */}
             <aside
                 className={cn(
-                    'fixed lg:sticky top-0 left-0 z-40 w-64 border-r-3 border-black dark:border-white min-h-screen h-screen overflow-y-auto p-6 bg-white dark:bg-gray-950 transition-transform duration-300 ease-in-out',
+                    'fixed lg:sticky top-0 left-0 z-40 w-64 border-r-3 border-black dark:border-white h-screen bg-white dark:bg-gray-950 transition-transform duration-300 ease-in-out',
                     isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
                 )}
             >
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center justify-between p-6 pb-4">
                     <Link href="/" className="block" onClick={closeSidebar}>
                         <h1 className="text-xl font-black">Brutalist UI</h1>
                     </Link>
@@ -86,60 +95,62 @@ export function Sidebar() {
                         <ThemeToggle />
                     </div>
                 </div>
-                <nav className="space-y-2 pb-8">
-                    {navigation.map((item) => (
-                        <div key={item.name}>
+                <ScrollArea className="h-[calc(100vh-80px)]">
+                    <nav className="space-y-2 px-6 pb-8">
+                        {navigation.map((item) => (
+                            <div key={item.name}>
+                                <Link
+                                    href={item.href}
+                                    onClick={closeSidebar}
+                                    className={cn(
+                                        'block px-3 py-2 font-bold transition-colors border-3 border-transparent',
+                                        pathname === item.href
+                                            ? 'bg-[#FFE66D] text-black border-black shadow-[2px_2px_0px_0px_#000000]'
+                                            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                                    )}
+                                >
+                                    {item.name}
+                                </Link>
+                                {item.children && (
+                                    <div className="ml-4 mt-1 space-y-1">
+                                        {item.children.map((child) => (
+                                            <Link
+                                                key={child.name}
+                                                href={child.href}
+                                                onClick={closeSidebar}
+                                                className={cn(
+                                                    'block px-3 py-1.5 text-sm font-medium transition-colors',
+                                                    pathname === child.href
+                                                        ? 'bg-[#FFE66D] text-black border-2 border-black'
+                                                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                                                )}
+                                            >
+                                                {child.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+
+                        {/* Sponsor Button */}
+                        <div className="pt-4 mt-4 border-t-2 border-gray-200 dark:border-gray-700">
                             <Link
-                                href={item.href}
+                                href="/sponsor"
                                 onClick={closeSidebar}
                                 className={cn(
-                                    'block px-3 py-2 font-bold transition-colors border-3 border-transparent',
-                                    pathname === item.href
-                                        ? 'bg-[#FFE66D] text-black border-black shadow-[2px_2px_0px_0px_#000000]'
-                                        : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                                    'flex items-center gap-2 px-3 py-2 font-bold transition-all border-3',
+                                    pathname === '/sponsor'
+                                        ? 'bg-[#FF6B6B] text-white border-black shadow-[2px_2px_0px_0px_#000000]'
+                                        : 'bg-[#FF6B6B] text-white border-black hover:shadow-[4px_4px_0px_0px_#000000] hover:-translate-y-0.5'
                                 )}
                             >
-                                {item.name}
+                                <Heart className="w-4 h-4" fill="white" />
+                                Sponsor
                             </Link>
-                            {item.children && (
-                                <div className="ml-4 mt-1 space-y-1">
-                                    {item.children.map((child) => (
-                                        <Link
-                                            key={child.name}
-                                            href={child.href}
-                                            onClick={closeSidebar}
-                                            className={cn(
-                                                'block px-3 py-1.5 text-sm font-medium transition-colors',
-                                                pathname === child.href
-                                                    ? 'bg-[#FFE66D] text-black border-2 border-black'
-                                                    : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-                                            )}
-                                        >
-                                            {child.name}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
                         </div>
-                    ))}
-
-                    {/* Sponsor Button */}
-                    <div className="pt-4 mt-4 border-t-2 border-gray-200 dark:border-gray-700">
-                        <Link
-                            href="/sponsor"
-                            onClick={closeSidebar}
-                            className={cn(
-                                'flex items-center gap-2 px-3 py-2 font-bold transition-all border-3',
-                                pathname === '/sponsor'
-                                    ? 'bg-[#FF6B6B] text-white border-black shadow-[2px_2px_0px_0px_#000000]'
-                                    : 'bg-[#FF6B6B] text-white border-black hover:shadow-[4px_4px_0px_0px_#000000] hover:-translate-y-0.5'
-                            )}
-                        >
-                            <Heart className="w-4 h-4" fill="white" />
-                            Sponsor
-                        </Link>
-                    </div>
-                </nav>
+                    </nav>
+                </ScrollArea>
             </aside>
         </>
     );

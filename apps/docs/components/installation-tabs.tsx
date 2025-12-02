@@ -38,6 +38,9 @@ const componentDependencies: Record<string, string[]> = {
     skeleton: [],
     calendar: ['react-day-picker'],
     'context-menu': ['@radix-ui/react-context-menu'],
+    command: ['cmdk'],
+    combobox: ['cmdk', '@radix-ui/react-popover'],
+    'scroll-area': ['@radix-ui/react-scroll-area'],
 };
 
 // Component import mappings (what gets exported from each component)
@@ -139,7 +142,77 @@ const componentImports: Record<string, string[]> = {
         'ContextMenuSubTrigger',
         'ContextMenuRadioGroup',
     ],
+    command: [
+        'Command',
+        'CommandDialog',
+        'CommandInput',
+        'CommandList',
+        'CommandEmpty',
+        'CommandGroup',
+        'CommandItem',
+        'CommandShortcut',
+        'CommandSeparator',
+    ],
+    combobox: ['Combobox', 'ComboboxMulti'],
+    'scroll-area': ['ScrollArea', 'ScrollBar'],
 };
+
+function CopyButton({ text }: { text: string }) {
+    const [copied, setCopied] = React.useState(false);
+
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    };
+
+    return (
+        <button
+            onClick={copyToClipboard}
+            className={cn(
+                'absolute top-2 right-2 p-1.5 border-2 border-white font-bold text-xs transition-all duration-200',
+                'bg-gray-800 hover:bg-[#4ECDC4] hover:border-black hover:text-black',
+                copied && 'bg-[#4ECDC4] border-black text-black'
+            )}
+            title={copied ? 'Copied!' : 'Copy to clipboard'}
+        >
+            {copied ? (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+            ) : (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+            )}
+        </button>
+    );
+}
 
 export function InstallationTabs({
     componentName,
@@ -231,9 +304,12 @@ export function InstallationTabs({
             {/* Content */}
             {activeTab === 'cli' ? (
                 <div className="space-y-4">
-                    <pre className="bg-gray-900 text-gray-100 p-4 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
-                        <code>{cliCommands[packageManager]}</code>
-                    </pre>
+                    <div className="relative">
+                        <CopyButton text={cliCommands[packageManager]} />
+                        <pre className="bg-gray-900 text-gray-100 p-4 pr-12 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
+                            <code>{cliCommands[packageManager]}</code>
+                        </pre>
+                    </div>
                 </div>
             ) : (
                 <div className="space-y-4">
@@ -241,9 +317,12 @@ export function InstallationTabs({
                         <p className="text-sm font-bold mb-2 text-gray-600 dark:text-gray-400">
                             1. Install dependencies:
                         </p>
-                        <pre className="bg-gray-900 text-gray-100 p-4 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
-                            <code>{dependencyCommands[packageManager]}</code>
-                        </pre>
+                        <div className="relative">
+                            <CopyButton text={dependencyCommands[packageManager]} />
+                            <pre className="bg-gray-900 text-gray-100 p-4 pr-12 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
+                                <code>{dependencyCommands[packageManager]}</code>
+                            </pre>
+                        </div>
                     </div>
 
                     <div>
@@ -276,9 +355,12 @@ export function InstallationTabs({
                         <p className="text-sm font-bold mb-2 text-gray-600 dark:text-gray-400">
                             4. Import and use:
                         </p>
-                        <pre className="bg-gray-900 text-gray-100 p-4 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
-                            <code>{importStatement}</code>
-                        </pre>
+                        <div className="relative">
+                            <CopyButton text={importStatement} />
+                            <pre className="bg-gray-900 text-gray-100 p-4 pr-12 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
+                                <code>{importStatement}</code>
+                            </pre>
+                        </div>
                     </div>
                 </div>
             )}

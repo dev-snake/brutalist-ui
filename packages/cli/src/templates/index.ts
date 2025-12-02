@@ -23,6 +23,7 @@ import { tabsTemplate } from './tabs.js';
 import { textareaTemplate } from './textarea.js';
 import { toastTemplate } from './toast.js';
 import { tooltipTemplate } from './tooltip.js';
+import { scrollAreaTemplate } from './scroll-area.js';
 
 const templates: Record<string, (utilsAlias: string) => string> = {
     button: buttonTemplate,
@@ -50,6 +51,7 @@ const templates: Record<string, (utilsAlias: string) => string> = {
     textarea: textareaTemplate,
     toast: toastTemplate,
     tooltip: tooltipTemplate,
+    'scroll-area': scrollAreaTemplate,
 };
 
 export function getComponentTemplate(name: string, utilsAlias: string): string {
