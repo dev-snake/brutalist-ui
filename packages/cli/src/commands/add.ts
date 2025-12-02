@@ -35,6 +35,7 @@ const AVAILABLE_COMPONENTS = [
     'label',
     'pagination',
     'popover',
+    'scroll-area',
     'select',
     'separator',
     'skeleton',
@@ -62,6 +63,7 @@ const COMPONENT_DEPENDENCIES: Record<string, string[]> = {
     checkbox: ['@radix-ui/react-checkbox'],
     calendar: ['react-day-picker', 'date-fns'],
     command: ['cmdk'],
+    'scroll-area': ['@radix-ui/react-scroll-area'],
     combobox: ['cmdk', '@radix-ui/react-popover'],
 };
 

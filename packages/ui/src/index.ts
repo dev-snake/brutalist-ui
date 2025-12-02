@@ -23,6 +23,7 @@ export * from './components/toast';
 export * from './components/skeleton';
 export * from './components/command';
 export * from './components/combobox';
+export * from './components/scroll-area';
 // Calendar is exported separately to avoid SSR issues with react-day-picker
 // Import from 'brutalist-ui/calendar' instead
 // export * from './components/calendar';

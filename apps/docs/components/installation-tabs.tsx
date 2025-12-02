@@ -40,6 +40,7 @@ const componentDependencies: Record<string, string[]> = {
     'context-menu': ['@radix-ui/react-context-menu'],
     command: ['cmdk'],
     combobox: ['cmdk', '@radix-ui/react-popover'],
+    'scroll-area': ['@radix-ui/react-scroll-area'],
 };
 
 // Component import mappings (what gets exported from each component)
@@ -153,6 +154,7 @@ const componentImports: Record<string, string[]> = {
         'CommandSeparator',
     ],
     combobox: ['Combobox', 'ComboboxMulti'],
+    'scroll-area': ['ScrollArea', 'ScrollBar'],
 };
 
 function CopyButton({ text }: { text: string }) {
