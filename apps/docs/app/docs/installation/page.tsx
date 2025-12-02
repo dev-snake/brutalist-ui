@@ -1,5 +1,6 @@
 import { Badge } from 'brutalist-ui';
 import { Metadata } from 'next';
+import { CodeBlock, PackageManagerTabs } from '@/components/code-block';
 
 export const metadata: Metadata = {
     title: 'Installation Guide - Brutalist UI | Setup Neo-Brutalism Components',
@@ -41,23 +42,20 @@ export default function InstallationPage() {
             </ul>
 
             <h2>Install the Package</h2>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`# Using npm
-npm install brutalist-ui
-
-# Using pnpm
-pnpm add brutalist-ui
-
-# Using yarn
-yarn add brutalist-ui`}
-            </pre>
+            <PackageManagerTabs
+                commands={{
+                    npm: 'npm install brutalist-ui',
+                    pnpm: 'pnpm add brutalist-ui',
+                    yarn: 'yarn add brutalist-ui',
+                    bun: 'bun add brutalist-ui',
+                }}
+            />
 
             <h2>Configure Tailwind CSS</h2>
             <p>
                 Add the library to your Tailwind CSS content paths and include the Brutalism plugin:
             </p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`// tailwind.config.js
+            <CodeBlock language="js">{`// tailwind.config.js
 module.exports = {
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
@@ -78,13 +76,11 @@ module.exports = {
   plugins: [
     require('brutalist-ui/brutalism-plugin')
   ],
-}`}
-            </pre>
+}`}</CodeBlock>
 
             <h2>Import Components</h2>
             <p>Import and use components in your React application:</p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`import { Button, Card, Dialog } from 'brutalist-ui';
+            <CodeBlock language="tsx">{`import { Button, Card, Dialog } from 'brutalist-ui';
 
 function App() {
   return (
@@ -95,31 +91,26 @@ function App() {
       </Button>
     </Card>
   );
-}`}
-            </pre>
+}`}</CodeBlock>
 
             <h2>TypeScript Support</h2>
             <p>
                 Neo-Brutalism UI is written in TypeScript and includes full type definitions. No
                 additional setup is required.
             </p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`import { Button, type ButtonProps } from 'brutalist-ui';
+            <CodeBlock language="tsx">{`import { Button, type ButtonProps } from 'brutalist-ui';
 
 // Full type inference for props
 const MyButton = (props: ButtonProps) => {
   return <Button {...props} />;
-};`}
-            </pre>
+};`}</CodeBlock>
 
             <h2>Next.js Setup</h2>
             <p>For Next.js projects, add the package to your transpilePackages config:</p>
-            <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-sm">
-                {`// next.config.js
+            <CodeBlock language="js">{`// next.config.js
 module.exports = {
   transpilePackages: ['brutalist-ui'],
-}`}
-            </pre>
+}`}</CodeBlock>
         </div>
     );
 }
