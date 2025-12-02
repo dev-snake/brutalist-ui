@@ -9,7 +9,15 @@ import { ThemeToggle } from './theme-toggle';
 
 const navigation = [
     { name: 'Getting Started', href: '/docs' },
-    { name: 'Installation', href: '/docs/installation' },
+    {
+        name: 'Installation',
+        href: '/docs/installation',
+        children: [
+            { name: 'Next.js', href: '/docs/installation/nextjs' },
+            { name: 'Vite', href: '/docs/installation/vite' },
+            { name: 'Manual', href: '/docs/installation/manual' },
+        ],
+    },
     {
         name: 'Components',
         href: '/docs/components',
