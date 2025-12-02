@@ -49,8 +49,8 @@ export default function ComboboxPage() {
             <div className="space-y-4">
                 <h1 className="text-4xl font-black">Combobox</h1>
                 <p className="text-lg text-gray-600 dark:text-gray-400">
-                    Autocomplete input and command palette with a list of suggestions.
-                    Built using a composition of Popover and Command components.
+                    Autocomplete input and command palette with a list of suggestions. Built using a
+                    composition of Popover and Command components.
                 </p>
             </div>
 
@@ -81,9 +81,7 @@ export default function ComboboxPage() {
             {/* With Disabled Options */}
             <section className="space-y-4">
                 <h2 className="text-2xl font-black">With Disabled Options</h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                    Some options can be disabled.
-                </p>
+                <p className="text-gray-600 dark:text-gray-400">Some options can be disabled.</p>
                 <div className="flex flex-col items-center gap-4 p-8 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white">
                     <div className="w-full max-w-xs">
                         <Combobox
@@ -234,14 +232,18 @@ export default function ComboboxPage() {
                             </tr>
                             <tr className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="p-4 font-mono text-sm">onValueChange</td>
-                                <td className="p-4 font-mono text-sm">(value: string) =&gt; void</td>
+                                <td className="p-4 font-mono text-sm">
+                                    (value: string) =&gt; void
+                                </td>
                                 <td className="p-4 font-mono text-sm">-</td>
                                 <td className="p-4">Callback when value changes</td>
                             </tr>
                             <tr className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="p-4 font-mono text-sm">placeholder</td>
                                 <td className="p-4 font-mono text-sm">string</td>
-                                <td className="p-4 font-mono text-sm">&quot;Select option...&quot;</td>
+                                <td className="p-4 font-mono text-sm">
+                                    &quot;Select option...&quot;
+                                </td>
                                 <td className="p-4">Placeholder text</td>
                             </tr>
                             <tr className="border-b border-gray-200 dark:border-gray-700">
@@ -253,7 +255,9 @@ export default function ComboboxPage() {
                             <tr className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="p-4 font-mono text-sm">emptyText</td>
                                 <td className="p-4 font-mono text-sm">string</td>
-                                <td className="p-4 font-mono text-sm">&quot;No results found.&quot;</td>
+                                <td className="p-4 font-mono text-sm">
+                                    &quot;No results found.&quot;
+                                </td>
                                 <td className="p-4">Text when no results</td>
                             </tr>
                             <tr className="border-b border-gray-200 dark:border-gray-700">
@@ -267,9 +271,7 @@ export default function ComboboxPage() {
                 </div>
 
                 <h3 className="text-xl font-black mt-6">ComboboxMulti</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                    Same props as Combobox, plus:
-                </p>
+                <p className="text-gray-600 dark:text-gray-400">Same props as Combobox, plus:</p>
                 <div className="overflow-x-auto">
                     <table className="w-full border-3 border-black dark:border-white">
                         <thead className="bg-[#FFE66D] dark:bg-[#FFE66D]">
@@ -297,7 +299,9 @@ export default function ComboboxPage() {
                             </tr>
                             <tr className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="p-4 font-mono text-sm">onValueChange</td>
-                                <td className="p-4 font-mono text-sm">(value: string[]) =&gt; void</td>
+                                <td className="p-4 font-mono text-sm">
+                                    (value: string[]) =&gt; void
+                                </td>
                                 <td className="p-4 font-mono text-sm">-</td>
                                 <td className="p-4">Callback when values change</td>
                             </tr>
@@ -305,7 +309,9 @@ export default function ComboboxPage() {
                                 <td className="p-4 font-mono text-sm">maxDisplay</td>
                                 <td className="p-4 font-mono text-sm">number</td>
                                 <td className="p-4 font-mono text-sm">3</td>
-                                <td className="p-4">Max items to show before &quot;X selected&quot;</td>
+                                <td className="p-4">
+                                    Max items to show before &quot;X selected&quot;
+                                </td>
                             </tr>
                         </tbody>
                     </table>

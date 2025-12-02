@@ -1,6 +1,6 @@
 {
     "name": "brutalist-ui",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "A Neo-Brutalism styled React UI component library",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",

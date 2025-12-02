@@ -180,9 +180,7 @@ export default function CommandPage() {
             {/* With Disabled Items */}
             <section className="space-y-4">
                 <h2 className="text-2xl font-black">With Disabled Items</h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                    Some items can be disabled.
-                </p>
+                <p className="text-gray-600 dark:text-gray-400">Some items can be disabled.</p>
                 <div className="flex justify-center p-8 bg-gray-100 dark:bg-gray-800 border-3 border-black dark:border-white">
                     <Command className="border-3 border-black dark:border-white shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#FFFFFF] max-w-md w-full">
                         <CommandInput placeholder="Search..." />
@@ -214,7 +212,8 @@ export default function CommandPage() {
                     <pre>npx brutalist-ui-cli add command</pre>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                    The Command component requires the <code className="bg-gray-100 dark:bg-gray-800 px-1">cmdk</code> package:
+                    The Command component requires the{' '}
+                    <code className="bg-gray-100 dark:bg-gray-800 px-1">cmdk</code> package:
                 </p>
                 <div className="bg-gray-900 text-gray-100 p-4 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
                     <pre>npm install cmdk</pre>
