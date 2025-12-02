@@ -3,6 +3,7 @@ import ora from 'ora';
 import inquirer from 'inquirer';
 import fs from 'fs-extra';
 import path from 'path';
+import { execSync } from 'child_process';
 import { getComponentTemplate } from '../templates/index.js';
 
 interface AddOptions {
@@ -23,8 +24,11 @@ const AVAILABLE_COMPONENTS = [
     'avatar',
     'badge',
     'button',
+    'calendar',
     'card',
     'checkbox',
+    'combobox',
+    'command',
     'dialog',
     'dropdown-menu',
     'input',
@@ -42,6 +46,50 @@ const AVAILABLE_COMPONENTS = [
     'toast',
     'tooltip',
 ];
+
+// Component dependencies mapping
+const COMPONENT_DEPENDENCIES: Record<string, string[]> = {
+    button: ['@radix-ui/react-slot'],
+    dialog: ['@radix-ui/react-dialog'],
+    popover: ['@radix-ui/react-popover'],
+    tooltip: ['@radix-ui/react-tooltip'],
+    'dropdown-menu': ['@radix-ui/react-dropdown-menu'],
+    select: ['@radix-ui/react-select'],
+    tabs: ['@radix-ui/react-tabs'],
+    avatar: ['@radix-ui/react-avatar'],
+    separator: ['@radix-ui/react-separator'],
+    switch: ['@radix-ui/react-switch'],
+    checkbox: ['@radix-ui/react-checkbox'],
+    calendar: ['react-day-picker', 'date-fns'],
+    command: ['cmdk'],
+    combobox: ['cmdk', '@radix-ui/react-popover'],
+};
+
+// Detect package manager
+function getPackageManager(): 'pnpm' | 'yarn' | 'bun' | 'npm' {
+    try {
+        if (fs.existsSync('pnpm-lock.yaml')) return 'pnpm';
+        if (fs.existsSync('yarn.lock')) return 'yarn';
+        if (fs.existsSync('bun.lockb')) return 'bun';
+    } catch {
+        // ignore
+    }
+    return 'npm';
+}
+
+// Install dependencies
+function installDependencies(packageManager: string, deps: string[]): void {
+    if (deps.length === 0) return;
+
+    const installCmd = {
+        pnpm: `pnpm add ${deps.join(' ')}`,
+        yarn: `yarn add ${deps.join(' ')}`,
+        bun: `bun add ${deps.join(' ')}`,
+        npm: `npm install ${deps.join(' ')}`,
+    }[packageManager];
+
+    execSync(installCmd!, { stdio: 'inherit' });
+}
 
 export async function add(components: string[], options: AddOptions) {
     // Check if initialized
@@ -120,6 +168,30 @@ export async function add(components: string[], options: AddOptions) {
     spinner.succeed(
         chalk.green(`Added ${added} component(s)${skipped > 0 ? `, skipped ${skipped}` : ''}`)
     );
+
+    // Collect and install dependencies
+    const allDeps = new Set<string>();
+    for (const component of components) {
+        const deps = COMPONENT_DEPENDENCIES[component];
+        if (deps) {
+            deps.forEach((d) => allDeps.add(d));
+        }
+    }
+
+    if (allDeps.size > 0) {
+        const packageManager = getPackageManager();
+        console.log('\n' + chalk.bold(`Installing dependencies with ${packageManager}...`));
+
+        try {
+            installDependencies(packageManager, Array.from(allDeps));
+            console.log(chalk.green('✓ Dependencies installed'));
+        } catch (error) {
+            console.log(chalk.yellow('⚠ Failed to install dependencies automatically.'));
+            console.log(
+                chalk.gray(`  Run manually: ${packageManager} add ${Array.from(allDeps).join(' ')}`)
+            );
+        }
+    }
 
     console.log('\n' + chalk.bold('Components added to:'));
     console.log(chalk.cyan(`  ${path.join(componentsDir, 'ui')}/`));

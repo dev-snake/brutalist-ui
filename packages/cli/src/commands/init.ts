@@ -4,6 +4,7 @@ import inquirer from 'inquirer';
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,6 +34,30 @@ const defaultConfig: Config = {
         utils: '@/lib/utils',
     },
 };
+
+// Detect package manager
+function getPackageManager(): 'pnpm' | 'yarn' | 'bun' | 'npm' {
+    try {
+        if (fs.existsSync('pnpm-lock.yaml')) return 'pnpm';
+        if (fs.existsSync('yarn.lock')) return 'yarn';
+        if (fs.existsSync('bun.lockb')) return 'bun';
+    } catch {
+        // ignore
+    }
+    return 'npm';
+}
+
+// Install dependencies
+function installDependencies(packageManager: string, deps: string[]): void {
+    const installCmd = {
+        pnpm: `pnpm add ${deps.join(' ')}`,
+        yarn: `yarn add ${deps.join(' ')}`,
+        bun: `bun add ${deps.join(' ')}`,
+        npm: `npm install ${deps.join(' ')}`,
+    }[packageManager];
+
+    execSync(installCmd!, { stdio: 'inherit' });
+}
 
 export async function init(options: InitOptions) {
     console.log(chalk.bold('\n🎨 Brutalist UI - Neo-Brutalism Component Library\n'));
@@ -187,12 +212,24 @@ export function cn(...inputs: ClassValue[]) {
 
         spinner.succeed(chalk.green('Brutalist UI initialized successfully!'));
 
+        // Install dependencies
+        const packageManager = getPackageManager();
+        console.log('\n' + chalk.bold(`Installing dependencies with ${packageManager}...`));
+
+        const deps = ['clsx', 'tailwind-merge', 'class-variance-authority'];
+
+        try {
+            installDependencies(packageManager, deps);
+            console.log(chalk.green('✓ Dependencies installed'));
+        } catch (error) {
+            console.log(chalk.yellow('⚠ Failed to install dependencies automatically.'));
+            console.log(chalk.gray(`  Run manually: ${packageManager} add ${deps.join(' ')}`));
+        }
+
         console.log('\n' + chalk.bold('Next steps:'));
-        console.log(chalk.cyan('  1. Install dependencies:'));
-        console.log(chalk.gray('     npm install clsx tailwind-merge class-variance-authority'));
-        console.log(chalk.cyan('  2. Add components:'));
-        console.log(chalk.gray('     npx brutalist-ui add button'));
-        console.log(chalk.gray('     npx brutalist-ui add --all'));
+        console.log(chalk.cyan('  1. Add components:'));
+        console.log(chalk.gray('     npx brutalist-ui-cli add button'));
+        console.log(chalk.gray('     npx brutalist-ui-cli add --all'));
         console.log('\n' + chalk.dim('Documentation: https://brutalistui.site/docs'));
     } catch (error) {
         spinner.fail(chalk.red('Failed to initialize Brutalist UI'));
