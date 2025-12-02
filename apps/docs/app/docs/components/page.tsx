@@ -3,9 +3,9 @@ import { Card, CardHeader, CardTitle, CardContent, Badge } from 'brutalist-ui';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'All Components - Brutalist UI | 22+ Neo-Brutalism React Components',
+    title: 'All Components - Brutalist UI | 23 Neo-Brutalism React Components',
     description:
-        'Browse 22+ Neo-Brutalism React components: Button, Card, Dialog, Toast, Table, Tabs, and more. Accessible, customizable, with bold borders and offset shadows.',
+        'Browse 23 Neo-Brutalism React components: Button, Card, Calendar, Dialog, Toast, Table, Tabs, and more. Accessible, customizable, with bold borders and offset shadows.',
     keywords: [
         'brutalist ui components',
         'neo-brutalism components',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'All Components - Brutalist UI',
         description:
-            'Browse 22+ Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
+            'Browse 23 Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
         url: 'https://brutalistui.site/docs/components',
     },
     alternates: {
@@ -27,54 +27,71 @@ export const metadata: Metadata = {
 
 const components = [
     {
+        name: 'Alert',
+        href: '/docs/components/alert',
+        description: 'Alert messages and notifications',
+    },
+    {
+        name: 'Avatar',
+        href: '/docs/components/avatar',
+        description: 'User profile image with fallback',
+    },
+    { name: 'Badge', href: '/docs/components/badge', description: 'Status indicators and labels' },
+    {
         name: 'Button',
         href: '/docs/components/button',
         description: 'Interactive button with multiple variants',
+    },
+    {
+        name: 'Calendar',
+        href: '/docs/components/calendar',
+        description: 'Date picker calendar component',
     },
     {
         name: 'Card',
         href: '/docs/components/card',
         description: 'Container for content with shadow',
     },
-    { name: 'Input', href: '/docs/components/input', description: 'Text input field' },
+    { name: 'Checkbox', href: '/docs/components/checkbox', description: 'Checkbox input control' },
     { name: 'Dialog', href: '/docs/components/dialog', description: 'Modal dialog overlay' },
-    { name: 'Popover', href: '/docs/components/popover', description: 'Floating content panel' },
-    {
-        name: 'Tooltip',
-        href: '/docs/components/tooltip',
-        description: 'Informational popup on hover',
-    },
     {
         name: 'Dropdown Menu',
         href: '/docs/components/dropdown-menu',
         description: 'Action menu dropdown',
     },
-    { name: 'Select', href: '/docs/components/select', description: 'Selection dropdown' },
-    { name: 'Tabs', href: '/docs/components/tabs', description: 'Tabbed content sections' },
-    { name: 'Table', href: '/docs/components/table', description: 'Data table display' },
-    {
-        name: 'Alert',
-        href: '/docs/components/alert',
-        description: 'Alert messages and notifications',
-    },
-    { name: 'Badge', href: '/docs/components/badge', description: 'Status indicators and labels' },
-    { name: 'Switch', href: '/docs/components/switch', description: 'Toggle switch control' },
-    { name: 'Checkbox', href: '/docs/components/checkbox', description: 'Checkbox input control' },
+    { name: 'Input', href: '/docs/components/input', description: 'Text input field' },
+    { name: 'Label', href: '/docs/components/label', description: 'Form label for accessibility' },
     {
         name: 'Pagination',
         href: '/docs/components/pagination',
         description: 'Page navigation component',
+    },
+    { name: 'Popover', href: '/docs/components/popover', description: 'Floating content panel' },
+    { name: 'Select', href: '/docs/components/select', description: 'Selection dropdown' },
+    {
+        name: 'Separator',
+        href: '/docs/components/separator',
+        description: 'Visual divider between content',
+    },
+    {
+        name: 'Skeleton',
+        href: '/docs/components/skeleton',
+        description: 'Loading placeholder skeletons',
     },
     {
         name: 'Spinner',
         href: '/docs/components/spinner',
         description: 'Loading spinner indicators',
     },
+    { name: 'Switch', href: '/docs/components/switch', description: 'Toggle switch control' },
+    { name: 'Table', href: '/docs/components/table', description: 'Data table display' },
+    { name: 'Tabs', href: '/docs/components/tabs', description: 'Tabbed content sections' },
+    { name: 'Textarea', href: '/docs/components/textarea', description: 'Multi-line text input' },
     { name: 'Toast', href: '/docs/components/toast', description: 'Toast notification messages' },
     {
-        name: 'Skeleton',
-        href: '/docs/components/skeleton',
-        description: 'Loading placeholder skeletons',
+        name: 'Tooltip',
+        href: '/docs/components/tooltip',
+        description: 'Informational popup on hover',
     },
 ];
 

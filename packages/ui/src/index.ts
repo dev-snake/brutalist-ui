@@ -21,7 +21,9 @@ export * from './components/pagination';
 export * from './components/spinner';
 export * from './components/toast';
 export * from './components/skeleton';
-export * from './components/calendar';
+// Calendar is exported separately to avoid SSR issues with react-day-picker
+// Import from 'brutalist-ui/calendar' instead
+// export * from './components/calendar';
 
 // Utilities
 export * from './lib/utils';

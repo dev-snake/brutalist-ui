@@ -18,6 +18,7 @@ const navigation = [
             { name: 'Avatar', href: '/docs/components/avatar' },
             { name: 'Badge', href: '/docs/components/badge' },
             { name: 'Button', href: '/docs/components/button' },
+            { name: 'Calendar', href: '/docs/components/calendar' },
             { name: 'Card', href: '/docs/components/card' },
             { name: 'Checkbox', href: '/docs/components/checkbox' },
             { name: 'Dialog', href: '/docs/components/dialog' },

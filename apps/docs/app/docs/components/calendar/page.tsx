@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Calendar } from 'brutalist-ui';
+import { Calendar } from 'brutalist-ui/calendar';
 import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function CalendarPage() {
@@ -61,7 +61,6 @@ export default function CalendarPage() {
                                 to: range?.to,
                             })
                         }
-                        numberOfMonths={2}
                     />
                 </div>
                 {dateRange.from && dateRange.to && (

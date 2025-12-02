@@ -3,6 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
     entry: {
         index: 'src/index.ts',
+        calendar: 'src/calendar.ts',
         'brutalism-plugin': 'src/lib/brutalism-plugin.js',
     },
     format: ['cjs', 'esm'],
