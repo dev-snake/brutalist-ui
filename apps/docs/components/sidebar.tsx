@@ -21,6 +21,8 @@ const navigation = [
             { name: 'Calendar', href: '/docs/components/calendar' },
             { name: 'Card', href: '/docs/components/card' },
             { name: 'Checkbox', href: '/docs/components/checkbox' },
+            { name: 'Combobox', href: '/docs/components/combobox' },
+            { name: 'Command', href: '/docs/components/command' },
             { name: 'Dialog', href: '/docs/components/dialog' },
             { name: 'Dropdown Menu', href: '/docs/components/dropdown-menu' },
             { name: 'Input', href: '/docs/components/input' },

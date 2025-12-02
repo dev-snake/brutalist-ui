@@ -27,8 +27,10 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+        showCloseButton?: boolean;
+    }
+>(({ className, children, showCloseButton = true, ...props }, ref) => (
     <DialogPortal>
         <DialogOverlay />
         <DialogPrimitive.Content
@@ -48,22 +50,24 @@ const DialogContent = React.forwardRef<
             {...props}
         >
             {children}
-            <DialogPrimitive.Close
-                className={cn(
-                    'absolute right-4 top-4',
-                    'h-8 w-8 flex items-center justify-center',
-                    'border-3 border-black dark:border-white bg-white dark:bg-gray-900',
-                    'shadow-[2px_2px_0px_0px_#000000] dark:shadow-[2px_2px_0px_0px_#FFFFFF]',
-                    'transition-all duration-150',
-                    'hover:bg-[#EF476F] hover:text-white',
-                    'hover:shadow-[3px_3px_0px_0px_#000000] hover:-translate-x-0.5 hover:-translate-y-0.5',
-                    'active:translate-y-0.5 active:shadow-none',
-                    'focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:ring-offset-2'
-                )}
-            >
-                <X className="h-4 w-4 stroke-[3]" />
-                <span className="sr-only">Close</span>
-            </DialogPrimitive.Close>
+            {showCloseButton && (
+                <DialogPrimitive.Close
+                    className={cn(
+                        'absolute right-4 top-4',
+                        'h-8 w-8 flex items-center justify-center',
+                        'border-3 border-black dark:border-white bg-white dark:bg-gray-900',
+                        'shadow-[2px_2px_0px_0px_#000000] dark:shadow-[2px_2px_0px_0px_#FFFFFF]',
+                        'transition-all duration-150',
+                        'hover:bg-[#EF476F] hover:text-white',
+                        'hover:shadow-[3px_3px_0px_0px_#000000] hover:-translate-x-0.5 hover:-translate-y-0.5',
+                        'active:translate-y-0.5 active:shadow-none',
+                        'focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:ring-offset-2'
+                    )}
+                >
+                    <X className="h-4 w-4 stroke-[3]" />
+                    <span className="sr-only">Close</span>
+                </DialogPrimitive.Close>
+            )}
         </DialogPrimitive.Content>
     </DialogPortal>
 ));

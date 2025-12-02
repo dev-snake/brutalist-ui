@@ -6,6 +6,8 @@ import { alertTemplate } from './alert.js';
 import { avatarTemplate } from './avatar.js';
 import { calendarTemplate } from './calendar.js';
 import { checkboxTemplate } from './checkbox.js';
+import { comboboxTemplate } from './combobox.js';
+import { commandTemplate } from './command.js';
 import { dialogTemplate } from './dialog.js';
 import { dropdownMenuTemplate } from './dropdown-menu.js';
 import { labelTemplate } from './label.js';
@@ -31,6 +33,8 @@ const templates: Record<string, (utilsAlias: string) => string> = {
     avatar: avatarTemplate,
     calendar: calendarTemplate,
     checkbox: checkboxTemplate,
+    combobox: comboboxTemplate,
+    command: commandTemplate,
     dialog: dialogTemplate,
     'dropdown-menu': dropdownMenuTemplate,
     label: labelTemplate,

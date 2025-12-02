@@ -3,9 +3,9 @@ import { Card, CardHeader, CardTitle, CardContent, Badge } from 'brutalist-ui';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'All Components - Brutalist UI | 23 Neo-Brutalism React Components',
+    title: 'All Components - Brutalist UI | 25 Neo-Brutalism React Components',
     description:
-        'Browse 23 Neo-Brutalism React components: Button, Card, Calendar, Dialog, Toast, Table, Tabs, and more. Accessible, customizable, with bold borders and offset shadows.',
+        'Browse 25 Neo-Brutalism React components: Button, Card, Calendar, Command, Combobox, Dialog, Toast, Table, Tabs, and more. Accessible, customizable, with bold borders and offset shadows.',
     keywords: [
         'brutalist ui components',
         'neo-brutalism components',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'All Components - Brutalist UI',
         description:
-            'Browse 23 Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
+            'Browse 25 Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
         url: 'https://brutalistui.site/docs/components',
     },
     alternates: {
@@ -53,6 +53,16 @@ const components = [
         description: 'Container for content with shadow',
     },
     { name: 'Checkbox', href: '/docs/components/checkbox', description: 'Checkbox input control' },
+    {
+        name: 'Combobox',
+        href: '/docs/components/combobox',
+        description: 'Autocomplete with search and selection',
+    },
+    {
+        name: 'Command',
+        href: '/docs/components/command',
+        description: 'Command palette for actions',
+    },
     { name: 'Dialog', href: '/docs/components/dialog', description: 'Modal dialog overlay' },
     {
         name: 'Dropdown Menu',
