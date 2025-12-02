@@ -1,8 +1,6 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
-    "framework": "nextjs",
-    "installCommand": "pnpm install",
     "buildCommand": "pnpm --filter brutalist-ui build && pnpm --filter docs build",
-    "outputDirectory": "apps/docs/.next",
-    "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/docs/ packages/ui/"
+    "installCommand": "pnpm install",
+    "outputDirectory": "apps/docs/.next"
 }
