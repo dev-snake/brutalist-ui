@@ -18,6 +18,7 @@ const navigation = [
             { name: 'Manual', href: '/docs/installation/manual' },
         ],
     },
+    { name: 'CLI', href: '/docs/cli' },
     {
         name: 'Components',
         href: '/docs/components',
@@ -42,6 +43,7 @@ const navigation = [
             { name: 'Separator', href: '/docs/components/separator' },
             { name: 'Skeleton', href: '/docs/components/skeleton' },
             { name: 'Spinner', href: '/docs/components/spinner' },
+            { name: 'Submit Button', href: '/docs/components/submit-button' },
             { name: 'Switch', href: '/docs/components/switch' },
             { name: 'Table', href: '/docs/components/table' },
             { name: 'Tabs', href: '/docs/components/tabs' },
