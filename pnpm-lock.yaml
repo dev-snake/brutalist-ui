@@ -28,7 +28,7 @@ importers:
         version: link:../../packages/ui
       next:
         specifier: 15.5.6
-        version: 15.5.6(react-dom@19.2.0)(react@19.2.0)
+        version: 15.5.6(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0)(react@19.2.0)
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@15.5.6)(react-dom@19.2.0)(react@19.2.0)
@@ -54,6 +54,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.22(postcss@8.5.6)
+      babel-plugin-react-compiler:
+        specifier: ^1.0.0
+        version: 1.0.0
       eslint:
         specifier: ^8.56.0
         version: 8.57.1
@@ -338,12 +341,10 @@ packages:
   /@babel/helper-string-parser@7.27.1:
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
     engines: {node: '>=6.9.0'}
-    dev: true
 
   /@babel/helper-validator-identifier@7.28.5:
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
-    dev: true
 
   /@babel/helper-validator-option@7.27.1:
     resolution: {integrity: sha512-YvjJow9FxbhFFKDSuFnVCe2WxXk1zWc22fFePVNEaWJEu8IrZVlda6N0uHwzZrUM1il7NC9Mlp4MaJYbYd9JSg==}
@@ -421,7 +422,6 @@ packages:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
-    dev: true
 
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
@@ -3649,6 +3649,11 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /babel-plugin-react-compiler@1.0.0:
+    resolution: {integrity: sha512-Ixm8tFfoKKIPYdCCKYTsqv+Fd4IJ0DQqMyEimo+pxUOMUR9cVPlwTrFt9Avu+3cb6Zp3mAzl+t1MrG2fxxKsxw==}
+    dependencies:
+      '@babel/types': 7.28.5
+
   /bail@2.0.2:
     resolution: {integrity: sha512-0xO6mYd7JB2YesxDKplafRpsiOzPt9V02ddPCLbY1xYGPOX24NTyN50qnUxgCPcSoYMhKpAuBTjQoRZCAkUDRw==}
     dev: false
@@ -6425,12 +6430,12 @@ packages:
       react: '*'
       react-dom: '*'
     dependencies:
-      next: 15.5.6(react-dom@19.2.0)(react@19.2.0)
+      next: 15.5.6(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0)(react@19.2.0)
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
     dev: false
 
-  /next@15.5.6(react-dom@19.2.0)(react@19.2.0):
+  /next@15.5.6(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0)(react@19.2.0):
     resolution: {integrity: sha512-zTxsnI3LQo3c9HSdSf91O1jMNsEzIXDShXd4wVdg9y5shwLqBXi4ZtUUJyB86KGVSJLZx0PFONvO54aheGX8QQ==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
     hasBin: true
@@ -6453,6 +6458,7 @@ packages:
     dependencies:
       '@next/env': 15.5.6
       '@swc/helpers': 0.5.15
+      babel-plugin-react-compiler: 1.0.0
       caniuse-lite: 1.0.30001757
       postcss: 8.4.31
       react: 19.2.0

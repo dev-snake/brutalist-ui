@@ -43,6 +43,7 @@ const AVAILABLE_COMPONENTS = [
     'separator',
     'skeleton',
     'spinner',
+    'submit-button',
     'switch',
     'table',
     'tabs',
@@ -79,6 +80,7 @@ const COMPONENT_DEPENDENCIES: Record<string, string[]> = {
     label: ['@radix-ui/react-label'],
     textarea: [],
     table: [],
+    'submit-button': [], // Uses button component, no additional deps
 };
 
 // Detect package manager

@@ -218,6 +218,7 @@ Options:
                         'separator',
                         'skeleton',
                         'spinner',
+                        'submit-button',
                         'switch',
                         'table',
                         'tabs',
@@ -235,7 +236,7 @@ Options:
                 </div>
                 <div className="mt-4 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                        <span className="font-bold text-black dark:text-white">26</span> components
+                        <span className="font-bold text-black dark:text-white">27</span> components
                         available •{' '}
                         <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 text-xs">
                             --all

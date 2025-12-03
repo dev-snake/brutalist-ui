@@ -1,5 +1,8 @@
 // Components
 export * from './components/button';
+// SubmitButton is exported separately to work properly with Server Components
+// Import from 'brutalist-ui/submit-button' instead
+// export * from './components/submit-button';
 export * from './components/card';
 export * from './components/input';
 export * from './components/textarea';
@@ -27,6 +30,10 @@ export * from './components/scroll-area';
 // Calendar is exported separately to avoid SSR issues with react-day-picker
 // Import from 'brutalist-ui/calendar' instead
 // export * from './components/calendar';
+
+// React 19 Hooks are re-exported from 'brutalist-ui/hooks'
+// to avoid issues with Server Components
+// Import from 'brutalist-ui/hooks' for useFormStatus, useFormState
 
 // Utilities
 export * from './lib/utils';

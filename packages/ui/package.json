@@ -16,6 +16,16 @@
             "import": "./dist/calendar.mjs",
             "require": "./dist/calendar.js"
         },
+        "./submit-button": {
+            "types": "./dist/submit-button.d.ts",
+            "import": "./dist/submit-button.mjs",
+            "require": "./dist/submit-button.js"
+        },
+        "./hooks": {
+            "types": "./dist/hooks.d.ts",
+            "import": "./dist/hooks.mjs",
+            "require": "./dist/hooks.js"
+        },
         "./brutalism-plugin": {
             "import": "./dist/brutalism-plugin.mjs",
             "require": "./dist/brutalism-plugin.js"

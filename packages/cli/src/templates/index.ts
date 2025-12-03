@@ -1,4 +1,5 @@
 import { buttonTemplate } from './button.js';
+import { submitButtonTemplate } from './submit-button.js';
 import { cardTemplate } from './card.js';
 import { inputTemplate } from './input.js';
 import { badgeTemplate } from './badge.js';
@@ -27,6 +28,7 @@ import { scrollAreaTemplate } from './scroll-area.js';
 
 const templates: Record<string, (utilsAlias: string) => string> = {
     button: buttonTemplate,
+    'submit-button': submitButtonTemplate,
     card: cardTemplate,
     input: inputTemplate,
     badge: badgeTemplate,

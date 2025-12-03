@@ -38,3 +38,7 @@ coverage
 
 # Misc
 .vercel
+
+# Development docs (internal only)
+DEVELOPMENT.md
+DEV_*.md
