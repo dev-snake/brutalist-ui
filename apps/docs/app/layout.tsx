@@ -79,12 +79,9 @@ export const metadata: Metadata = {
         creator: '@devsnake',
     },
     icons: {
-        icon: [
-            { url: '/favicon.svg', type: 'image/svg+xml' },
-            { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-            { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-        ],
-        apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+        icon: '/favicon.svg',
+        shortcut: '/favicon.svg',
+        apple: '/logo_bu.png',
     },
     manifest: '/manifest.json',
     other: {
@@ -136,6 +133,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
+                <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+                <link rel="icon" href="/icon" type="image/png" sizes="32x32" />
+                <link rel="apple-touch-icon" href="/apple-icon" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
