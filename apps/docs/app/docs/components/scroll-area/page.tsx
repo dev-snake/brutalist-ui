@@ -1,8 +1,7 @@
 'use client';
 
-import { Badge, ScrollArea, ScrollBar } from 'brutalist-ui';
+import { Badge, ScrollArea, ScrollBar, Separator } from '@/components/ui';
 import { InstallationTabs } from '@/components/installation-tabs';
-import { Separator } from 'brutalist-ui';
 
 export default function ScrollAreaPage() {
     const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);

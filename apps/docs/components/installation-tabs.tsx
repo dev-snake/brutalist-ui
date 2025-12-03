@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from 'brutalist-ui';
+import { cn } from '@/components/ui';
 
 interface InstallationTabsProps {
     componentName: string;
@@ -223,10 +223,10 @@ export function InstallationTabs({
     const [packageManager, setPackageManager] = React.useState<PackageManager>('pnpm');
 
     const cliCommands: Record<PackageManager, string> = {
-        pnpm: `pnpm dlx brutalist-ui-cli add ${componentName}`,
-        npm: `npx brutalist-ui-cli add ${componentName}`,
-        yarn: `yarn dlx brutalist-ui-cli add ${componentName}`,
-        bun: `bunx brutalist-ui-cli add ${componentName}`,
+        pnpm: `pnpm dlx brutalist@latest add ${componentName}`,
+        npm: `npx brutalist@latest add ${componentName}`,
+        yarn: `yarn dlx brutalist@latest add ${componentName}`,
+        bun: `bunx brutalist@latest add ${componentName}`,
     };
 
     // Get dependencies for manual install

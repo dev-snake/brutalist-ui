@@ -19,10 +19,22 @@ const toastVariants = cva(
                     'bg-white dark:bg-gray-900 text-black dark:text-white',
                     'shadow-[6px_6px_0px_0px_#000000] dark:shadow-[6px_6px_0px_0px_#FFFFFF]',
                 ],
-                success: ['bg-[#7FB069] text-black', 'shadow-[6px_6px_0px_0px_#000000]'],
-                error: ['bg-[#FF6B6B] text-black', 'shadow-[6px_6px_0px_0px_#000000]'],
-                warning: ['bg-[#FFE66D] text-black', 'shadow-[6px_6px_0px_0px_#000000]'],
-                info: ['bg-[#4ECDC4] text-black', 'shadow-[6px_6px_0px_0px_#000000]'],
+                success: [
+                    'bg-[#7FB069] text-black dark:bg-[#2d4a28] dark:text-white',
+                    'shadow-[6px_6px_0px_0px_#000000] dark:shadow-[6px_6px_0px_0px_#FFFFFF]',
+                ],
+                error: [
+                    'bg-[#FF6B6B] text-black dark:bg-[#7a2d2d] dark:text-white',
+                    'shadow-[6px_6px_0px_0px_#000000] dark:shadow-[6px_6px_0px_0px_#FFFFFF]',
+                ],
+                warning: [
+                    'bg-[#FFE66D] text-black dark:bg-[#6b5a1f] dark:text-white',
+                    'shadow-[6px_6px_0px_0px_#000000] dark:shadow-[6px_6px_0px_0px_#FFFFFF]',
+                ],
+                info: [
+                    'bg-[#4ECDC4] text-black dark:bg-[#1f5450] dark:text-white',
+                    'shadow-[6px_6px_0px_0px_#000000] dark:shadow-[6px_6px_0px_0px_#FFFFFF]',
+                ],
             },
             size: {
                 sm: 'max-w-xs',
@@ -157,7 +169,7 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
                             )}
                             aria-label="Close"
                         >
-                            <X className="h-4 w-4 stroke-[3]" />
+                            <X className="h-4 w-4 stroke-[3] dark:text-black" />
                         </button>
                     )}
                 </div>

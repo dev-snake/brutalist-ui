@@ -1,6 +1,6 @@
 'use client';
 
-import { Separator } from 'brutalist-ui';
+import { Separator } from '@/components/ui';
 import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function SeparatorPage() {

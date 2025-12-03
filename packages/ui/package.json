@@ -21,6 +21,21 @@
             "import": "./dist/submit-button.mjs",
             "require": "./dist/submit-button.js"
         },
+        "./button": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        },
+        "./input": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        },
+        "./card": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        },
         "./hooks": {
             "types": "./dist/hooks.d.ts",
             "import": "./dist/hooks.mjs",

@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from 'brutalist-ui';
+import { cn } from '@/components/ui';
 
 interface LogoProps {
     size?: 'sm' | 'md' | 'lg' | 'xl';

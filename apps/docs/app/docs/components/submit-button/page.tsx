@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger, Card } from 'brutalist-ui';
+import { Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger, Card } from '@/components/ui';
 import { Copy, Check, Rocket, Zap, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -165,9 +165,9 @@ export { SubmitButton };`;
                     <TabsContent value="cli" className="mt-4">
                         <div className="relative">
                             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg border-2 border-black overflow-x-auto">
-                                <code>npx brutalist-ui-cli add submit-button</code>
+                                <code>npx brutalist@latest add submit-button</code>
                             </pre>
-                            <CopyButton text="npx brutalist-ui-cli add submit-button" id="cli" />
+                            <CopyButton text="npx brutalist@latest add submit-button" id="cli" />
                         </div>
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             Note: This will also add the{' '}

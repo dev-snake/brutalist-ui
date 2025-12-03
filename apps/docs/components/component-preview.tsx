@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Card, cn } from 'brutalist-ui';
+import { Card, cn } from '@/components/ui';
 
 interface ComponentPreviewProps {
     children: React.ReactNode;

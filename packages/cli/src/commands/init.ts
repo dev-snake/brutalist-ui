@@ -294,8 +294,8 @@ export function cn(...inputs: ClassValue[]) {
 
         log('\n' + chalk.bold('Next steps:'), options.silent);
         log(chalk.cyan('  1. Add components:'), options.silent);
-        log(chalk.gray('     npx brutalist-ui-cli add button'), options.silent);
-        log(chalk.gray('     npx brutalist-ui-cli add --all'), options.silent);
+        log(chalk.gray('     npx brutalist@latest add button'), options.silent);
+        log(chalk.gray('     npx brutalist@latest add --all'), options.silent);
         log('\n' + chalk.dim('Documentation: https://brutalistui.site/docs'), options.silent);
     } catch (error) {
         spinner?.fail(chalk.red('Failed to initialize Brutalist UI'));

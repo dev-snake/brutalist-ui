@@ -1,6 +1,6 @@
 'use client';
 
-import { Pagination, Badge } from 'brutalist-ui';
+import { Pagination, Badge } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 import * as React from 'react';

@@ -1,6 +1,6 @@
 'use client';
 
-import { Toast, ToastContainer, Button, Badge, useToast } from 'brutalist-ui';
+import { Toast, ToastContainer, Button, Badge, useToast } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 import { Rocket } from 'lucide-react';

@@ -10,7 +10,7 @@ import {
     Badge,
     Input,
     Label,
-} from 'brutalist-ui';
+} from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 

@@ -1,203 +1,107 @@
 # Brutalist UI
 
-A Neo-Brutalism styled React UI component library. Beautiful, accessible components with bold borders, offset shadows, and that classic brutalist aesthetic.
+Neo-brutalism components with a shadcn-compatible API. Tokens (background/foreground/primary/etc.), data-slot, and CVA variants are aligned so you can import like `@/components/ui/button` in apps, while keeping the original brutalist look via wrappers.
 
 [![npm version](https://img.shields.io/npm/v/brutalist-ui.svg?style=flat-square&color=FF6B6B)](https://www.npmjs.com/package/brutalist-ui)
 [![npm downloads](https://img.shields.io/npm/dm/brutalist-ui.svg?style=flat-square)](https://www.npmjs.com/package/brutalist-ui)
 [![License: MIT](https://img.shields.io/badge/License-MIT-4ECDC4.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-FFE66D.svg?style=flat-square)](https://www.typescriptlang.org/)
 
-## ✨ Features
+## Features
+- Shadcn-compatible API: `Button`, `Input`, `Card` exports with `variant/size`, `data-slot`, and tokenized classes.
+- Brutalist wrappers: keep the old bold style and `loading` prop via `BrutalButton` (re-exports old button variants).
+- Tailwind-ready tokens: background/foreground/primary/secondary/destructive, ring, input, card, etc. Dark mode via `.dark`.
+- Radix-based primitives, CVA variants, and tailwind-merge `cn`.
 
--   🎨 **Neo-Brutalism Design** - Bold 3px borders, offset shadows, vibrant colors
--   🧱 **22+ Components** - Comprehensive UI kit for modern applications
--   🌙 **Dark Mode** - Full dark mode support out of the box
--   ♿ **Accessible** - Built on Radix UI primitives for A11y
--   🎯 **TypeScript** - Full type safety and IntelliSense
--   🎨 **Tailwind CSS** - Easy customization with utility classes
--   🔧 **CVA** - Powerful variant system with class-variance-authority
--   📦 **Tree-shakeable** - Import only what you need
-
-## 📦 Installation
-
+## Installation
 ```bash
-npm install brutalist-ui
-# or
 pnpm add brutalist-ui
+# or
+npm install brutalist-ui
 # or
 yarn add brutalist-ui
 ```
 
-## 🚀 Setup
-
-### 1. Configure Tailwind CSS
-
-Add the brutalist-ui content path and plugin to your `tailwind.config.js`:
-
+## Setup
+### 1) Tailwind config
+Add plugin and ensure tokens/shadows are available (dark mode uses class strategy):
 ```js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-        // ... your content paths
-        './node_modules/brutalist-ui/**/*.{js,mjs}',
-    ],
-    darkMode: 'class',
-    theme: {
-        extend: {
-            borderWidth: {
-                3: '3px',
-            },
-            boxShadow: {
-                brutal: '4px 4px 0px 0px #000000',
-                'brutal-sm': '2px 2px 0px 0px #000000',
-                'brutal-lg': '6px 6px 0px 0px #000000',
-            },
-        },
+  content: [
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/brutalist-ui/**/*.{js,mjs}',
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      // tokens are provided by the library; override here if needed
     },
-    plugins: [require('brutalist-ui/brutalism-plugin')],
+  },
+  plugins: [require('brutalist-ui/brutalism-plugin')],
 };
 ```
 
-### 2. Import Styles (Optional)
-
-If you want the base styles:
-
-```tsx
+### 2) Base styles
+Import once in your app entry (e.g., `app/layout.tsx` or `src/main.tsx`):
+```ts
 import 'brutalist-ui/styles.css';
 ```
 
-## 💡 Usage
+### 3) TypeScript paths (monorepo/alias)
+- If you want `@/components/ui/button` style imports, set `baseUrl`/`paths` to point at your app root and ensure `@ui/*` (or similar) points to `packages/ui/src/*`. Example for Next app:
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@ui/*": ["../../packages/ui/src/*"]
+    }
+  }
+}
+```
+- Package exports already expose subpaths `brutalist-ui/button`, `brutalist-ui/input`, `brutalist-ui/card`.
 
+## Usage
+Shadcn-style components:
 ```tsx
-import { Button, Card, CardHeader, CardTitle, CardContent, Badge } from 'brutalist-ui';
+import { Button } from 'brutalist-ui/button';
+import { Input } from 'brutalist-ui/input';
+import { Card, CardHeader, CardTitle, CardContent } from 'brutalist-ui/card';
 
-function App() {
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Hello Brutalism!</CardTitle>
-                <Badge variant="success">New</Badge>
-            </CardHeader>
-            <CardContent>
-                <Button variant="primary" size="lg">
-                    Click me
-                </Button>
-            </CardContent>
-        </Card>
-    );
+export function Example() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Shadcn-compatible Button</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <Input placeholder="Email" />
+        <Button variant="default">Primary</Button>
+        <Button variant="outline" size="sm">
+          Outline
+        </Button>
+      </CardContent>
+    </Card>
+  );
 }
 ```
 
-## 🧩 Components (22+)
-
-### Form Components
-
-| Component  | Description                                                                             |
-| ---------- | --------------------------------------------------------------------------------------- |
-| `Button`   | 9 variants (default, primary, secondary, accent, danger, success, outline, ghost, link) |
-| `Input`    | Text input with brutalist styling                                                       |
-| `Textarea` | Multi-line text input with auto-resize                                                  |
-| `Label`    | Form labels                                                                             |
-| `Checkbox` | Checkbox input with checkmark                                                           |
-| `Switch`   | Toggle switch control                                                                   |
-| `Select`   | Dropdown select (built on Radix UI)                                                     |
-
-### Layout Components
-
-| Component   | Description                                     |
-| ----------- | ----------------------------------------------- |
-| `Card`      | Container with header, content, footer sections |
-| `Separator` | Visual divider (horizontal/vertical)            |
-
-### Overlay Components
-
-| Component      | Description                          |
-| -------------- | ------------------------------------ |
-| `Dialog`       | Modal dialog (built on Radix UI)     |
-| `Popover`      | Floating content (built on Radix UI) |
-| `Tooltip`      | Hover tooltips (built on Radix UI)   |
-| `DropdownMenu` | Context menus (built on Radix UI)    |
-
-### Feedback & Status
-
-| Component  | Description                                     |
-| ---------- | ----------------------------------------------- |
-| `Alert`    | Info, success, warning, error notifications     |
-| `Badge`    | Status indicators and labels                    |
-| `Toast`    | Toast notification system                       |
-| `Spinner`  | Loading spinners (brutalist, dots, pulse, bars) |
-| `Skeleton` | Loading placeholder animations                  |
-
-### Data Display
-
-| Component | Description                        |
-| --------- | ---------------------------------- |
-| `Table`   | Data tables with brutalist styling |
-| `Avatar`  | User avatars with fallback         |
-| `Tabs`    | Tabbed content (built on Radix UI) |
-
-### Navigation
-
-| Component    | Description                                |
-| ------------ | ------------------------------------------ |
-| `Pagination` | Page navigation with first/last, prev/next |
-
-## 🎨 Brutalism Plugin Classes
-
-The Tailwind plugin provides these utility classes:
-
-| Class           | Description                            |
-| --------------- | -------------------------------------- |
-| `.nb-border`    | 3px solid black border                 |
-| `.nb-shadow`    | 4px 4px offset shadow                  |
-| `.nb-shadow-sm` | 2px 2px offset shadow                  |
-| `.nb-shadow-lg` | 6px 6px offset shadow                  |
-| `.nb-press`     | Pressed state (translateY + no shadow) |
-| `.nb-font`      | Font weight 900 + letter spacing       |
-
-### Color Palette
-
-| Color        | Hex       | Usage                        |
-| ------------ | --------- | ---------------------------- |
-| 🔴 Coral Red | `#FF6B6B` | Primary actions, destructive |
-| 🟢 Teal      | `#4ECDC4` | Success, secondary           |
-| 🟡 Yellow    | `#FFE66D` | Warning, highlights          |
-| ⚫ Black     | `#000000` | Borders, text                |
-| ⚪ White     | `#FFFFFF` | Backgrounds                  |
-
-## 📝 TypeScript
-
-All components are fully typed:
-
+Keep the original brutalist look and `loading` prop:
 ```tsx
-import { Button, type ButtonProps } from 'brutalist-ui';
+import { BrutalButton } from 'brutalist-ui';
 
-const MyButton: React.FC<ButtonProps> = (props) => {
-    return <Button variant="primary" {...props} />;
-};
+export function LegacyBrutal() {
+  return (
+    <BrutalButton variant="primary" loading>
+      Saving...
+    </BrutalButton>
+  );
+}
 ```
 
-## 🎨 Customization
-
-Components use Tailwind CSS classes and can be customized with the `className` prop:
-
-```tsx
-<Button className="bg-purple-500 hover:bg-purple-600">Custom Purple</Button>
-```
-
-## 🌐 Browser Support
-
--   Chrome (latest)
--   Firefox (latest)
--   Safari (latest)
--   Edge (latest)
-
-## 📄 License
-
-MIT © [dev-snake](https://github.com/dev-snake)
-
-## 🔗 Links
-
--   [NPM Package](https://www.npmjs.com/package/brutalist-ui)
--   [GitHub Repository](https://github.com/dev-snake/brutalist-ui)
--   [Documentation](https://brutalistui.site)
+## Notes
+- Dark mode: add/remove `.dark` on `html` or `body` to switch themes.
+- Tokens can be overridden by setting CSS variables (`--background`, `--primary`, etc.) before importing components.
+- For SSR builds that tree-shake, you can still import from the root `brutalist-ui`, or from the per-component subpaths above. The old API remains available; new shadcn-aligned components live under `components/ui`.

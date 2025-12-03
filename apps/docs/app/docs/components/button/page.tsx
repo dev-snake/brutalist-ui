@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Badge } from 'brutalist-ui';
+import { Button, Card, CardContent, Badge } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 import { Mail, ArrowRight, Loader2 } from 'lucide-react';

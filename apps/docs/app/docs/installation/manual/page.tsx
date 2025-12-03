@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge } from 'brutalist-ui';
+import { Badge } from '@/components/ui';
 import Link from 'next/link';
 import { CodeBlock, PackageManagerTabs } from '@/components/code-block';
 
@@ -12,46 +12,107 @@ export default function ManualInstallationPage() {
             </Badge>
             <h1 className="text-4xl font-black mb-4">Manual Installation</h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                Add Brutalist UI to your project manually without using the CLI.
+                Add Brutalist UI components manually to any React project.
             </p>
 
-            {/* Step 1: Install package */}
-            <div className="mb-10">
-                <h2 className="text-2xl font-black mb-4 flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 bg-black dark:bg-white text-white dark:text-black text-sm font-black border-3 border-black dark:border-white">
-                        1
-                    </span>
-                    Install the package
-                </h2>
-                <p className="mb-4 text-gray-600 dark:text-gray-400">
-                    Install{' '}
-                    <code className="bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm">
-                        brutalist-ui
-                    </code>{' '}
-                    and its peer dependencies:
+            {/* Method A: NPM Package */}
+            <section className="mb-12">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#4ECDC4] border-3 border-black flex items-center justify-center">
+                        <span className="font-black text-black">A</span>
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black">NPM Package</h2>
+                        <span className="text-xs uppercase tracking-wider text-[#4ECDC4] font-bold">
+                            Simplest
+                        </span>
+                    </div>
+                </div>
+                <p className="mb-6 text-gray-600 dark:text-gray-400">
+                    Just install the package and use it.
                 </p>
+
+                <h3 className="text-lg font-black mb-3">1. Install package</h3>
                 <PackageManagerTabs
                     commands={{
-                        pnpm: 'pnpm add brutalist-ui clsx tailwind-merge class-variance-authority',
-                        npm: 'npm install brutalist-ui clsx tailwind-merge class-variance-authority',
-                        yarn: 'yarn add brutalist-ui clsx tailwind-merge class-variance-authority',
-                        bun: 'bun add brutalist-ui clsx tailwind-merge class-variance-authority',
+                        pnpm: 'pnpm add brutalist-ui',
+                        npm: 'npm install brutalist-ui',
+                        yarn: 'yarn add brutalist-ui',
+                        bun: 'bun add brutalist-ui',
                     }}
                 />
-            </div>
 
-            {/* Step 2: Configure Tailwind */}
-            <div className="mb-10">
-                <h2 className="text-2xl font-black mb-4 flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 bg-black dark:bg-white text-white dark:text-black text-sm font-black border-3 border-black dark:border-white">
-                        2
-                    </span>
-                    Configure Tailwind CSS
-                </h2>
+                <h3 className="text-lg font-black mb-3 mt-6">2. Import styles</h3>
                 <p className="mb-4 text-gray-600 dark:text-gray-400">
-                    Add the library to your Tailwind CSS content paths and include the Brutalism
-                    plugin:
+                    Add to your entry file (main.tsx, _app.tsx, or layout.tsx):
                 </p>
+                <CodeBlock language="entry file">{`import 'brutalist-ui/styles.css';`}</CodeBlock>
+
+                <h3 className="text-lg font-black mb-3 mt-6">3. Use components</h3>
+                <CodeBlock language="tsx">{`import { Button, Card, Dialog, Badge } from 'brutalist-ui';
+
+// Special imports for SSR-sensitive components
+import { Calendar } from 'brutalist-ui/calendar';
+import { SubmitButton } from 'brutalist-ui/submit-button';
+
+function MyComponent() {
+  return (
+    <Card>
+      <Button variant="primary">Click me</Button>
+    </Card>
+  );
+}`}</CodeBlock>
+            </section>
+
+            {/* Method B: Manual Copy */}
+            <section className="mb-12">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#FF6B6B] border-3 border-black flex items-center justify-center">
+                        <span className="font-black text-black">B</span>
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black">Copy Components</h2>
+                        <span className="text-xs uppercase tracking-wider text-gray-500">
+                            Full Control
+                        </span>
+                    </div>
+                </div>
+                <p className="mb-6 text-gray-600 dark:text-gray-400">
+                    Copy source files directly into your project.
+                </p>
+
+                <h3 className="text-lg font-black mb-3">1. Prerequisites</h3>
+                <p className="mb-4 text-gray-600 dark:text-gray-400">
+                    Make sure Tailwind CSS is installed in your project.{' '}
+                    <a
+                        href="https://tailwindcss.com/docs/installation"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#FF6B6B] hover:underline font-semibold"
+                    >
+                        Follow the Tailwind CSS installation →
+                    </a>
+                </p>
+
+                <h3 className="text-lg font-black mb-3 mt-6">2. Install dependencies</h3>
+                <PackageManagerTabs
+                    commands={{
+                        pnpm: 'pnpm add clsx tailwind-merge class-variance-authority lucide-react',
+                        npm: 'npm install clsx tailwind-merge class-variance-authority lucide-react',
+                        yarn: 'yarn add clsx tailwind-merge class-variance-authority lucide-react',
+                        bun: 'bun add clsx tailwind-merge class-variance-authority lucide-react',
+                    }}
+                />
+
+                <h3 className="text-lg font-black mb-3 mt-6">3. Create utils.ts</h3>
+                <CodeBlock language="lib/utils.ts">{`import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}`}</CodeBlock>
+
+                <h3 className="text-lg font-black mb-3 mt-6">4. Configure tailwind.config.js</h3>
                 <CodeBlock language="tailwind.config.js">{`/** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -59,7 +120,6 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/brutalist-ui/**/*.{js,mjs}",
   ],
   theme: {
     extend: {
@@ -71,54 +131,50 @@ module.exports = {
         "brutal-sm": "2px 2px 0px 0px #000",
         "brutal-lg": "6px 6px 0px 0px #000",
       },
-      colors: {
-        brutalism: {
-          primary: "#FF6B6B",
-          secondary: "#4ECDC4",
-          accent: "#FFE66D",
-        },
-      },
     },
   },
-  plugins: [
-    require("brutalist-ui/brutalism-plugin"),
-  ],
+};`}</CodeBlock>
+
+                <h3 className="text-lg font-black mb-3 mt-6">5. Add base styles to your CSS</h3>
+                <CodeBlock language="globals.css">{`@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brutalist UI utility classes */
+@layer utilities {
+  .border-3 {
+    border-width: 3px;
+  }
+  
+  .shadow-brutal {
+    box-shadow: 4px 4px 0px 0px #000;
+  }
+  
+  .shadow-brutal-sm {
+    box-shadow: 2px 2px 0px 0px #000;
+  }
+  
+  .shadow-brutal-lg {
+    box-shadow: 6px 6px 0px 0px #000;
+  }
+}
+
+/* Dark mode shadows */
+.dark .shadow-brutal {
+  box-shadow: 4px 4px 0px 0px #fff;
+}
+
+.dark .shadow-brutal-sm {
+  box-shadow: 2px 2px 0px 0px #fff;
+}
+
+.dark .shadow-brutal-lg {
+  box-shadow: 6px 6px 0px 0px #fff;
 }`}</CodeBlock>
-            </div>
 
-            {/* Step 3: Add utils */}
-            <div className="mb-10">
-                <h2 className="text-2xl font-black mb-4 flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 bg-black dark:bg-white text-white dark:text-black text-sm font-black border-3 border-black dark:border-white">
-                        3
-                    </span>
-                    Add cn utility
-                </h2>
+                <h3 className="text-lg font-black mb-3 mt-6">6. Copy components from GitHub</h3>
                 <p className="mb-4 text-gray-600 dark:text-gray-400">
-                    Create a{' '}
-                    <code className="bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm">
-                        lib/utils.ts
-                    </code>{' '}
-                    file with the cn helper:
-                </p>
-                <CodeBlock language="lib/utils.ts">{`import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}`}</CodeBlock>
-            </div>
-
-            {/* Step 4: Copy component */}
-            <div className="mb-10">
-                <h2 className="text-2xl font-black mb-4 flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 bg-black dark:bg-white text-white dark:text-black text-sm font-black border-3 border-black dark:border-white">
-                        4
-                    </span>
-                    Copy components
-                </h2>
-                <p className="mb-4 text-gray-600 dark:text-gray-400">
-                    Copy the component source code from GitHub to your{' '}
+                    Copy the component files to your{' '}
                     <code className="bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm">
                         components/ui
                     </code>{' '}
@@ -135,50 +191,119 @@ export function cn(...inputs: ClassValue[]) {
                     </svg>
                     Browse components on GitHub
                 </a>
-            </div>
 
-            {/* Step 5: Usage */}
-            <div className="mb-10">
-                <h2 className="text-2xl font-black mb-4 flex items-center gap-3">
-                    <span className="flex items-center justify-center w-8 h-8 bg-black dark:bg-white text-white dark:text-black text-sm font-black border-3 border-black dark:border-white">
-                        5
-                    </span>
-                    Usage
-                </h2>
+                <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-900 border-3 border-black dark:border-white">
+                    <h4 className="font-black mb-3 text-sm uppercase tracking-wider">
+                        Recommended Structure
+                    </h4>
+                    <pre className="text-sm font-mono text-gray-600 dark:text-gray-400">{`src/
+├── components/
+│   └── ui/
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── dialog.tsx
+│       └── ...
+└── lib/
+    └── utils.ts`}</pre>
+                </div>
+            </section>
+
+            {/* Component Dependencies */}
+            <section className="mb-12">
+                <h2 className="text-xl font-black mb-4">Component Dependencies</h2>
                 <p className="mb-4 text-gray-600 dark:text-gray-400">
-                    Import and use the component in your app:
+                    Some components require additional Radix UI packages:
                 </p>
-                <CodeBlock language="App.tsx">{`import { Button } from "@/components/ui/button"
+                <div className="overflow-x-auto">
+                    <table className="w-full border-3 border-black dark:border-white text-sm">
+                        <thead className="bg-[#FFE66D]">
+                            <tr>
+                                <th className="px-4 py-2 text-left border-r-3 border-b-3 border-black font-black text-black">
+                                    Component
+                                </th>
+                                <th className="px-4 py-2 text-left border-b-3 border-black font-black text-black">
+                                    Dependencies
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white dark:bg-gray-900">
+                            <tr className="border-b-2 border-black dark:border-white">
+                                <td className="px-4 py-2 border-r-3 border-black dark:border-white font-mono">
+                                    Button
+                                </td>
+                                <td className="px-4 py-2 font-mono text-xs">
+                                    @radix-ui/react-slot
+                                </td>
+                            </tr>
+                            <tr className="border-b-2 border-black dark:border-white">
+                                <td className="px-4 py-2 border-r-3 border-black dark:border-white font-mono">
+                                    Dialog
+                                </td>
+                                <td className="px-4 py-2 font-mono text-xs">
+                                    @radix-ui/react-dialog
+                                </td>
+                            </tr>
+                            <tr className="border-b-2 border-black dark:border-white">
+                                <td className="px-4 py-2 border-r-3 border-black dark:border-white font-mono">
+                                    Select
+                                </td>
+                                <td className="px-4 py-2 font-mono text-xs">
+                                    @radix-ui/react-select
+                                </td>
+                            </tr>
+                            <tr className="border-b-2 border-black dark:border-white">
+                                <td className="px-4 py-2 border-r-3 border-black dark:border-white font-mono">
+                                    Dropdown
+                                </td>
+                                <td className="px-4 py-2 font-mono text-xs">
+                                    @radix-ui/react-dropdown-menu
+                                </td>
+                            </tr>
+                            <tr className="border-b-2 border-black dark:border-white">
+                                <td className="px-4 py-2 border-r-3 border-black dark:border-white font-mono">
+                                    Calendar
+                                </td>
+                                <td className="px-4 py-2 font-mono text-xs">
+                                    react-day-picker, date-fns
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-2 border-r-3 border-black dark:border-white font-mono">
+                                    Command
+                                </td>
+                                <td className="px-4 py-2 font-mono text-xs">cmdk</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            {/* Usage */}
+            <section className="mb-12">
+                <h2 className="text-xl font-black mb-4">Usage Example</h2>
+                <CodeBlock language="tsx">{`import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function App() {
   return (
     <div className="p-8">
-      <Button variant="primary">Click me</Button>
+      <Card variant="default" padding="default">
+        <CardHeader>
+          <CardTitle>Welcome!</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-4">This is a brutalist card.</p>
+          <div className="flex gap-2">
+            <Button variant="primary">Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="outline">Outline</Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
-  )
+  );
 }`}</CodeBlock>
-            </div>
-
-            {/* Alternative: Direct Import */}
-            <div className="mb-10 p-6 border-3 border-black dark:border-white bg-[#FFE66D]/20">
-                <h3 className="text-xl font-black mb-3">💡 Alternative: Direct Import</h3>
-                <p className="mb-4 text-gray-700 dark:text-gray-300">
-                    You can also import components directly from the{' '}
-                    <code className="bg-gray-200 dark:bg-gray-800 px-1.5 py-0.5 font-mono text-sm">
-                        brutalist-ui
-                    </code>{' '}
-                    package without copying:
-                </p>
-                <CodeBlock language="tsx">{`import { Button, Card, Dialog } from "brutalist-ui"
-
-export default function App() {
-  return (
-    <Card>
-      <Button variant="primary">Click me</Button>
-    </Card>
-  )
-}`}</CodeBlock>
-            </div>
+            </section>
 
             {/* Navigation */}
             <div className="flex justify-between items-center pt-8 border-t-3 border-black dark:border-white mt-12">
@@ -197,10 +322,10 @@ export default function App() {
                     Vite
                 </Link>
                 <Link
-                    href="/docs/components"
+                    href="/docs/cli"
                     className="flex items-center gap-2 font-bold hover:text-[#FF6B6B] transition-colors"
                 >
-                    Components
+                    CLI Reference
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                             strokeLinecap="round"
