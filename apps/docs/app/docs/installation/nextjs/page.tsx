@@ -144,26 +144,26 @@ export default function Home() {
                 </p>
                 <PackageManagerTabs
                     commands={{
-                        pnpm: 'pnpm dlx brutalist@latest init',
-                        npm: 'npx brutalist@latest init',
-                        yarn: 'yarn dlx brutalist@latest init',
-                        bun: 'bunx brutalist@latest init',
+                        pnpm: 'pnpm dlx brutx@latest init',
+                        npm: 'npx brutx@latest init',
+                        yarn: 'yarn dlx brutx@latest init',
+                        bun: 'bunx brutx@latest init',
                     }}
                 />
 
                 <h3 className="text-lg font-black mb-3 mt-6">2. Add components</h3>
                 <PackageManagerTabs
                     commands={{
-                        pnpm: 'pnpm dlx brutalist@latest add button card badge',
-                        npm: 'npx brutalist@latest add button card badge',
-                        yarn: 'yarn dlx brutalist@latest add button card badge',
-                        bun: 'bunx brutalist@latest add button card badge',
+                        pnpm: 'pnpm dlx brutx@latest add button card badge',
+                        npm: 'npx brutx@latest add button card badge',
+                        yarn: 'yarn dlx brutx@latest add button card badge',
+                        bun: 'bunx brutx@latest add button card badge',
                     }}
                 />
                 <p className="mt-2 text-sm text-gray-500">
                     Or add all components:{' '}
                     <code className="bg-gray-200 dark:bg-gray-800 px-1">
-                        npx brutalist@latest add --all
+                        npx brutx@latest add --all
                     </code>
                 </p>
 

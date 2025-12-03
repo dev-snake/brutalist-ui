@@ -165,9 +165,9 @@ export { SubmitButton };`;
                     <TabsContent value="cli" className="mt-4">
                         <div className="relative">
                             <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg border-2 border-black overflow-x-auto">
-                                <code>npx brutalist@latest add submit-button</code>
+                                <code>npx brutx@latest add submit-button</code>
                             </pre>
-                            <CopyButton text="npx brutalist@latest add submit-button" id="cli" />
+                            <CopyButton text="npx brutx@latest add submit-button" id="cli" />
                         </div>
                         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                             Note: This will also add the{' '}

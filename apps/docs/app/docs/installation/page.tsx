@@ -260,7 +260,7 @@ export default function InstallationPage() {
                                     Copy source code. Full control over every component.
                                 </p>
                                 <pre className="bg-black text-[#FF6B6B] p-3 text-sm font-mono mb-4 overflow-x-auto">
-                                    npx brutalist@latest init
+                                    npx brutx@latest init
                                 </pre>
                                 <ul className="text-sm space-y-2 mb-4">
                                     <li className="flex items-start gap-2">
