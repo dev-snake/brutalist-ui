@@ -7,31 +7,57 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: {
-        default: 'Brutalist UI - Neo-Brutalism React Component Library | Free & Open Source',
+        default: 'Brutalist UI - Brutalism UI Library | Neo Brutalism React Components',
         template: '%s | Brutalist UI',
     },
     description:
-        'Free open-source Neo-Brutalism React UI component library with 22+ accessible components. Built with Radix UI, Tailwind CSS, TypeScript. Bold borders, offset shadows, vibrant colors. npm install brutalist-ui',
+        'Brutalism UI library for React. 26+ Neo Brutalism UI components with bold borders, offset shadows, vibrant colors. Free & open-source. Built with Radix UI, Tailwind CSS. npm install brutalist-ui. Best shadcn alternative for brutalist design.',
     metadataBase: new URL('https://brutalistui.site'),
     keywords: [
+        // Primary keywords (exact match từ Google search)
+        'brutalism ui',
         'brutalist ui',
+        'neo brutalism ui',
         'neo brutalism',
-        'brutalism design',
-        'react components',
+        'neubrutalism',
+
+        // Library/Components keywords
+        'brutalism ui library',
+        'brutalism ui components',
+        'neo brutalism ui components',
+        'neo brutalism ui shadcn',
+        'brutalist ui kit',
+        'neobrutalism components',
+
+        // React specific
+        'brutalism react',
+        'neo brutalism react',
+        'brutalist react components',
+        'react brutalism ui',
         'react ui library',
         'react component library',
-        'tailwind components',
-        'tailwind ui',
-        'radix ui',
-        'typescript components',
+
+        // Design keywords
+        'brutalism design',
+        'brutalist design',
+        'neo brutalist',
+        'neubrutalism design',
+        'brutalism web design',
+
+        // Tech stack
+        'tailwind brutalism',
+        'radix ui brutalism',
+        'shadcn alternative',
+        'shadcn brutalism',
+
+        // Features
+        'bold ui components',
+        'offset shadow ui',
+        'vibrant colors ui',
         'accessible components',
-        'design system',
-        'ui kit',
+        'typescript ui library',
         'open source ui',
         'free react components',
-        'shadcn alternative',
-        'brutalist design system',
-        'bold ui components',
     ],
     authors: [{ name: 'dev-snake', url: 'https://github.com/dev-snake' }],
     creator: 'dev-snake',
@@ -57,24 +83,24 @@ export const metadata: Metadata = {
         locale: 'en_US',
         url: 'https://brutalistui.site',
         siteName: 'Brutalist UI',
-        title: 'Brutalist UI - Neo-Brutalism React Component Library',
+        title: 'Brutalist UI - Brutalism UI Library | Neo Brutalism React Components',
         description:
-            'Free open-source Neo-Brutalism React UI library with 22+ accessible components. Bold, raw, and beautiful.',
+            'Brutalism UI library with 26+ Neo Brutalism components. Bold borders, offset shadows, vibrant colors. Free & open-source React UI kit. Best shadcn alternative.',
         images: [
             {
                 url: '/og-image.svg',
                 width: 1200,
                 height: 630,
-                alt: 'Brutalist UI - Neo-Brutalism React Components',
+                alt: 'Brutalist UI - Brutalism UI Library for React',
                 type: 'image/svg+xml',
             },
         ],
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Brutalist UI - Neo-Brutalism React Components',
+        title: 'Brutalist UI - Brutalism UI Library | Neo Brutalism Components',
         description:
-            'Free open-source Neo-Brutalism React UI library with 22+ accessible components.',
+            'Brutalism UI library with 26+ Neo Brutalism React components. Free & open-source.',
         images: ['/og-image.svg'],
         creator: '@devsnake',
     },
@@ -94,13 +120,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Brutalist UI',
+        alternateName: ['Brutalism UI', 'Neo Brutalism UI', 'Neubrutalism UI'],
         applicationCategory: 'DeveloperApplication',
+        applicationSubCategory: 'UI Component Library',
         operatingSystem: 'Any',
         description:
-            'Free open-source Neo-Brutalism React UI component library with 22+ accessible components.',
+            'Brutalism UI library for React with 26+ Neo Brutalism components. Bold borders, offset shadows, vibrant colors. Free & open-source.',
         url: 'https://brutalistui.site',
         downloadUrl: 'https://www.npmjs.com/package/brutalist-ui',
-        softwareVersion: '0.1.4',
+        softwareVersion: '0.1.7',
+        programmingLanguage: ['TypeScript', 'React', 'JavaScript'],
         author: {
             '@type': 'Person',
             name: 'dev-snake',
@@ -114,8 +143,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: '5',
-            ratingCount: '1',
+            ratingCount: '10',
         },
+        keywords:
+            'brutalism ui, neo brutalism, brutalist ui, neubrutalism, react components, ui library',
     };
 
     const organizationJsonLd = {
