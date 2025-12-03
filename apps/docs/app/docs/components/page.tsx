@@ -3,9 +3,9 @@ import { Card, CardHeader, CardTitle, CardContent, Badge } from 'brutalist-ui';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'All Components - Brutalist UI | 25 Neo-Brutalism React Components',
+    title: 'All Components - Brutalist UI | 26 Neo-Brutalism React Components',
     description:
-        'Browse 25 Neo-Brutalism React components: Button, Card, Calendar, Command, Combobox, Dialog, Toast, Table, Tabs, and more. Accessible, customizable, with bold borders and offset shadows.',
+        'Browse 26 Neo-Brutalism React components: Button, Card, Calendar, Command, Combobox, Dialog, Toast, Table, Tabs, Scroll Area and more. Accessible, customizable, with bold borders and offset shadows.',
     keywords: [
         'brutalist ui components',
         'neo-brutalism components',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'All Components - Brutalist UI',
         description:
-            'Browse 25 Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
+            'Browse 26 Neo-Brutalism React components built with Radix UI and Tailwind CSS.',
         url: 'https://brutalistui.site/docs/components',
     },
     alternates: {
@@ -102,6 +102,11 @@ const components = [
         name: 'Tooltip',
         href: '/docs/components/tooltip',
         description: 'Informational popup on hover',
+    },
+    {
+        name: 'Scroll Area',
+        href: '/docs/components/scroll-area',
+        description: 'Custom cross-browser scrollable container',
     },
 ];
 

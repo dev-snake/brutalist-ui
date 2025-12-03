@@ -14,7 +14,7 @@ export default function Home() {
             <section className="container-brutal py-12 sm:py-20 px-4">
                 <div className="flex flex-col items-center text-center">
                     <Badge variant="primary" size="lg" className="mb-4 sm:mb-6">
-                        v0.1.1
+                        v0.1.7
                     </Badge>
 
                     {/* 3D Brutalist Logo Text */}
