@@ -117,7 +117,7 @@ export default function CLIPage() {
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                             The CLI (
                             <code className="bg-gray-200 dark:bg-gray-800 px-1 font-mono">
-                                brutalist
+                                brutx
                             </code>
                             ) copies component source files into your project for full
                             customization. The NPM package (
@@ -157,7 +157,7 @@ export default function CLIPage() {
 
             <h3 className="text-xl font-black mb-3">Options</h3>
             <CodeBlock className="mb-6">
-                {`Usage: brutalist init [options]
+                {`Usage: brutx init [options]
 
 initialize your project and install dependencies
 
@@ -186,7 +186,7 @@ Options:
 
             <h3 className="text-xl font-black mb-3">Options</h3>
             <CodeBlock className="mb-6">
-                {`Usage: brutalist add [options] [components...]
+                {`Usage: brutx add [options] [components...]
 
 add a component to your project
 
