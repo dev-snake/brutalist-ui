@@ -7,22 +7,28 @@ const program = new Command();
 program
     .name('brutalist-ui')
     .description('CLI for adding Brutalist UI components to your project')
-    .version('0.1.0');
+    .version('0.1.3');
 
 program
     .command('init')
     .description('Initialize Brutalist UI in your project')
-    .option('-y, --yes', 'Skip confirmation prompts')
-    .option('-d, --defaults', 'Use default configuration')
+    .option('-y, --yes', 'Skip confirmation prompts', false)
+    .option('-d, --defaults', 'Use default configuration', false)
+    .option('-c, --cwd <cwd>', 'The working directory', process.cwd())
+    .option('-f, --force', 'Force overwrite of existing configuration', false)
+    .option('-s, --silent', 'Mute output', false)
     .action(init);
 
 program
     .command('add')
     .description('Add components to your project')
     .argument('[components...]', 'Components to add')
-    .option('-a, --all', 'Add all components')
-    .option('-o, --overwrite', 'Overwrite existing files')
-    .option('-p, --path <path>', 'Path to add components to')
+    .option('-y, --yes', 'Skip confirmation prompts', false)
+    .option('-a, --all', 'Add all components', false)
+    .option('-o, --overwrite', 'Overwrite existing files', false)
+    .option('-p, --path <path>', 'The path to add the component to')
+    .option('-c, --cwd <cwd>', 'The working directory', process.cwd())
+    .option('-s, --silent', 'Mute output', false)
     .action(add);
 
 program.parse();

@@ -10,6 +10,9 @@ interface AddOptions {
     all?: boolean;
     overwrite?: boolean;
     path?: string;
+    cwd?: string;
+    yes?: boolean;
+    silent?: boolean;
 }
 
 interface ComponentsConfig {
@@ -51,28 +54,39 @@ const AVAILABLE_COMPONENTS = [
 // Component dependencies mapping
 const COMPONENT_DEPENDENCIES: Record<string, string[]> = {
     button: ['@radix-ui/react-slot'],
-    dialog: ['@radix-ui/react-dialog'],
+    dialog: ['@radix-ui/react-dialog', 'lucide-react'],
     popover: ['@radix-ui/react-popover'],
     tooltip: ['@radix-ui/react-tooltip'],
-    'dropdown-menu': ['@radix-ui/react-dropdown-menu'],
-    select: ['@radix-ui/react-select'],
+    'dropdown-menu': ['@radix-ui/react-dropdown-menu', 'lucide-react'],
+    select: ['@radix-ui/react-select', 'lucide-react'],
     tabs: ['@radix-ui/react-tabs'],
     avatar: ['@radix-ui/react-avatar'],
     separator: ['@radix-ui/react-separator'],
     switch: ['@radix-ui/react-switch'],
-    checkbox: ['@radix-ui/react-checkbox'],
-    calendar: ['react-day-picker', 'date-fns'],
-    command: ['cmdk'],
+    checkbox: ['@radix-ui/react-checkbox', 'lucide-react'],
+    calendar: ['react-day-picker', 'date-fns', 'lucide-react'],
+    command: ['cmdk', 'lucide-react'],
     'scroll-area': ['@radix-ui/react-scroll-area'],
-    combobox: ['cmdk', '@radix-ui/react-popover'],
+    combobox: ['cmdk', '@radix-ui/react-popover', 'lucide-react'],
+    alert: ['lucide-react'],
+    pagination: ['lucide-react'],
+    toast: ['lucide-react'],
+    spinner: [],
+    skeleton: [],
+    badge: [],
+    card: [],
+    input: [],
+    label: ['@radix-ui/react-label'],
+    textarea: [],
+    table: [],
 };
 
 // Detect package manager
-function getPackageManager(): 'pnpm' | 'yarn' | 'bun' | 'npm' {
+function getPackageManager(cwd: string): 'pnpm' | 'yarn' | 'bun' | 'npm' {
     try {
-        if (fs.existsSync('pnpm-lock.yaml')) return 'pnpm';
-        if (fs.existsSync('yarn.lock')) return 'yarn';
-        if (fs.existsSync('bun.lockb')) return 'bun';
+        if (fs.existsSync(path.join(cwd, 'pnpm-lock.yaml'))) return 'pnpm';
+        if (fs.existsSync(path.join(cwd, 'yarn.lock'))) return 'yarn';
+        if (fs.existsSync(path.join(cwd, 'bun.lockb'))) return 'bun';
     } catch {
         // ignore
     }
@@ -80,7 +94,7 @@ function getPackageManager(): 'pnpm' | 'yarn' | 'bun' | 'npm' {
 }
 
 // Install dependencies
-function installDependencies(packageManager: string, deps: string[]): void {
+function installDependencies(packageManager: string, deps: string[], cwd: string): void {
     if (deps.length === 0) return;
 
     const installCmd = {
@@ -90,18 +104,27 @@ function installDependencies(packageManager: string, deps: string[]): void {
         npm: `npm install ${deps.join(' ')}`,
     }[packageManager];
 
-    execSync(installCmd!, { stdio: 'inherit' });
+    execSync(installCmd!, { stdio: 'inherit', cwd });
+}
+
+function log(message: string, silent?: boolean) {
+    if (!silent) {
+        console.log(message);
+    }
 }
 
 export async function add(components: string[], options: AddOptions) {
+    const cwd = options.cwd || process.cwd();
+
     // Check if initialized
-    if (!(await fs.pathExists('components.json'))) {
+    const configPath = path.join(cwd, 'components.json');
+    if (!(await fs.pathExists(configPath))) {
         console.log(chalk.red('Error: Brutalist UI is not initialized.'));
-        console.log(chalk.yellow('Run: npx brutalist-ui init'));
+        console.log(chalk.yellow('Run: npx brutalist-ui-cli init'));
         process.exit(1);
     }
 
-    const config: ComponentsConfig = await fs.readJson('components.json');
+    const config: ComponentsConfig = await fs.readJson(configPath);
 
     // Handle --all flag
     if (options.all) {
@@ -110,6 +133,12 @@ export async function add(components: string[], options: AddOptions) {
 
     // If no components specified, show picker
     if (components.length === 0) {
+        if (options.yes) {
+            console.log(chalk.red('Error: No components specified.'));
+            console.log(chalk.yellow('Use: npx brutalist-ui-cli add [component] or --all'));
+            process.exit(1);
+        }
+
         const { selected } = await inquirer.prompt([
             {
                 type: 'checkbox',
@@ -126,7 +155,7 @@ export async function add(components: string[], options: AddOptions) {
     }
 
     if (components.length === 0) {
-        console.log(chalk.yellow('No components selected.'));
+        log(chalk.yellow('No components selected.'), options.silent);
         return;
     }
 
@@ -138,22 +167,25 @@ export async function add(components: string[], options: AddOptions) {
         process.exit(1);
     }
 
-    const spinner = ora('Adding components...').start();
+    const spinner = options.silent ? null : ora('Adding components...').start();
 
-    const componentsDir = options.path || config.aliases.components.replace('@/', 'src/');
+    const componentsDir = options.path
+        ? path.join(cwd, options.path)
+        : path.join(cwd, config.aliases.components.replace('@/', 'src/'));
     const utilsAlias = config.aliases.utils;
 
     await fs.ensureDir(path.join(componentsDir, 'ui'));
 
     let added = 0;
     let skipped = 0;
+    const addedComponents: string[] = [];
 
     for (const component of components) {
         const filePath = path.join(componentsDir, 'ui', `${component}.tsx`);
 
         // Check if exists
         if ((await fs.pathExists(filePath)) && !options.overwrite) {
-            spinner.info(chalk.yellow(`Skipping ${component} (already exists)`));
+            spinner?.info(chalk.yellow(`Skipping ${component} (already exists)`));
             skipped++;
             continue;
         }
@@ -162,18 +194,19 @@ export async function add(components: string[], options: AddOptions) {
             const template = getComponentTemplate(component, utilsAlias);
             await fs.writeFile(filePath, template);
             added++;
+            addedComponents.push(component);
         } catch (error) {
-            spinner.warn(chalk.yellow(`Failed to add ${component}`));
+            spinner?.warn(chalk.yellow(`Failed to add ${component}`));
         }
     }
 
-    spinner.succeed(
+    spinner?.succeed(
         chalk.green(`Added ${added} component(s)${skipped > 0 ? `, skipped ${skipped}` : ''}`)
     );
 
     // Collect and install dependencies
     const allDeps = new Set<string>();
-    for (const component of components) {
+    for (const component of addedComponents) {
         const deps = COMPONENT_DEPENDENCIES[component];
         if (deps) {
             deps.forEach((d) => allDeps.add(d));
@@ -181,23 +214,38 @@ export async function add(components: string[], options: AddOptions) {
     }
 
     if (allDeps.size > 0) {
-        const packageManager = getPackageManager();
-        console.log('\n' + chalk.bold(`Installing dependencies with ${packageManager}...`));
+        const packageManager = getPackageManager(cwd);
+        log('\n' + chalk.bold(`Installing dependencies with ${packageManager}...`), options.silent);
 
         try {
-            installDependencies(packageManager, Array.from(allDeps));
-            console.log(chalk.green('✓ Dependencies installed'));
+            installDependencies(packageManager, Array.from(allDeps), cwd);
+            log(chalk.green('✓ Dependencies installed'), options.silent);
         } catch (error) {
-            console.log(chalk.yellow('⚠ Failed to install dependencies automatically.'));
-            console.log(
-                chalk.gray(`  Run manually: ${packageManager} add ${Array.from(allDeps).join(' ')}`)
+            log(chalk.yellow('⚠ Failed to install dependencies automatically.'), options.silent);
+            log(
+                chalk.gray(
+                    `  Run manually: ${packageManager} add ${Array.from(allDeps).join(' ')}`
+                ),
+                options.silent
             );
         }
     }
 
-    console.log('\n' + chalk.bold('Components added to:'));
-    console.log(chalk.cyan(`  ${path.join(componentsDir, 'ui')}/`));
+    log('\n' + chalk.bold('Components added to:'), options.silent);
+    log(chalk.cyan(`  ${path.join(componentsDir, 'ui')}/`), options.silent);
 
-    console.log('\n' + chalk.bold('Usage:'));
-    console.log(chalk.gray(`  import { Button } from "${config.aliases.components}/ui/button";`));
+    if (addedComponents.length > 0) {
+        log('\n' + chalk.bold('Usage:'), options.silent);
+        const exampleComponent = addedComponents[0];
+        const componentName = exampleComponent
+            .split('-')
+            .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+            .join('');
+        log(
+            chalk.gray(
+                `  import { ${componentName} } from "${config.aliases.components}/ui/${exampleComponent}";`
+            ),
+            options.silent
+        );
+    }
 }

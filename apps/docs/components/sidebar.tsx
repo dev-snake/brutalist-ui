@@ -18,6 +18,7 @@ const navigation = [
             { name: 'Manual', href: '/docs/installation/manual' },
         ],
     },
+    { name: 'CLI', href: '/docs/cli' },
     {
         name: 'Components',
         href: '/docs/components',
