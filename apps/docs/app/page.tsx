@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from 'brutalist-ui';
+import { Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@/components/ui';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Home() {
@@ -276,7 +276,8 @@ export default function Home() {
                                     3. Use the components:
                                 </p>
                                 <pre className="bg-gray-900 text-white p-3 sm:p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-xs sm:text-sm">
-                                    <code>{`import { Button, Card } from 'brutalist-ui';
+                                    <code>{`import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 function App() {
   return (

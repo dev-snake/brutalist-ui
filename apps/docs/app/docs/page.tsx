@@ -1,4 +1,4 @@
-import { Card, CardContent, Badge } from 'brutalist-ui';
+import { Card, CardContent, Badge } from '@/components/ui';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -107,7 +107,8 @@ export default function DocsPage() {
 
             <h2>Quick Example</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`import { Button, Card } from 'brutalist-ui';
+                {`import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 function MyComponent() {
   return (

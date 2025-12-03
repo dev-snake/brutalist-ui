@@ -11,7 +11,7 @@ import {
     CommandSeparator,
     CommandShortcut,
     CommandDialog,
-} from 'brutalist-ui';
+} from '@/components/ui';
 import {
     Calculator,
     Calendar,

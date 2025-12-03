@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge } from 'brutalist-ui';
+import { Badge } from '@/components/ui';
 import { Metadata } from 'next';
 import { useState } from 'react';
 

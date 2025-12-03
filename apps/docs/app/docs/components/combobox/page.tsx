@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Combobox, ComboboxMulti } from 'brutalist-ui';
+import { Combobox, ComboboxMulti } from '@/components/ui';
 
 const frameworks = [
     { value: 'next', label: 'Next.js' },

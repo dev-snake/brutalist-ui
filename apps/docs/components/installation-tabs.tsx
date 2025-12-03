@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from 'brutalist-ui';
+import { cn } from '@/components/ui';
 
 interface InstallationTabsProps {
     componentName: string;

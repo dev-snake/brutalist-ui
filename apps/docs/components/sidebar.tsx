@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn, ScrollArea } from 'brutalist-ui';
+import { cn, ScrollArea } from '@/components/ui';
 import { useState } from 'react';
 import { Menu, X, Heart } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';

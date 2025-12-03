@@ -1,6 +1,6 @@
 'use client';
 
-import { Spinner, BlockSpinner, DotsSpinner, BarsSpinner, Badge } from 'brutalist-ui';
+import { Spinner, BlockSpinner, DotsSpinner, BarsSpinner, Badge } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 

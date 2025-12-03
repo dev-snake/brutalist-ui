@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge } from 'brutalist-ui';
+import { Badge } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Switch, Label, Badge, Card, CardContent } from 'brutalist-ui';
+import { Switch, Label, Badge, Card, CardContent } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 import * as React from 'react';

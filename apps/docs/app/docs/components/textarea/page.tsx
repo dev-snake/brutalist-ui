@@ -1,6 +1,6 @@
 'use client';
 
-import { Textarea } from 'brutalist-ui';
+import { Textarea } from '@/components/ui';
 import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function TextareaPage() {

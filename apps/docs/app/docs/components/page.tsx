@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent, Badge } from 'brutalist-ui';
+import { Card, CardHeader, CardTitle, CardContent, Badge } from '@/components/ui';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

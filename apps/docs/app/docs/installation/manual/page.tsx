@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge } from 'brutalist-ui';
+import { Badge } from '@/components/ui';
 import Link from 'next/link';
 import { CodeBlock, PackageManagerTabs } from '@/components/code-block';
 

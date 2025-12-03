@@ -1,6 +1,14 @@
 'use client';
 
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell, Badge } from 'brutalist-ui';
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableHead,
+    TableRow,
+    TableCell,
+    Badge,
+} from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 

@@ -1,4 +1,4 @@
-import { Badge } from 'brutalist-ui';
+import { Badge } from '@/components/ui';
 import { Metadata } from 'next';
 import Link from 'next/link';
 

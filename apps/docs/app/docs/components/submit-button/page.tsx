@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger, Card } from 'brutalist-ui';
+import { Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger, Card } from '@/components/ui';
 import { Copy, Check, Rocket, Zap, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';

@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, AlertTitle, AlertDescription, Badge } from 'brutalist-ui';
+import { Alert, AlertTitle, AlertDescription, Badge } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 import { AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';

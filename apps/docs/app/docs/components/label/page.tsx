@@ -1,6 +1,6 @@
 'use client';
 
-import { Label, Input, Checkbox } from 'brutalist-ui';
+import { Label, Input, Checkbox } from '@/components/ui';
 import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function LabelPage() {

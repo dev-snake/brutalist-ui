@@ -1,6 +1,6 @@
 'use client';
 
-import { Input, Label, Textarea, Badge, Card, CardContent } from 'brutalist-ui';
+import { Input, Label, Textarea, Badge, Card, CardContent } from '@/components/ui';
 import { ComponentPreview } from '@/components/component-preview';
 import { InstallationTabs } from '@/components/installation-tabs';
 

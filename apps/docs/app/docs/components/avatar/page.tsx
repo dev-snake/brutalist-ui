@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, AvatarImage, AvatarFallback } from 'brutalist-ui';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui';
 import { InstallationTabs } from '@/components/installation-tabs';
 
 export default function AvatarPage() {
