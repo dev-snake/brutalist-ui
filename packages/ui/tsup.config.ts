@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup';
+import { copyFileSync } from 'fs';
 
 export default defineConfig({
     entry: {
@@ -19,5 +20,9 @@ export default defineConfig({
         options.banner = {
             js: '"use client";',
         };
+    },
+    onSuccess: async () => {
+        // Copy styles.css to dist
+        copyFileSync('src/styles.css', 'dist/styles.css');
     },
 });

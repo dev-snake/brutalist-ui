@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui';
+import { Badge, Card, CardContent } from '@/components/ui';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -143,77 +143,272 @@ const frameworks = [
 
 export default function InstallationPage() {
     return (
-        <div className="max-w-3xl">
+        <div className="max-w-4xl">
             <Badge variant="secondary" className="mb-4">
                 Getting Started
             </Badge>
             <h1 className="text-4xl font-black mb-4">Installation</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                How to install dependencies and structure your app.
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-10">
+                Choose your preferred method to add Brutalist UI to your project.
             </p>
 
             {/* Prerequisites */}
-            <div className="mb-10 p-6 border-3 border-black dark:border-white bg-[#FFE66D]/20">
-                <h3 className="text-xl font-black mb-3">📋 Prerequisites</h3>
-                <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-black dark:bg-white" />
-                        React 18 or higher
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-black dark:bg-white" />
-                        Tailwind CSS 3.0 or higher
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-black dark:bg-white" />
-                        Node.js 18 or higher
-                    </li>
-                </ul>
-            </div>
-
-            {/* Framework Selection */}
-            <h2 className="text-2xl font-black mb-6">Choose your framework</h2>
-            <div className="grid gap-4">
-                {frameworks.map((framework) => (
-                    <Link
-                        key={framework.name}
-                        href={framework.href}
-                        className="group flex items-center gap-4 p-4 border-3 border-black dark:border-white bg-white dark:bg-gray-900 hover:bg-[#4ECDC4] hover:shadow-brutal transition-all"
-                    >
-                        <div className="flex-shrink-0">{framework.icon}</div>
-                        <div>
-                            <h3 className="font-black text-lg group-hover:text-black">
-                                {framework.name}
-                            </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-800">
-                                {framework.description}
-                            </p>
-                        </div>
-                        <svg
-                            className="w-5 h-5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+            <section className="mb-12">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-[#FFE66D] border-3 border-black flex items-center justify-center font-black text-black">
+                        !
+                    </div>
+                    <h2 className="text-xl font-black">Prerequisites</h2>
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3">
+                    {[
+                        { label: 'React', value: '18+ or 19' },
+                        { label: 'Tailwind CSS', value: '3.0+' },
+                        { label: 'Node.js', value: '18+' },
+                    ].map((item) => (
+                        <div
+                            key={item.label}
+                            className="p-4 border-3 border-black dark:border-white bg-white dark:bg-gray-900"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={3}
-                                d="M9 5l7 7-7 7"
-                            />
-                        </svg>
-                    </Link>
-                ))}
-            </div>
+                            <p className="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                                {item.label}
+                            </p>
+                            <p className="font-black">{item.value}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
 
-            {/* TypeScript Note */}
-            <div className="mt-10 p-6 border-3 border-black dark:border-white bg-[#4ECDC4]/20">
-                <h3 className="text-xl font-black mb-3">🔷 TypeScript Support</h3>
-                <p className="text-gray-700 dark:text-gray-300">
-                    Brutalist UI is written in TypeScript and includes full type definitions. No
-                    additional setup is required for TypeScript projects.
-                </p>
-            </div>
+            {/* Two Installation Methods */}
+            <section className="mb-12">
+                <h2 className="text-2xl font-black mb-6">Choose Your Method</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                    {/* Option A: NPM Package */}
+                    <div className="relative">
+                        <div className="absolute -top-3 left-4 px-2 bg-white dark:bg-black z-10">
+                            <span className="text-xs font-black uppercase tracking-wider text-[#4ECDC4]">
+                                Recommended
+                            </span>
+                        </div>
+                        <Card
+                            variant="default"
+                            padding="default"
+                            className="h-full border-[#4ECDC4]"
+                        >
+                            <CardContent className="p-6">
+                                <div className="w-12 h-12 bg-[#4ECDC4] border-3 border-black flex items-center justify-center mb-4">
+                                    <svg
+                                        className="w-6 h-6"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth={2.5}
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                                        />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-black mb-2">NPM Package</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                    Quick start. Install and use all 27 components immediately.
+                                </p>
+                                <pre className="bg-black text-[#4ECDC4] p-3 text-sm font-mono mb-4 overflow-x-auto">
+                                    pnpm add brutalist-ui
+                                </pre>
+                                <ul className="text-sm space-y-2 mb-4">
+                                    <li className="flex items-start gap-2">
+                                        <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
+                                        Zero config required
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
+                                        Tree-shakeable exports
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
+                                        TypeScript included
+                                    </li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Option B: CLI */}
+                    <div>
+                        <Card variant="default" padding="default" className="h-full">
+                            <CardContent className="p-6">
+                                <div className="w-12 h-12 bg-[#FF6B6B] border-3 border-black flex items-center justify-center mb-4">
+                                    <svg
+                                        className="w-6 h-6"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth={2.5}
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                        />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-black mb-2">CLI Tool</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                    Copy source code. Full control over every component.
+                                </p>
+                                <pre className="bg-black text-[#FF6B6B] p-3 text-sm font-mono mb-4 overflow-x-auto">
+                                    npx brutalist@latest init
+                                </pre>
+                                <ul className="text-sm space-y-2 mb-4">
+                                    <li className="flex items-start gap-2">
+                                        <span className="w-1.5 h-1.5 mt-2 bg-[#FF6B6B]" />
+                                        Full customization
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="w-1.5 h-1.5 mt-2 bg-[#FF6B6B]" />
+                                        Pick individual components
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="w-1.5 h-1.5 mt-2 bg-[#FF6B6B]" />
+                                        Own the code
+                                    </li>
+                                </ul>
+                                <Link
+                                    href="/docs/cli"
+                                    className="inline-flex items-center text-sm font-bold hover:text-[#FF6B6B] transition-colors"
+                                >
+                                    CLI Reference
+                                    <svg
+                                        className="w-4 h-4 ml-1"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M9 5l7 7-7 7"
+                                        />
+                                    </svg>
+                                </Link>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </section>
+
+            {/* Quick Start */}
+            <section className="mb-12 p-6 border-3 border-black dark:border-white bg-gray-50 dark:bg-gray-900">
+                <h2 className="text-xl font-black mb-4">Quick Start with NPM</h2>
+                <div className="grid gap-4">
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black text-sm">
+                            1
+                        </div>
+                        <div className="flex-1">
+                            <p className="font-bold mb-2">Install the package</p>
+                            <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto">
+                                pnpm add brutalist-ui
+                            </pre>
+                        </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black text-sm">
+                            2
+                        </div>
+                        <div className="flex-1">
+                            <p className="font-bold mb-2">Import styles</p>
+                            <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto">
+                                {`import 'brutalist-ui/styles.css';`}
+                            </pre>
+                        </div>
+                    </div>
+                    <div className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black text-sm">
+                            3
+                        </div>
+                        <div className="flex-1">
+                            <p className="font-bold mb-2">Use components</p>
+                            <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto">
+                                {`import { Button, Card } from 'brutalist-ui';`}
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Framework Guides */}
+            <section className="mb-12">
+                <h2 className="text-2xl font-black mb-6">Framework Guides</h2>
+                <div className="grid gap-3">
+                    {frameworks.map((framework) => (
+                        <Link
+                            key={framework.name}
+                            href={framework.href}
+                            className="group flex items-center gap-4 p-4 border-3 border-black dark:border-white bg-white dark:bg-gray-900 hover:translate-x-1 hover:shadow-brutal transition-all"
+                        >
+                            <div className="flex-shrink-0 w-12 h-12 border-2 border-black dark:border-white flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+                                {framework.icon}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <h3 className="font-black">{framework.name}</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                                    {framework.description}
+                                </p>
+                            </div>
+                            <svg
+                                className="w-5 h-5 text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </Link>
+                    ))}
+                </div>
+            </section>
+
+            {/* Package Info */}
+            <section className="grid sm:grid-cols-2 gap-6">
+                <div className="p-6 border-3 border-black dark:border-white">
+                    <h3 className="font-black mb-4 pb-2 border-b-2 border-black dark:border-white">
+                        Package Info
+                    </h3>
+                    <dl className="space-y-3 text-sm">
+                        <div className="flex justify-between">
+                            <dt className="text-gray-500 dark:text-gray-400">NPM Package</dt>
+                            <dd className="font-mono font-bold">brutalist-ui</dd>
+                        </div>
+                        <div className="flex justify-between">
+                            <dt className="text-gray-500 dark:text-gray-400">CLI Package</dt>
+                            <dd className="font-mono font-bold">brutalist</dd>
+                        </div>
+                        <div className="flex justify-between">
+                            <dt className="text-gray-500 dark:text-gray-400">Components</dt>
+                            <dd className="font-mono font-bold">27</dd>
+                        </div>
+                    </dl>
+                </div>
+                <div className="p-6 border-3 border-black dark:border-white bg-[#4ECDC4]/10">
+                    <h3 className="font-black mb-4 pb-2 border-b-2 border-black dark:border-white">
+                        TypeScript
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Full type definitions included. All components export their prop types for
+                        excellent DX.
+                    </p>
+                </div>
+            </section>
         </div>
     );
 }

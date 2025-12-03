@@ -191,7 +191,7 @@ export default function ComboboxPage() {
                     The Combobox is built using a composition of the Popover and Command components.
                 </p>
                 <div className="bg-gray-900 text-gray-100 p-4 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
-                    <pre>npx brutalist-ui-cli add combobox popover command</pre>
+                    <pre>npx brutalist@latest add combobox popover command</pre>
                 </div>
             </section>
 

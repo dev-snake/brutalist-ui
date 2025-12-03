@@ -1,7 +1,7 @@
 'use client';
 
 import { Badge } from '@/components/ui';
-import { Metadata } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 
 const packageManagers = ['pnpm', 'npm', 'yarn', 'bun'] as const;
@@ -9,24 +9,24 @@ type PackageManager = (typeof packageManagers)[number];
 
 const commands: Record<PackageManager, { init: string; add: string; addAll: string }> = {
     pnpm: {
-        init: 'pnpm dlx brutalist-ui-cli@latest init',
-        add: 'pnpm dlx brutalist-ui-cli@latest add [component]',
-        addAll: 'pnpm dlx brutalist-ui-cli@latest add --all',
+        init: 'pnpm dlx brutalist@latest init',
+        add: 'pnpm dlx brutalist@latest add [component]',
+        addAll: 'pnpm dlx brutalist@latest add --all',
     },
     npm: {
-        init: 'npx brutalist-ui-cli@latest init',
-        add: 'npx brutalist-ui-cli@latest add [component]',
-        addAll: 'npx brutalist-ui-cli@latest add --all',
+        init: 'npx brutalist@latest init',
+        add: 'npx brutalist@latest add [component]',
+        addAll: 'npx brutalist@latest add --all',
     },
     yarn: {
-        init: 'yarn dlx brutalist-ui-cli@latest init',
-        add: 'yarn dlx brutalist-ui-cli@latest add [component]',
-        addAll: 'yarn dlx brutalist-ui-cli@latest add --all',
+        init: 'yarn dlx brutalist@latest init',
+        add: 'yarn dlx brutalist@latest add [component]',
+        addAll: 'yarn dlx brutalist@latest add --all',
     },
     bun: {
-        init: 'bunx brutalist-ui-cli@latest init',
-        add: 'bunx brutalist-ui-cli@latest add [component]',
-        addAll: 'bunx brutalist-ui-cli@latest add --all',
+        init: 'bunx brutalist@latest init',
+        add: 'bunx brutalist@latest add [component]',
+        addAll: 'bunx brutalist@latest add --all',
     },
 };
 
@@ -89,10 +89,52 @@ export default function CLIPage() {
             <Badge variant="primary" className="mb-4">
                 CLI
             </Badge>
-            <h1 className="text-4xl font-black mb-4">Brutalist UI CLI</h1>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                Use the CLI to add components to your project.
+            <h1 className="text-4xl font-black mb-4">CLI Reference</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
+                Use the CLI to add components directly to your project source code.
             </p>
+
+            {/* Info box about CLI vs NPM */}
+            <div className="mb-10 p-5 border-3 border-black dark:border-white bg-gray-50 dark:bg-gray-900">
+                <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-[#FF6B6B] border-3 border-black flex items-center justify-center">
+                        <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 className="font-black mb-2">CLI vs NPM Package</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                            The CLI (
+                            <code className="bg-gray-200 dark:bg-gray-800 px-1 font-mono">
+                                brutalist
+                            </code>
+                            ) copies component source files into your project for full
+                            customization. The NPM package (
+                            <code className="bg-gray-200 dark:bg-gray-800 px-1 font-mono">
+                                brutalist-ui
+                            </code>
+                            ) is a direct dependency import.
+                        </p>
+                        <Link
+                            href="/docs"
+                            className="text-sm font-bold hover:text-[#FF6B6B] transition-colors"
+                        >
+                            Compare both approaches →
+                        </Link>
+                    </div>
+                </div>
+            </div>
 
             {/* init command */}
             <h2 id="init" className="text-2xl font-black mb-4 mt-10">
@@ -115,7 +157,7 @@ export default function CLIPage() {
 
             <h3 className="text-xl font-black mb-3">Options</h3>
             <CodeBlock className="mb-6">
-                {`Usage: brutalist-ui init [options]
+                {`Usage: brutalist init [options]
 
 initialize your project and install dependencies
 
@@ -144,7 +186,7 @@ Options:
 
             <h3 className="text-xl font-black mb-3">Options</h3>
             <CodeBlock className="mb-6">
-                {`Usage: brutalist-ui add [options] [components...]
+                {`Usage: brutalist add [options] [components...]
 
 add a component to your project
 
@@ -167,25 +209,21 @@ Options:
             </h2>
 
             <h3 className="text-lg font-black mb-3">Add a single component</h3>
-            <CodeBlock className="mb-6">npx brutalist-ui-cli@latest add button</CodeBlock>
+            <CodeBlock className="mb-6">npx brutalist@latest add button</CodeBlock>
 
             <h3 className="text-lg font-black mb-3">Add multiple components</h3>
-            <CodeBlock className="mb-6">
-                npx brutalist-ui-cli@latest add button card dialog
-            </CodeBlock>
+            <CodeBlock className="mb-6">npx brutalist@latest add button card dialog</CodeBlock>
 
             <h3 className="text-lg font-black mb-3">Add all components</h3>
             <PackageManagerTabs command="addAll" />
 
             <h3 className="text-lg font-black mb-3">Add with custom path</h3>
             <CodeBlock className="mb-6">
-                npx brutalist-ui-cli@latest add button -p src/components/custom
+                npx brutalist@latest add button -p src/components/custom
             </CodeBlock>
 
             <h3 className="text-lg font-black mb-3">Overwrite existing files</h3>
-            <CodeBlock className="mb-6">
-                npx brutalist-ui-cli@latest add button --overwrite
-            </CodeBlock>
+            <CodeBlock className="mb-6">npx brutalist@latest add button --overwrite</CodeBlock>
 
             {/* Available Components */}
             <h2 id="components" className="text-2xl font-black mb-4 mt-10">
@@ -358,6 +396,38 @@ Options:
                         <code className="bg-gray-100 dark:bg-gray-800 px-1">content</code> array.
                     </p>
                 </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex justify-between items-center pt-8 border-t-3 border-black dark:border-white mt-12">
+                <Link
+                    href="/docs/installation/manual"
+                    className="flex items-center gap-2 font-bold hover:text-[#FF6B6B] transition-colors"
+                >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={3}
+                            d="M15 19l-7-7 7-7"
+                        />
+                    </svg>
+                    Manual Installation
+                </Link>
+                <Link
+                    href="/docs/components"
+                    className="flex items-center gap-2 font-bold hover:text-[#FF6B6B] transition-colors"
+                >
+                    Components
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={3}
+                            d="M9 5l7 7-7 7"
+                        />
+                    </svg>
+                </Link>
             </div>
         </div>
     );
