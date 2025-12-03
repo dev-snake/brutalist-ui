@@ -176,20 +176,20 @@ export default defineConfig({
                 <h3 className="text-lg font-black mb-3 mt-6">4. Run init command</h3>
                 <PackageManagerTabs
                     commands={{
-                        pnpm: 'pnpm dlx brutalist@latest init',
-                        npm: 'npx brutalist@latest init',
-                        yarn: 'yarn dlx brutalist@latest init',
-                        bun: 'bunx brutalist@latest init',
+                        pnpm: 'pnpm dlx brutx@latest init',
+                        npm: 'npx brutx@latest init',
+                        yarn: 'yarn dlx brutx@latest init',
+                        bun: 'bunx brutx@latest init',
                     }}
                 />
 
                 <h3 className="text-lg font-black mb-3 mt-6">5. Add components</h3>
                 <PackageManagerTabs
                     commands={{
-                        pnpm: 'pnpm dlx brutalist@latest add button card badge',
-                        npm: 'npx brutalist@latest add button card badge',
-                        yarn: 'yarn dlx brutalist@latest add button card badge',
-                        bun: 'bunx brutalist@latest add button card badge',
+                        pnpm: 'pnpm dlx brutx@latest add button card badge',
+                        npm: 'npx brutx@latest add button card badge',
+                        yarn: 'yarn dlx brutx@latest add button card badge',
+                        bun: 'bunx brutx@latest add button card badge',
                     }}
                 />
 

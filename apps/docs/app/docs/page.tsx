@@ -128,10 +128,10 @@ import 'brutalist-ui/styles.css'`}
                         Copy components into your codebase for full control.
                     </p>
                     <pre className="bg-black text-[#FF6B6B] p-3 text-sm font-mono overflow-x-auto">
-                        {`npx brutalist@latest init`}
+                        {`npx brutx@latest init`}
                     </pre>
                     <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto mt-2">
-                        {`npx brutalist@latest add button`}
+                        {`npx brutx@latest add button`}
                     </pre>
                 </div>
             </div>

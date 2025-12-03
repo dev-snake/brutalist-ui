@@ -209,7 +209,7 @@ export default function CommandPage() {
             <section className="space-y-4">
                 <h2 className="text-2xl font-black">Installation</h2>
                 <div className="bg-gray-900 text-gray-100 p-4 border-3 border-black dark:border-white font-mono text-sm overflow-x-auto">
-                    <pre>npx brutalist@latest add command</pre>
+                    <pre>npx brutx@latest add command</pre>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
                     The Command component requires the{' '}

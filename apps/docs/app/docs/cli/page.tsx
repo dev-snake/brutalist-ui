@@ -9,24 +9,24 @@ type PackageManager = (typeof packageManagers)[number];
 
 const commands: Record<PackageManager, { init: string; add: string; addAll: string }> = {
     pnpm: {
-        init: 'pnpm dlx brutalist@latest init',
-        add: 'pnpm dlx brutalist@latest add [component]',
-        addAll: 'pnpm dlx brutalist@latest add --all',
+        init: 'pnpm dlx brutx@latest init',
+        add: 'pnpm dlx brutx@latest add [component]',
+        addAll: 'pnpm dlx brutx@latest add --all',
     },
     npm: {
-        init: 'npx brutalist@latest init',
-        add: 'npx brutalist@latest add [component]',
-        addAll: 'npx brutalist@latest add --all',
+        init: 'npx brutx@latest init',
+        add: 'npx brutx@latest add [component]',
+        addAll: 'npx brutx@latest add --all',
     },
     yarn: {
-        init: 'yarn dlx brutalist@latest init',
-        add: 'yarn dlx brutalist@latest add [component]',
-        addAll: 'yarn dlx brutalist@latest add --all',
+        init: 'yarn dlx brutx@latest init',
+        add: 'yarn dlx brutx@latest add [component]',
+        addAll: 'yarn dlx brutx@latest add --all',
     },
     bun: {
-        init: 'bunx brutalist@latest init',
-        add: 'bunx brutalist@latest add [component]',
-        addAll: 'bunx brutalist@latest add --all',
+        init: 'bunx brutx@latest init',
+        add: 'bunx brutx@latest add [component]',
+        addAll: 'bunx brutx@latest add --all',
     },
 };
 
@@ -117,7 +117,7 @@ export default function CLIPage() {
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                             The CLI (
                             <code className="bg-gray-200 dark:bg-gray-800 px-1 font-mono">
-                                brutalist
+                                brutx
                             </code>
                             ) copies component source files into your project for full
                             customization. The NPM package (
@@ -157,7 +157,7 @@ export default function CLIPage() {
 
             <h3 className="text-xl font-black mb-3">Options</h3>
             <CodeBlock className="mb-6">
-                {`Usage: brutalist init [options]
+                {`Usage: brutx init [options]
 
 initialize your project and install dependencies
 
@@ -186,7 +186,7 @@ Options:
 
             <h3 className="text-xl font-black mb-3">Options</h3>
             <CodeBlock className="mb-6">
-                {`Usage: brutalist add [options] [components...]
+                {`Usage: brutx add [options] [components...]
 
 add a component to your project
 
@@ -209,21 +209,21 @@ Options:
             </h2>
 
             <h3 className="text-lg font-black mb-3">Add a single component</h3>
-            <CodeBlock className="mb-6">npx brutalist@latest add button</CodeBlock>
+            <CodeBlock className="mb-6">npx brutx@latest add button</CodeBlock>
 
             <h3 className="text-lg font-black mb-3">Add multiple components</h3>
-            <CodeBlock className="mb-6">npx brutalist@latest add button card dialog</CodeBlock>
+            <CodeBlock className="mb-6">npx brutx@latest add button card dialog</CodeBlock>
 
             <h3 className="text-lg font-black mb-3">Add all components</h3>
             <PackageManagerTabs command="addAll" />
 
             <h3 className="text-lg font-black mb-3">Add with custom path</h3>
             <CodeBlock className="mb-6">
-                npx brutalist@latest add button -p src/components/custom
+                npx brutx@latest add button -p src/components/custom
             </CodeBlock>
 
             <h3 className="text-lg font-black mb-3">Overwrite existing files</h3>
-            <CodeBlock className="mb-6">npx brutalist@latest add button --overwrite</CodeBlock>
+            <CodeBlock className="mb-6">npx brutx@latest add button --overwrite</CodeBlock>
 
             {/* Available Components */}
             <h2 id="components" className="text-2xl font-black mb-4 mt-10">

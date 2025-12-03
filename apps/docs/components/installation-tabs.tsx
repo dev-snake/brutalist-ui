@@ -223,10 +223,10 @@ export function InstallationTabs({
     const [packageManager, setPackageManager] = React.useState<PackageManager>('pnpm');
 
     const cliCommands: Record<PackageManager, string> = {
-        pnpm: `pnpm dlx brutalist@latest add ${componentName}`,
-        npm: `npx brutalist@latest add ${componentName}`,
-        yarn: `yarn dlx brutalist@latest add ${componentName}`,
-        bun: `bunx brutalist@latest add ${componentName}`,
+        pnpm: `pnpm dlx brutx@latest add ${componentName}`,
+        npm: `npx brutx@latest add ${componentName}`,
+        yarn: `yarn dlx brutx@latest add ${componentName}`,
+        bun: `bunx brutx@latest add ${componentName}`,
     };
 
     // Get dependencies for manual install

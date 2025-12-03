@@ -122,7 +122,7 @@ export async function add(components: string[], options: AddOptions) {
     const configPath = path.join(cwd, 'components.json');
     if (!(await fs.pathExists(configPath))) {
         console.log(chalk.red('Error: Brutalist UI is not initialized.'));
-        console.log(chalk.yellow('Run: npx brutalist@latest init'));
+        console.log(chalk.yellow('Run: npx brutx@latest init'));
         process.exit(1);
     }
 
@@ -137,7 +137,7 @@ export async function add(components: string[], options: AddOptions) {
     if (components.length === 0) {
         if (options.yes) {
             console.log(chalk.red('Error: No components specified.'));
-            console.log(chalk.yellow('Use: npx brutalist@latest add [component] or --all'));
+            console.log(chalk.yellow('Use: npx brutx@latest add [component] or --all'));
             process.exit(1);
         }
 
