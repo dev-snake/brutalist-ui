@@ -2,18 +2,8 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-// Route segment config
-export const dynamic = 'force-static';
-
 // 180x180 Apple Touch Icon - matches favicon.svg design
-export const size = {
-    width: 180,
-    height: 180,
-};
-
-export const contentType = 'image/png';
-
-export default function AppleTouchIcon() {
+export async function GET() {
     return new ImageResponse(
         (
             <div
@@ -78,7 +68,8 @@ export default function AppleTouchIcon() {
             </div>
         ),
         {
-            ...size,
+            width: 180,
+            height: 180,
         }
     );
 }

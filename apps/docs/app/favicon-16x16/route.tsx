@@ -2,18 +2,8 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-// Route segment config
-export const dynamic = 'force-static';
-
 // 16x16 favicon - matches favicon.svg design
-export const size = {
-    width: 16,
-    height: 16,
-};
-
-export const contentType = 'image/png';
-
-export default function Favicon16() {
+export async function GET() {
     return new ImageResponse(
         (
             <div
@@ -78,7 +68,8 @@ export default function Favicon16() {
             </div>
         ),
         {
-            ...size,
+            width: 16,
+            height: 16,
         }
     );
 }
