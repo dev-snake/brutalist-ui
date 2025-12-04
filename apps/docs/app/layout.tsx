@@ -12,7 +12,7 @@ export const metadata: Metadata = {
         template: '%s | Brutalist UI',
     },
     description:
-        'Brutalism UI library for React. 26+ Neo Brutalism UI components with bold borders, offset shadows, vibrant colors. Free & open-source. Built with Radix UI, Tailwind CSS. npm install brutalist-ui. Best shadcn alternative for brutalist design.',
+        'Brutalism UI library for React. 26+ Neo Brutalism UI components with bold borders, offset shadows, vibrant colors. Free & open-source. Built with Radix UI, Tailwind CSS. Use CLI: npx brutx@latest init. Best shadcn alternative for brutalist design.',
     metadataBase: new URL('https://brutalistui.site'),
     keywords: [
         // Primary keywords (exact match từ Google search)

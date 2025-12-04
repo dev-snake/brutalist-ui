@@ -15,70 +15,103 @@ export default function ManualInstallationPage() {
                 Add Brutalist UI components manually to any React project.
             </p>
 
-            {/* Method A: NPM Package */}
+            {/* CLI Installation */}
             <section className="mb-12">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 bg-[#4ECDC4] border-3 border-black flex items-center justify-center">
-                        <span className="font-black text-black">A</span>
+                        <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
                     </div>
                     <div>
-                        <h2 className="text-xl font-black">NPM Package</h2>
+                        <h2 className="text-xl font-black">CLI Installation</h2>
                         <span className="text-xs uppercase tracking-wider text-[#4ECDC4] font-bold">
-                            Simplest
+                            Recommended
                         </span>
                     </div>
                 </div>
                 <p className="mb-6 text-gray-600 dark:text-gray-400">
-                    Just install the package and use it.
+                    Use the CLI to copy components into your project.
                 </p>
 
-                <h3 className="text-lg font-black mb-3">1. Install package</h3>
+                <h3 className="text-lg font-black mb-3">1. Run init command</h3>
                 <PackageManagerTabs
                     commands={{
-                        pnpm: 'pnpm add brutalist-ui',
-                        npm: 'npm install brutalist-ui',
-                        yarn: 'yarn add brutalist-ui',
-                        bun: 'bun add brutalist-ui',
+                        pnpm: 'pnpm dlx brutx@latest init',
+                        npm: 'npx brutx@latest init',
+                        yarn: 'yarn dlx brutx@latest init',
+                        bun: 'bunx brutx@latest init',
                     }}
                 />
 
-                <h3 className="text-lg font-black mb-3 mt-6">2. Import styles</h3>
-                <p className="mb-4 text-gray-600 dark:text-gray-400">
-                    Add to your entry file (main.tsx, _app.tsx, or layout.tsx):
+                <h3 className="text-lg font-black mb-3 mt-6">2. Add components</h3>
+                <PackageManagerTabs
+                    commands={{
+                        pnpm: 'pnpm dlx brutx@latest add button card dialog',
+                        npm: 'npx brutx@latest add button card dialog',
+                        yarn: 'yarn dlx brutx@latest add button card dialog',
+                        bun: 'bunx brutx@latest add button card dialog',
+                    }}
+                />
+                <p className="mt-2 text-sm text-gray-500">
+                    Or add all components:{' '}
+                    <code className="bg-gray-200 dark:bg-gray-800 px-1">
+                        npx brutx@latest add --all
+                    </code>
                 </p>
-                <CodeBlock language="entry file">{`import 'brutalist-ui/styles.css';`}</CodeBlock>
 
                 <h3 className="text-lg font-black mb-3 mt-6">3. Use components</h3>
-                <CodeBlock language="tsx">{`import { Button, Card, Dialog, Badge } from 'brutalist-ui';
-
-// Special imports for SSR-sensitive components
-import { Calendar } from 'brutalist-ui/calendar';
-import { SubmitButton } from 'brutalist-ui/submit-button';
+                <CodeBlock language="tsx">{`import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 function MyComponent() {
   return (
     <Card>
-      <Button variant="primary">Click me</Button>
+      <CardContent>
+        <Button variant="primary">Click me</Button>
+      </CardContent>
     </Card>
   );
 }`}</CodeBlock>
             </section>
 
-            {/* Method B: Manual Copy */}
+            {/* Manual Copy (Alternative) */}
             <section className="mb-12">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 bg-[#FF6B6B] border-3 border-black flex items-center justify-center">
-                        <span className="font-black text-black">B</span>
+                        <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                        </svg>
                     </div>
                     <div>
-                        <h2 className="text-xl font-black">Copy Components</h2>
+                        <h2 className="text-xl font-black">Manual Copy</h2>
                         <span className="text-xs uppercase tracking-wider text-gray-500">
-                            Full Control
+                            Alternative
                         </span>
                     </div>
                 </div>
                 <p className="mb-6 text-gray-600 dark:text-gray-400">
-                    Copy source files directly into your project.
+                    If you prefer to copy files manually, follow these steps.
                 </p>
 
                 <h3 className="text-lg font-black mb-3">1. Prerequisites</h3>

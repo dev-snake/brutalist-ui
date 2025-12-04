@@ -60,49 +60,13 @@ export default function DocsPage() {
                 </li>
             </ul>
 
-            <h2>Two Ways to Use</h2>
-            <p className="mb-4">Brutalist UI offers two ways to add components to your project:</p>
+            <h2>How to Use</h2>
+            <p className="mb-4">Use the CLI to add Brutalist UI components to your project:</p>
 
-            <div className="grid md:grid-cols-2 gap-4 my-6">
+            <div className="my-6">
                 <div className="p-5 border-3 border-[#4ECDC4] bg-white dark:bg-gray-900">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 bg-[#4ECDC4] border-3 border-black flex items-center justify-center">
-                            <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth={2.5}
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                                />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 className="font-black text-lg">NPM Package</h3>
-                            <span className="text-xs uppercase tracking-wider text-[#4ECDC4] font-bold">
-                                Recommended
-                            </span>
-                        </div>
-                    </div>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                        Install and use all components immediately. Zero config.
-                    </p>
-                    <pre className="bg-black text-[#4ECDC4] p-3 text-sm font-mono overflow-x-auto">
-                        {`pnpm add brutalist-ui`}
-                    </pre>
-                    <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto mt-2">
-                        {`import { Button } from 'brutalist-ui'
-import 'brutalist-ui/styles.css'`}
-                    </pre>
-                </div>
-
-                <div className="p-5 border-3 border-black dark:border-white bg-white dark:bg-gray-900">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 bg-[#FF6B6B] border-3 border-black flex items-center justify-center">
                             <svg
                                 className="w-5 h-5"
                                 fill="none"
@@ -119,19 +83,22 @@ import 'brutalist-ui/styles.css'`}
                         </div>
                         <div>
                             <h3 className="font-black text-lg">CLI Tool</h3>
-                            <span className="text-xs uppercase tracking-wider text-gray-500">
-                                Copy & Customize
+                            <span className="text-xs uppercase tracking-wider text-[#4ECDC4] font-bold">
+                                Recommended
                             </span>
                         </div>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                        Copy components into your codebase for full control.
+                        Copy components into your codebase for full control and customization.
                     </p>
-                    <pre className="bg-black text-[#FF6B6B] p-3 text-sm font-mono overflow-x-auto">
+                    <pre className="bg-black text-[#4ECDC4] p-3 text-sm font-mono overflow-x-auto">
                         {`npx brutx@latest init`}
                     </pre>
                     <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto mt-2">
-                        {`npx brutx@latest add button`}
+                        {`npx brutx@latest add button card`}
+                    </pre>
+                    <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto mt-2">
+                        {`import { Button } from '@/components/ui/button'`}
                     </pre>
                 </div>
             </div>
@@ -280,11 +247,7 @@ import 'brutalist-ui/styles.css'`}
 
             <h2>Quick Example</h2>
             <pre className="bg-gray-900 text-white p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto">
-                {`// Using NPM package
-import { Button, Card, CardContent } from 'brutalist-ui';
-import 'brutalist-ui/styles.css';
-
-// Or using CLI-copied components
+                {`// Using CLI-copied components
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 

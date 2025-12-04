@@ -61,44 +61,49 @@ Your support helps keep this project alive and growing! 🚀
 
 ## 📦 Installation
 
+Use the CLI to add components to your project:
+
 ```bash
-# npm
-npm install brutalist-ui
+# Initialize your project
+npx brutx@latest init
 
-# pnpm
-pnpm add brutalist-ui
+# Add components
+npx brutx@latest add button card badge
 
-# yarn
-yarn add brutalist-ui
+# Or add all components
+npx brutx@latest add --all
 ```
 
 ## 🚀 Quick Start
 
-### 1. Configure Tailwind CSS
+### 1. Initialize Project
 
-```js
-// tailwind.config.js
-module.exports = {
-    content: [
-        // ... your content paths
-        './node_modules/brutalist-ui/**/*.{js,mjs}',
-    ],
-    darkMode: 'class',
-    plugins: [require('brutalist-ui/brutalism-plugin')],
-};
+```bash
+npx brutx@latest init
 ```
 
-### 2. Import Styles (Optional)
+This will:
 
-```tsx
-// In your app entry point
-import 'brutalist-ui/styles.css';
+-   Create `components.json` configuration
+-   Set up your components directory
+-   Install required dependencies
+
+### 2. Add Components
+
+```bash
+# Add specific components
+npx brutx@latest add button card dialog
+
+# Add all components at once
+npx brutx@latest add --all
 ```
 
 ### 3. Use Components
 
 ```tsx
-import { Button, Card, CardHeader, CardContent, Badge } from 'brutalist-ui';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 function App() {
     return (
@@ -173,6 +178,14 @@ The brutalism plugin adds these utilities:
 
 ```css
 .nb-border    /* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
+/* 3px solid black border */
 /* 3px solid black border */
 /* 3px solid black border */
 /* 3px solid black border */

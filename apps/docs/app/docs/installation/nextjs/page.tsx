@@ -15,117 +15,27 @@ export default function NextJsInstallationPage() {
                 Install and configure Brutalist UI for Next.js (App Router or Pages Router).
             </p>
 
-            {/* Method A: NPM Package */}
+            {/* CLI Installation */}
             <section className="mb-12">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 bg-[#4ECDC4] border-3 border-black flex items-center justify-center">
-                        <span className="font-black text-black">A</span>
+                        <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
                     </div>
                     <div>
-                        <h2 className="text-xl font-black">NPM Package</h2>
+                        <h2 className="text-xl font-black">CLI Installation</h2>
                         <span className="text-xs uppercase tracking-wider text-[#4ECDC4] font-bold">
-                            Recommended
-                        </span>
-                    </div>
-                </div>
-                <p className="mb-6 text-gray-600 dark:text-gray-400">
-                    Fastest way to get started. Use all components directly from the package.
-                </p>
-
-                <h3 className="text-lg font-black mb-3">1. Install the package</h3>
-                <PackageManagerTabs
-                    commands={{
-                        pnpm: 'pnpm add brutalist-ui',
-                        npm: 'npm install brutalist-ui',
-                        yarn: 'yarn add brutalist-ui',
-                        bun: 'bun add brutalist-ui',
-                    }}
-                />
-
-                <h3 className="text-lg font-black mb-3 mt-6">
-                    2. Import styles in your root layout
-                </h3>
-                <CodeBlock language="app/layout.tsx">{`import type { Metadata } from 'next';
-import 'brutalist-ui/styles.css'; // Add this line
-import './globals.css';
-
-export const metadata: Metadata = {
-  title: 'My App',
-  description: 'Built with Brutalist UI',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
-}`}</CodeBlock>
-
-                <h3 className="text-lg font-black mb-3 mt-6">3. Use components</h3>
-                <CodeBlock language="app/page.tsx">{`import { Button, Card, CardContent, Badge } from 'brutalist-ui';
-
-// For Calendar (separate import to avoid SSR issues)
-import { Calendar } from 'brutalist-ui/calendar';
-
-// For SubmitButton (works with Server Actions)
-import { SubmitButton } from 'brutalist-ui/submit-button';
-
-export default function Home() {
-  return (
-    <main className="p-8">
-      <Card variant="default" padding="default">
-        <CardContent>
-          <Badge variant="accent" className="mb-4">Welcome</Badge>
-          <h1 className="text-2xl font-black mb-4">Hello Brutalist UI!</h1>
-          <div className="flex gap-2">
-            <Button variant="primary">Primary</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="accent">Accent</Button>
-          </div>
-        </CardContent>
-      </Card>
-    </main>
-  );
-}`}</CodeBlock>
-
-                <div className="mt-6 p-4 border-3 border-black dark:border-white bg-white dark:bg-gray-900">
-                    <h4 className="font-black mb-3 text-sm uppercase tracking-wider">
-                        Available Exports
-                    </h4>
-                    <div className="grid gap-2 text-sm">
-                        {[
-                            { path: 'brutalist-ui', desc: 'All main components' },
-                            { path: 'brutalist-ui/calendar', desc: 'Calendar component' },
-                            { path: 'brutalist-ui/submit-button', desc: 'SubmitButton for forms' },
-                            { path: 'brutalist-ui/hooks', desc: 'React 19 hooks' },
-                            { path: 'brutalist-ui/styles.css', desc: 'CSS styles' },
-                        ].map((item) => (
-                            <div
-                                key={item.path}
-                                className="flex items-center justify-between py-1 border-b border-gray-200 dark:border-gray-700 last:border-0"
-                            >
-                                <code className="font-mono text-[#4ECDC4]">{item.path}</code>
-                                <span className="text-gray-500">{item.desc}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Method B: CLI */}
-            <section className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-[#FF6B6B] border-3 border-black flex items-center justify-center">
-                        <span className="font-black text-black">B</span>
-                    </div>
-                    <div>
-                        <h2 className="text-xl font-black">CLI Tool</h2>
-                        <span className="text-xs uppercase tracking-wider text-gray-500">
                             Copy & Customize
                         </span>
                     </div>
