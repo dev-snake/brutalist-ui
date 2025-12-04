@@ -27,53 +27,218 @@ interface Config {
     };
 }
 
-const defaultConfig: Config = {
-    tailwind: {
-        config: 'tailwind.config.js',
-        css: 'app/globals.css',
-    },
-    aliases: {
-        components: '@/components',
-        utils: '@/lib/utils',
-    },
-};
+interface TsConfig {
+    compilerOptions?: {
+        baseUrl?: string;
+        paths?: Record<string, string[]>;
+    };
+}
 
-// Detect project type and adjust defaults
-async function detectProjectType(cwd: string): Promise<Config> {
-    const config = { ...defaultConfig };
+// Project types we support
+type ProjectType = 'nextjs' | 'nextjs-src' | 'vite' | 'vite-src' | 'cra' | 'remix' | 'unknown';
 
-    // Check for common CSS file locations
-    const cssLocations = [
-        'src/app/globals.css',
-        'src/index.css',
-        'src/styles/globals.css',
-        'app/globals.css',
-        'styles/globals.css',
-    ];
+/**
+ * Detect project type based on config files and folder structure
+ */
+function detectProjectType(cwd: string): ProjectType {
+    const hasNextConfig = 
+        fs.existsSync(path.join(cwd, 'next.config.js')) ||
+        fs.existsSync(path.join(cwd, 'next.config.mjs')) ||
+        fs.existsSync(path.join(cwd, 'next.config.ts'));
+    
+    const hasViteConfig = 
+        fs.existsSync(path.join(cwd, 'vite.config.js')) ||
+        fs.existsSync(path.join(cwd, 'vite.config.ts')) ||
+        fs.existsSync(path.join(cwd, 'vite.config.mjs'));
+    
+    const hasRemixConfig = fs.existsSync(path.join(cwd, 'remix.config.js'));
+    
+    const hasSrcFolder = fs.existsSync(path.join(cwd, 'src'));
+    const hasAppFolder = fs.existsSync(path.join(cwd, 'app'));
+    const hasSrcAppFolder = fs.existsSync(path.join(cwd, 'src', 'app'));
 
-    for (const cssPath of cssLocations) {
-        if (await fs.pathExists(path.join(cwd, cssPath))) {
-            config.tailwind.css = cssPath;
-            break;
+    if (hasRemixConfig) return 'remix';
+    
+    if (hasNextConfig) {
+        // Next.js with src folder
+        if (hasSrcFolder && hasSrcAppFolder) return 'nextjs-src';
+        // Next.js without src (app router at root)
+        return 'nextjs';
+    }
+    
+    if (hasViteConfig) {
+        if (hasSrcFolder) return 'vite-src';
+        return 'vite';
+    }
+    
+    // Check for CRA (react-scripts in package.json)
+    try {
+        const packageJson = fs.readJsonSync(path.join(cwd, 'package.json'));
+        if (packageJson.dependencies?.['react-scripts'] || packageJson.devDependencies?.['react-scripts']) {
+            return 'cra';
+        }
+    } catch {}
+
+    return 'unknown';
+}
+
+/**
+ * Read and parse tsconfig.json or jsconfig.json
+ */
+function readTsConfig(cwd: string): TsConfig | null {
+    const configFiles = ['tsconfig.json', 'jsconfig.json'];
+    
+    for (const configFile of configFiles) {
+        const configPath = path.join(cwd, configFile);
+        if (fs.existsSync(configPath)) {
+            try {
+                const content = fs.readFileSync(configPath, 'utf-8');
+                // Remove comments (tsconfig allows comments)
+                const jsonContent = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+                return JSON.parse(jsonContent);
+            } catch {
+                // If parsing fails, continue to next file
+            }
         }
     }
+    return null;
+}
 
-    // Check for tailwind config variations
+/**
+ * Get alias configuration from tsconfig/jsconfig
+ */
+function getAliasFromTsConfig(cwd: string): { components: string; utils: string } | null {
+    const tsConfig = readTsConfig(cwd);
+    
+    if (tsConfig?.compilerOptions?.paths) {
+        const paths = tsConfig.compilerOptions.paths;
+        
+        // Look for common alias patterns
+        for (const [alias] of Object.entries(paths)) {
+            // Found @/* or ~/* pattern
+            if (alias.endsWith('/*')) {
+                const prefix = alias.replace('/*', '');
+                return {
+                    components: `${prefix}/components`,
+                    utils: `${prefix}/lib/utils`,
+                };
+            }
+        }
+    }
+    
+    return null;
+}
+
+/**
+ * Find existing CSS files in the project
+ */
+function findCssFile(cwd: string, projectType: ProjectType): string | null {
+    // Priority list based on project type
+    const cssLocations: Record<ProjectType, string[]> = {
+        'nextjs': [
+            'app/globals.css',
+            'styles/globals.css',
+            'app/global.css',
+        ],
+        'nextjs-src': [
+            'src/app/globals.css',
+            'src/styles/globals.css',
+            'src/app/global.css',
+        ],
+        'vite': [
+            'src/index.css',
+            'src/App.css',
+            'index.css',
+        ],
+        'vite-src': [
+            'src/index.css',
+            'src/App.css',
+            'src/styles/index.css',
+        ],
+        'cra': [
+            'src/index.css',
+            'src/App.css',
+        ],
+        'remix': [
+            'app/styles/global.css',
+            'app/root.css',
+            'app/tailwind.css',
+        ],
+        'unknown': [
+            'src/index.css',
+            'src/app/globals.css',
+            'app/globals.css',
+            'src/styles/globals.css',
+            'styles/globals.css',
+            'index.css',
+        ],
+    };
+
+    const locations = cssLocations[projectType];
+    
+    for (const cssPath of locations) {
+        if (fs.existsSync(path.join(cwd, cssPath))) {
+            return cssPath;
+        }
+    }
+    
+    return null;
+}
+
+/**
+ * Find tailwind config file
+ */
+function findTailwindConfig(cwd: string): string | null {
     const tailwindConfigs = [
-        'tailwind.config.js',
         'tailwind.config.ts',
+        'tailwind.config.js',
         'tailwind.config.mjs',
         'tailwind.config.cjs',
     ];
 
     for (const configPath of tailwindConfigs) {
-        if (await fs.pathExists(path.join(cwd, configPath))) {
-            config.tailwind.config = configPath;
-            break;
+        if (fs.existsSync(path.join(cwd, configPath))) {
+            return configPath;
         }
     }
+    
+    return null;
+}
 
-    return config;
+/**
+ * Auto-detect project settings
+ */
+async function detectProjectSettings(cwd: string): Promise<Config> {
+    const projectType = detectProjectType(cwd);
+    
+    // Get aliases from tsconfig/jsconfig if available
+    const aliasConfig = getAliasFromTsConfig(cwd);
+    
+    // Find CSS and Tailwind config files
+    const cssFile = findCssFile(cwd, projectType);
+    const tailwindConfig = findTailwindConfig(cwd);
+    
+    // Determine default aliases based on project type
+    let defaultAliases: { components: string; utils: string };
+    
+    if (aliasConfig) {
+        // Use aliases from tsconfig
+        defaultAliases = aliasConfig;
+    } else {
+        // Fallback based on project type
+        defaultAliases = {
+            components: '@/components',
+            utils: '@/lib/utils',
+        };
+    }
+
+    return {
+        tailwind: {
+            config: tailwindConfig || 'tailwind.config.js',
+            css: cssFile || (projectType.includes('src') ? 'src/index.css' : 'app/globals.css'),
+        },
+        aliases: defaultAliases,
+    };
 }
 
 // Detect package manager
@@ -108,9 +273,11 @@ function log(message: string, silent?: boolean) {
 
 export async function init(options: InitOptions) {
     const cwd = options.cwd || process.cwd();
+    const projectType = detectProjectType(cwd);
 
     if (!options.silent) {
         console.log(chalk.bold('\n🎨 Brutalist UI - Neo-Brutalism Component Library\n'));
+        console.log(chalk.gray(`   Detected project: ${projectType}\n`));
     }
 
     // Check if already initialized
@@ -141,7 +308,7 @@ export async function init(options: InitOptions) {
     }
 
     // Detect project settings
-    let config = await detectProjectType(cwd);
+    let config = await detectProjectSettings(cwd);
 
     if (!options.yes && !options.defaults) {
         const answers = await inquirer.prompt([

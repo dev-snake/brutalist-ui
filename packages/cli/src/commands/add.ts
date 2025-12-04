@@ -22,6 +22,148 @@ interface ComponentsConfig {
     };
 }
 
+interface TsConfig {
+    compilerOptions?: {
+        baseUrl?: string;
+        paths?: Record<string, string[]>;
+    };
+}
+
+// Project types we support
+type ProjectType = 'nextjs' | 'nextjs-src' | 'vite' | 'vite-src' | 'cra' | 'remix' | 'unknown';
+
+/**
+ * Detect project type based on config files and folder structure
+ */
+function detectProjectType(cwd: string): ProjectType {
+    const hasNextConfig = 
+        fs.existsSync(path.join(cwd, 'next.config.js')) ||
+        fs.existsSync(path.join(cwd, 'next.config.mjs')) ||
+        fs.existsSync(path.join(cwd, 'next.config.ts'));
+    
+    const hasViteConfig = 
+        fs.existsSync(path.join(cwd, 'vite.config.js')) ||
+        fs.existsSync(path.join(cwd, 'vite.config.ts')) ||
+        fs.existsSync(path.join(cwd, 'vite.config.mjs'));
+    
+    const hasRemixConfig = fs.existsSync(path.join(cwd, 'remix.config.js'));
+    
+    const hasSrcFolder = fs.existsSync(path.join(cwd, 'src'));
+    const hasAppFolder = fs.existsSync(path.join(cwd, 'app'));
+    const hasSrcAppFolder = fs.existsSync(path.join(cwd, 'src', 'app'));
+
+    if (hasRemixConfig) return 'remix';
+    
+    if (hasNextConfig) {
+        // Next.js with src folder
+        if (hasSrcFolder && hasSrcAppFolder) return 'nextjs-src';
+        // Next.js without src (app router at root)
+        return 'nextjs';
+    }
+    
+    if (hasViteConfig) {
+        if (hasSrcFolder) return 'vite-src';
+        return 'vite';
+    }
+    
+    // Check for CRA (react-scripts in package.json)
+    try {
+        const packageJson = fs.readJsonSync(path.join(cwd, 'package.json'));
+        if (packageJson.dependencies?.['react-scripts'] || packageJson.devDependencies?.['react-scripts']) {
+            return 'cra';
+        }
+    } catch {}
+
+    return 'unknown';
+}
+
+/**
+ * Read and parse tsconfig.json or jsconfig.json
+ */
+function readTsConfig(cwd: string): TsConfig | null {
+    const configFiles = ['tsconfig.json', 'jsconfig.json'];
+    
+    for (const configFile of configFiles) {
+        const configPath = path.join(cwd, configFile);
+        if (fs.existsSync(configPath)) {
+            try {
+                const content = fs.readFileSync(configPath, 'utf-8');
+                // Remove comments (tsconfig allows comments)
+                const jsonContent = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+                return JSON.parse(jsonContent);
+            } catch {
+                // If parsing fails, continue to next file
+            }
+        }
+    }
+    return null;
+}
+
+/**
+ * Resolve alias to actual filesystem path using tsconfig/jsconfig paths
+ * Falls back to intelligent detection based on project structure
+ */
+function resolveAliasPath(alias: string, cwd: string): string {
+    const tsConfig = readTsConfig(cwd);
+    const projectType = detectProjectType(cwd);
+    
+    // Get the alias prefix (e.g., "@" from "@/components")
+    const aliasMatch = alias.match(/^(@[^/]*)\/(.*)/);
+    if (!aliasMatch) {
+        // No alias, treat as relative path
+        return path.join(cwd, alias);
+    }
+    
+    const [, aliasPrefix, relativePath] = aliasMatch;
+    const aliasPattern = `${aliasPrefix}/*`;
+    
+    // Try to resolve from tsconfig/jsconfig paths
+    if (tsConfig?.compilerOptions?.paths) {
+        const paths = tsConfig.compilerOptions.paths;
+        const baseUrl = tsConfig.compilerOptions.baseUrl || '.';
+        
+        // Look for matching alias pattern
+        if (paths[aliasPattern]) {
+            const targetPath = paths[aliasPattern][0]; // Take first mapping
+            // Convert "@/*" -> "./*" or "./src/*" to actual path
+            const resolvedBase = targetPath.replace('/*', '');
+            return path.join(cwd, baseUrl, resolvedBase, relativePath);
+        }
+        
+        // Try exact alias match
+        if (paths[alias]) {
+            return path.join(cwd, baseUrl, paths[alias][0]);
+        }
+    }
+    
+    // Fallback: Intelligent detection based on project type
+    const pathWithoutAlias = relativePath; // "components" from "@/components"
+    
+    switch (projectType) {
+        case 'nextjs-src':
+        case 'vite-src':
+        case 'cra':
+            // These typically use src/ folder
+            return path.join(cwd, 'src', pathWithoutAlias);
+        
+        case 'nextjs':
+        case 'vite':
+            // Modern Next.js without src uses root
+            return path.join(cwd, pathWithoutAlias);
+        
+        case 'remix':
+            // Remix uses app/ folder structure
+            return path.join(cwd, 'app', pathWithoutAlias);
+        
+        default:
+            // Unknown: check if src exists
+            if (fs.existsSync(path.join(cwd, 'src'))) {
+                return path.join(cwd, 'src', pathWithoutAlias);
+            }
+            return path.join(cwd, pathWithoutAlias);
+    }
+}
+
 const AVAILABLE_COMPONENTS = [
     'alert',
     'avatar',
@@ -113,21 +255,6 @@ function log(message: string, silent?: boolean) {
     if (!silent) {
         console.log(message);
     }
-}
-
-// Resolve alias to actual path
-function resolveAliasPath(alias: string, cwd: string): string {
-    // @/components -> components (or src/components if src exists)
-    // @/lib/utils -> lib/utils (or src/lib/utils if src exists)
-    const relativePath = alias.replace(/^@\//, '');
-
-    // Check if src folder exists and has content
-    const srcExists = fs.existsSync(path.join(cwd, 'src'));
-
-    if (srcExists) {
-        return path.join(cwd, 'src', relativePath);
-    }
-    return path.join(cwd, relativePath);
 }
 
 export async function add(components: string[], options: AddOptions) {
