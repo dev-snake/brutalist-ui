@@ -106,12 +106,9 @@ export const metadata: Metadata = {
         creator: '@devsnake',
     },
     icons: {
-        icon: [
-            { url: '/favicon.svg', type: 'image/svg+xml' },
-            { url: '/favicon-16x16', sizes: '16x16', type: 'image/png' },
-            { url: '/favicon-32x32', sizes: '32x32', type: 'image/png' },
-        ],
-        apple: [{ url: '/apple-touch-icon', sizes: '180x180' }],
+        icon: '/favicon.svg',
+        shortcut: '/favicon.svg',
+        apple: '/favicon.svg',
     },
     manifest: '/manifest.json',
     verification: {
@@ -153,18 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         '@id': 'https://brutalistui.site/#organization',
         name: 'Brutalist UI',
         url: 'https://brutalistui.site',
-        logo: {
-            '@type': 'ImageObject',
-            '@id': 'https://brutalistui.site/#logo',
-            url: 'https://brutalistui.site/logo_bu.png',
-            contentUrl: 'https://brutalistui.site/logo_bu.png',
-            width: 512,
-            height: 512,
-            caption: 'Brutalist UI Logo',
-        },
-        image: {
-            '@id': 'https://brutalistui.site/#logo',
-        },
+        logo: 'https://brutalistui.site/favicon.svg',
         sameAs: [
             'https://github.com/dev-snake/brutalist-ui',
             'https://www.npmjs.com/package/brutalist-ui',
@@ -254,12 +240,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
-                {/* Favicon - Multiple formats for all browsers */}
+                {/* Favicon - Dùng trực tiếp favicon.svg */}
                 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32" />
-                <link rel="icon" type="image/png" sizes="192x192" href="/icon-192" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon" />
+                <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
+                <link rel="apple-touch-icon" href="/favicon.svg" />
 
                 {/* Schema.org JSON-LD - Order matters! */}
                 <script
