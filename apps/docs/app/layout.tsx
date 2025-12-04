@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: {
-        default: 'Brutalist UI - Brutalism UI Library | Neo Brutalism React Components',
+        default: 'Brutalist UI - Neo Brutalism React Component Library',
         template: '%s | Brutalist UI',
     },
     description:
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
         locale: 'en_US',
         url: 'https://brutalistui.site',
         siteName: 'Brutalist UI',
-        title: 'Brutalist UI - Brutalism UI Library | Neo Brutalism React Components',
+        title: 'Brutalist UI - Neo Brutalism React Component Library',
         description:
             'Brutalism UI library with 26+ Neo Brutalism components. Bold borders, offset shadows, vibrant colors. Free & open-source React UI kit. Best shadcn alternative.',
         images: [
@@ -92,32 +92,87 @@ export const metadata: Metadata = {
                 url: '/og-image.svg',
                 width: 1200,
                 height: 630,
-                alt: 'Brutalist UI - Brutalism UI Library for React',
+                alt: 'Brutalist UI - Neo Brutalism React Component Library',
                 type: 'image/svg+xml',
             },
         ],
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Brutalist UI - Brutalism UI Library | Neo Brutalism Components',
+        title: 'Brutalist UI - Neo Brutalism React Component Library',
         description:
             'Brutalism UI library with 26+ Neo Brutalism React components. Free & open-source.',
         images: ['/og-image.svg'],
         creator: '@devsnake',
     },
     icons: {
-        icon: '/favicon.svg',
-        shortcut: '/favicon.svg',
-        apple: '/logo_bu.png',
+        icon: [
+            { url: '/favicon.svg', type: 'image/svg+xml' },
+            { url: '/favicon-16x16', sizes: '16x16', type: 'image/png' },
+            { url: '/favicon-32x32', sizes: '32x32', type: 'image/png' },
+        ],
+        apple: [{ url: '/apple-touch-icon', sizes: '180x180' }],
     },
     manifest: '/manifest.json',
-    other: {
-        'google-site-verification': 'YOUR_GOOGLE_VERIFICATION_CODE',
+    verification: {
+        google: 'google4dc1dc17528f75a7',
     },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    const jsonLd = {
+    // WebSite Schema - QUAN TRỌNG cho Sitelinks và Search Box
+    const websiteJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        '@id': 'https://brutalistui.site/#website',
+        name: 'Brutalist UI',
+        alternateName: ['Brutalism UI', 'Neo Brutalism UI', 'BrutalistUI'],
+        url: 'https://brutalistui.site',
+        description:
+            'Brutalism UI library for React. 26+ Neo Brutalism UI components with bold borders, offset shadows, vibrant colors.',
+        publisher: {
+            '@id': 'https://brutalistui.site/#organization',
+        },
+        potentialAction: [
+            {
+                '@type': 'SearchAction',
+                target: {
+                    '@type': 'EntryPoint',
+                    urlTemplate: 'https://brutalistui.site/docs/components/{search_term_string}',
+                },
+                'query-input': 'required name=search_term_string',
+            },
+        ],
+        inLanguage: 'en-US',
+    };
+
+    // Organization Schema - Cho Logo và Brand
+    const organizationJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        '@id': 'https://brutalistui.site/#organization',
+        name: 'Brutalist UI',
+        url: 'https://brutalistui.site',
+        logo: {
+            '@type': 'ImageObject',
+            '@id': 'https://brutalistui.site/#logo',
+            url: 'https://brutalistui.site/logo_bu.png',
+            contentUrl: 'https://brutalistui.site/logo_bu.png',
+            width: 512,
+            height: 512,
+            caption: 'Brutalist UI Logo',
+        },
+        image: {
+            '@id': 'https://brutalistui.site/#logo',
+        },
+        sameAs: [
+            'https://github.com/dev-snake/brutalist-ui',
+            'https://www.npmjs.com/package/brutalist-ui',
+        ],
+    };
+
+    // SoftwareApplication Schema
+    const softwareJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Brutalist UI',
@@ -132,49 +187,96 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         softwareVersion: '0.1.7',
         programmingLanguage: ['TypeScript', 'React', 'JavaScript'],
         author: {
-            '@type': 'Person',
-            name: 'dev-snake',
-            url: 'https://github.com/dev-snake',
+            '@id': 'https://brutalistui.site/#organization',
         },
         offers: {
             '@type': 'Offer',
             price: '0',
             priceCurrency: 'USD',
-        },
-        aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '5',
-            ratingCount: '10',
+            availability: 'https://schema.org/InStock',
         },
         keywords:
             'brutalism ui, neo brutalism, brutalist ui, neubrutalism, react components, ui library',
     };
 
-    const organizationJsonLd = {
+    // SiteNavigationElement Schema - QUAN TRỌNG cho Sitelinks
+    const navigationJsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'Brutalist UI',
-        url: 'https://brutalistui.site',
-        logo: 'https://brutalistui.site/favicon.svg',
-        sameAs: [
-            'https://github.com/dev-snake/brutalist-ui',
-            'https://www.npmjs.com/package/brutalist-ui',
+        '@type': 'ItemList',
+        '@id': 'https://brutalistui.site/#navigation',
+        name: 'Main Navigation',
+        itemListElement: [
+            {
+                '@type': 'SiteNavigationElement',
+                position: 1,
+                name: 'Introduction',
+                description: 'Get started with Brutalist UI',
+                url: 'https://brutalistui.site/docs',
+            },
+            {
+                '@type': 'SiteNavigationElement',
+                position: 2,
+                name: 'Installation',
+                description: 'Install and configure Brutalist UI for your project',
+                url: 'https://brutalistui.site/docs/installation',
+            },
+            {
+                '@type': 'SiteNavigationElement',
+                position: 3,
+                name: 'Components',
+                description: 'Browse all 26+ Neo Brutalism UI components',
+                url: 'https://brutalistui.site/docs/components',
+            },
+            {
+                '@type': 'SiteNavigationElement',
+                position: 4,
+                name: 'CLI',
+                description: 'Use the CLI to add components to your project',
+                url: 'https://brutalistui.site/docs/cli',
+            },
+            {
+                '@type': 'SiteNavigationElement',
+                position: 5,
+                name: 'Button',
+                description: 'Interactive button component with multiple variants',
+                url: 'https://brutalistui.site/docs/components/button',
+            },
+            {
+                '@type': 'SiteNavigationElement',
+                position: 6,
+                name: 'Card',
+                description: 'Container component with header, content, and footer',
+                url: 'https://brutalistui.site/docs/components/card',
+            },
         ],
     };
 
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
+                {/* Favicon - Multiple formats for all browsers */}
                 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-                <link rel="icon" href="/icon" type="image/png" sizes="32x32" />
-                <link rel="apple-touch-icon" href="/apple-icon" />
+                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16" />
+                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32" />
+                <link rel="icon" type="image/png" sizes="192x192" href="/icon-192" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon" />
+
+                {/* Schema.org JSON-LD - Order matters! */}
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
                 />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(navigationJsonLd) }}
                 />
             </head>
             <body className={inter.className}>
