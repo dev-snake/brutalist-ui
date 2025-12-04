@@ -2,18 +2,8 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-// Route segment config
-export const dynamic = 'force-static';
-
 // 512x512 icon for PWA - matches favicon.svg design
-export const size = {
-    width: 512,
-    height: 512,
-};
-
-export const contentType = 'image/png';
-
-export default function Icon512() {
+export async function GET() {
     return new ImageResponse(
         (
             <div
@@ -78,7 +68,8 @@ export default function Icon512() {
             </div>
         ),
         {
-            ...size,
+            width: 512,
+            height: 512,
         }
     );
 }
