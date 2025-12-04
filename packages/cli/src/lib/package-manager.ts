@@ -30,7 +30,7 @@ export function installPackages(
     cwd: string
 ): void {
     if (packages.length === 0) return;
-    
+
     const command = `${INSTALL_COMMANDS[packageManager]} ${packages.join(' ')}`;
     execSync(command, { stdio: 'inherit', cwd });
 }

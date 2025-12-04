@@ -16,7 +16,7 @@ import { CONFIG_FILES, CSS_LOCATIONS, DEFAULT_ALIASES } from './constants.js';
  * Check if any of the given files exist in the directory
  */
 function hasAnyFile(cwd: string, files: readonly string[]): boolean {
-    return files.some(file => fs.existsSync(path.join(cwd, file)));
+    return files.some((file) => fs.existsSync(path.join(cwd, file)));
 }
 
 /**
@@ -42,21 +42,21 @@ export function detectProjectType(cwd: string): ProjectType {
     const hasNext = hasAnyFile(cwd, CONFIG_FILES.next);
     const hasVite = hasAnyFile(cwd, CONFIG_FILES.vite);
     const hasRemix = hasAnyFile(cwd, CONFIG_FILES.remix);
-    
+
     const hasSrc = fs.existsSync(path.join(cwd, 'src'));
     const hasSrcApp = fs.existsSync(path.join(cwd, 'src', 'app'));
 
     // Check in order of specificity
     if (hasRemix) return 'remix';
-    
+
     if (hasNext) {
-        return (hasSrc && hasSrcApp) ? 'nextjs-src' : 'nextjs';
+        return hasSrc && hasSrcApp ? 'nextjs-src' : 'nextjs';
     }
-    
+
     if (hasVite) {
         return hasSrc ? 'vite-src' : 'vite';
     }
-    
+
     // Check for CRA
     if (isCRA(cwd)) return 'cra';
 
@@ -71,7 +71,7 @@ function isCRA(cwd: string): boolean {
         const packageJson = fs.readJsonSync(path.join(cwd, 'package.json'));
         return Boolean(
             packageJson.dependencies?.['react-scripts'] ||
-            packageJson.devDependencies?.['react-scripts']
+                packageJson.devDependencies?.['react-scripts']
         );
     } catch {
         return false;
@@ -87,11 +87,11 @@ function isCRA(cwd: string): boolean {
  */
 export function detectPackageManager(cwd: string): PackageManager {
     const { lockfiles } = CONFIG_FILES;
-    
+
     if (fs.existsSync(path.join(cwd, lockfiles.pnpm))) return 'pnpm';
     if (fs.existsSync(path.join(cwd, lockfiles.yarn))) return 'yarn';
     if (fs.existsSync(path.join(cwd, lockfiles.bun))) return 'bun';
-    
+
     return 'npm';
 }
 
@@ -106,9 +106,9 @@ export function detectPackageManager(cwd: string): PackageManager {
 export function readTsConfig(cwd: string): TsConfig | null {
     for (const configFile of CONFIG_FILES.tsconfig) {
         const configPath = path.join(cwd, configFile);
-        
+
         if (!fs.existsSync(configPath)) continue;
-        
+
         try {
             const content = fs.readFileSync(configPath, 'utf-8');
             // Strip comments (tsconfig allows them)
@@ -146,7 +146,7 @@ export function findCssFile(cwd: string, projectType: ProjectType): string | nul
 export function getAliasFromTsConfig(cwd: string): AliasConfig | null {
     const tsConfig = readTsConfig(cwd);
     const paths = tsConfig?.compilerOptions?.paths;
-    
+
     if (!paths) return null;
 
     // Find alias pattern like @/* or ~/*
@@ -159,7 +159,7 @@ export function getAliasFromTsConfig(cwd: string): AliasConfig | null {
             };
         }
     }
-    
+
     return null;
 }
 
@@ -170,18 +170,18 @@ export function getAliasFromTsConfig(cwd: string): AliasConfig | null {
 export function resolveAliasPath(alias: string, cwd: string): string {
     // Parse alias (e.g., "@/components" -> prefix: "@", path: "components")
     const match = alias.match(/^(@[^/]*|~)\/(.*)/);
-    
+
     if (!match) {
         // No alias, treat as relative path
         return path.join(cwd, alias);
     }
-    
+
     const [, aliasPrefix, relativePath] = match;
-    
+
     // Try tsconfig resolution first
     const resolvedFromConfig = resolveFromTsConfig(cwd, aliasPrefix, relativePath);
     if (resolvedFromConfig) return resolvedFromConfig;
-    
+
     // Fallback to project type based resolution
     return resolveByProjectType(cwd, relativePath);
 }
@@ -189,21 +189,25 @@ export function resolveAliasPath(alias: string, cwd: string): string {
 /**
  * Resolve path using tsconfig/jsconfig paths
  */
-function resolveFromTsConfig(cwd: string, aliasPrefix: string, relativePath: string): string | null {
+function resolveFromTsConfig(
+    cwd: string,
+    aliasPrefix: string,
+    relativePath: string
+): string | null {
     const tsConfig = readTsConfig(cwd);
     const paths = tsConfig?.compilerOptions?.paths;
-    
+
     if (!paths) return null;
-    
+
     const aliasPattern = `${aliasPrefix}/*`;
     const baseUrl = tsConfig?.compilerOptions?.baseUrl || '.';
-    
+
     if (paths[aliasPattern]) {
         const targetPath = paths[aliasPattern][0];
         const resolvedBase = targetPath.replace('/*', '');
         return path.join(cwd, baseUrl, resolvedBase, relativePath);
     }
-    
+
     return null;
 }
 
@@ -212,17 +216,17 @@ function resolveFromTsConfig(cwd: string, aliasPrefix: string, relativePath: str
  */
 function resolveByProjectType(cwd: string, relativePath: string): string {
     const projectType = detectProjectType(cwd);
-    
+
     const projectTypeToBase: Record<ProjectType, string> = {
         'nextjs-src': 'src',
         'vite-src': 'src',
-        'cra': 'src',
-        'nextjs': '',
-        'vite': '',
-        'remix': 'app',
-        'unknown': fs.existsSync(path.join(cwd, 'src')) ? 'src' : '',
+        cra: 'src',
+        nextjs: '',
+        vite: '',
+        remix: 'app',
+        unknown: fs.existsSync(path.join(cwd, 'src')) ? 'src' : '',
     };
-    
+
     const base = projectTypeToBase[projectType];
     return path.join(cwd, base, relativePath);
 }
