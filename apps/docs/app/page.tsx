@@ -10,7 +10,7 @@ export default function Home() {
                 <ThemeToggle />
             </div>
 
-            {/* Hero Section */}
+            {/* Hero Section  */}
             <section className="container-brutal py-12 sm:py-20 px-4">
                 <div className="flex flex-col items-center text-center">
                     <Badge variant="primary" size="lg" className="mb-4 sm:mb-6">
