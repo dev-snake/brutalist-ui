@@ -45,7 +45,7 @@ export default function NotFound() {
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <Link href="/">
-                            <Button variant="primary" size="lg" className="w-full sm:w-auto truncate">
+                            <Button variant="primary" size="lg" className="w-full sm:w-auto truncate ">
                                 ← Go Home
                             </Button>
                         </Link>
