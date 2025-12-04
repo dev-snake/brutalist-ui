@@ -1,6 +1,6 @@
 {
     "name": "brutx",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "CLI for adding Brutalist UI components to your project",
     "bin": {
         "brutx": "dist/index.js"

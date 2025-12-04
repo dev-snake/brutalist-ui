@@ -115,6 +115,21 @@ function log(message: string, silent?: boolean) {
     }
 }
 
+// Resolve alias to actual path
+function resolveAliasPath(alias: string, cwd: string): string {
+    // @/components -> components (or src/components if src exists)
+    // @/lib/utils -> lib/utils (or src/lib/utils if src exists)
+    const relativePath = alias.replace(/^@\//, '');
+
+    // Check if src folder exists and has content
+    const srcExists = fs.existsSync(path.join(cwd, 'src'));
+
+    if (srcExists) {
+        return path.join(cwd, 'src', relativePath);
+    }
+    return path.join(cwd, relativePath);
+}
+
 export async function add(components: string[], options: AddOptions) {
     const cwd = options.cwd || process.cwd();
 
@@ -173,10 +188,28 @@ export async function add(components: string[], options: AddOptions) {
 
     const componentsDir = options.path
         ? path.join(cwd, options.path)
-        : path.join(cwd, config.aliases.components.replace('@/', 'src/'));
+        : resolveAliasPath(config.aliases.components, cwd);
     const utilsAlias = config.aliases.utils;
+    const utilsPath = resolveAliasPath(config.aliases.utils, cwd) + '.ts';
+    const utilsDir = path.dirname(utilsPath);
 
     await fs.ensureDir(path.join(componentsDir, 'ui'));
+
+    // Create utils.ts if it doesn't exist
+    if (!(await fs.pathExists(utilsPath))) {
+        await fs.ensureDir(utilsDir);
+        await fs.writeFile(
+            utilsPath,
+            `import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs));
+}
+`
+        );
+        spinner?.info(chalk.gray(`Created ${utilsPath}`));
+    }
 
     let added = 0;
     let skipped = 0;

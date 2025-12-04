@@ -30,7 +30,7 @@ interface Config {
 const defaultConfig: Config = {
     tailwind: {
         config: 'tailwind.config.js',
-        css: 'src/app/globals.css',
+        css: 'app/globals.css',
     },
     aliases: {
         components: '@/components',
@@ -198,27 +198,9 @@ export async function init(options: InitOptions) {
             { spaces: 2 }
         );
 
-        // Create directories
-        const componentsDir = config.aliases.components.replace('@/', 'src/');
-        const utilsDir = path.dirname(config.aliases.utils.replace('@/', 'src/'));
+        // NOTE: Don't create directories here - they will be created when adding components
 
-        await fs.ensureDir(path.join(cwd, componentsDir, 'ui'));
-        await fs.ensureDir(path.join(cwd, utilsDir));
-
-        // Create utils.ts
-        const utilsPath = path.join(cwd, config.aliases.utils.replace('@/', 'src/') + '.ts');
-        if (!(await fs.pathExists(utilsPath))) {
-            await fs.writeFile(
-                utilsPath,
-                `import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
-`
-            );
-        }
+        // Create utils.ts only when user adds first component (moved to add.ts)
 
         // Update tailwind.config.js if exists
         const tailwindConfigPath = path.join(cwd, config.tailwind.config);
