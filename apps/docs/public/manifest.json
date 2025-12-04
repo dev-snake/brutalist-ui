@@ -1,53 +1,16 @@
 {
     "name": "Brutalist UI",
     "short_name": "BrutalistUI",
-    "description": "Neo-Brutalism React Component Library - 26+ accessible components with bold borders, offset shadows, and vibrant colors. Free & open-source.",
+    "description": "Neo-Brutalism React Component Library - 26+ accessible components with bold borders, offset shadows, and vibrant colors.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#FFFBF5",
     "theme_color": "#FF6B6B",
-    "orientation": "portrait-primary",
     "icons": [
         {
             "src": "/favicon.svg",
             "sizes": "any",
             "type": "image/svg+xml"
-        },
-        {
-            "src": "/favicon-16x16",
-            "sizes": "16x16",
-            "type": "image/png"
-        },
-        {
-            "src": "/favicon-32x32",
-            "sizes": "32x32",
-            "type": "image/png"
-        },
-        {
-            "src": "/apple-touch-icon",
-            "sizes": "180x180",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-192",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any maskable"
-        },
-        {
-            "src": "/icon-512",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any maskable"
-        }
-    ],
-    "categories": ["developer tools", "utilities", "productivity"],
-    "screenshots": [
-        {
-            "src": "/og-image.svg",
-            "sizes": "1200x630",
-            "type": "image/svg+xml",
-            "label": "Brutalist UI Components Preview"
         }
     ]
 }
