@@ -15,120 +15,27 @@ export default function ViteInstallationPage() {
                 Install and configure Brutalist UI for Vite + React projects.
             </p>
 
-            {/* Method A: NPM Package */}
+            {/* CLI Installation */}
             <section className="mb-12">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 bg-[#4ECDC4] border-3 border-black flex items-center justify-center">
-                        <span className="font-black text-black">A</span>
+                        <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
                     </div>
                     <div>
-                        <h2 className="text-xl font-black">NPM Package</h2>
+                        <h2 className="text-xl font-black">CLI Installation</h2>
                         <span className="text-xs uppercase tracking-wider text-[#4ECDC4] font-bold">
-                            Recommended
-                        </span>
-                    </div>
-                </div>
-                <p className="mb-6 text-gray-600 dark:text-gray-400">
-                    Fastest way to get started with Vite.
-                </p>
-
-                <h3 className="text-lg font-black mb-3">1. Create a Vite project (if new)</h3>
-                <PackageManagerTabs
-                    commands={{
-                        pnpm: 'pnpm create vite@latest my-app --template react-ts',
-                        npm: 'npm create vite@latest my-app -- --template react-ts',
-                        yarn: 'yarn create vite my-app --template react-ts',
-                        bun: 'bunx create-vite my-app --template react-ts',
-                    }}
-                />
-
-                <h3 className="text-lg font-black mb-3 mt-6">2. Install Tailwind CSS</h3>
-                <PackageManagerTabs
-                    commands={{
-                        pnpm: 'pnpm add -D tailwindcss postcss autoprefixer && npx tailwindcss init -p',
-                        npm: 'npm install -D tailwindcss postcss autoprefixer && npx tailwindcss init -p',
-                        yarn: 'yarn add -D tailwindcss postcss autoprefixer && npx tailwindcss init -p',
-                        bun: 'bun add -D tailwindcss postcss autoprefixer && bunx tailwindcss init -p',
-                    }}
-                />
-
-                <h3 className="text-lg font-black mb-3 mt-6">3. Configure tailwind.config.js</h3>
-                <CodeBlock language="tailwind.config.js">{`/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      borderWidth: {
-        3: "3px",
-      },
-    },
-  },
-  plugins: [],
-}`}</CodeBlock>
-
-                <h3 className="text-lg font-black mb-3 mt-6">4. Add Tailwind to CSS</h3>
-                <CodeBlock language="src/index.css">{`@tailwind base;
-@tailwind components;
-@tailwind utilities;`}</CodeBlock>
-
-                <h3 className="text-lg font-black mb-3 mt-6">5. Install Brutalist UI</h3>
-                <PackageManagerTabs
-                    commands={{
-                        pnpm: 'pnpm add brutalist-ui',
-                        npm: 'npm install brutalist-ui',
-                        yarn: 'yarn add brutalist-ui',
-                        bun: 'bun add brutalist-ui',
-                    }}
-                />
-
-                <h3 className="text-lg font-black mb-3 mt-6">6. Import styles in main.tsx</h3>
-                <CodeBlock language="src/main.tsx">{`import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './index.css';
-import 'brutalist-ui/styles.css'; // Add this line
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);`}</CodeBlock>
-
-                <h3 className="text-lg font-black mb-3 mt-6">7. Use components</h3>
-                <CodeBlock language="src/App.tsx">{`import { Button, Card, CardContent, Badge } from 'brutalist-ui';
-
-function App() {
-  return (
-    <div className="p-8">
-      <Card variant="default" padding="default">
-        <CardContent>
-          <Badge variant="accent" className="mb-4">Welcome</Badge>
-          <h1 className="text-2xl font-black mb-4">Hello Brutalist UI!</h1>
-          <div className="flex gap-2">
-            <Button variant="primary">Primary</Button>
-            <Button variant="secondary">Secondary</Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-export default App;`}</CodeBlock>
-            </section>
-
-            {/* Method B: CLI */}
-            <section className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-[#FF6B6B] border-3 border-black flex items-center justify-center">
-                        <span className="font-black text-black">B</span>
-                    </div>
-                    <div>
-                        <h2 className="text-xl font-black">CLI Tool</h2>
-                        <span className="text-xs uppercase tracking-wider text-gray-500">
                             Copy & Customize
                         </span>
                     </div>
@@ -137,7 +44,7 @@ export default App;`}</CodeBlock>
                     Copy components into your project for full customization.
                 </p>
 
-                <h3 className="text-lg font-black mb-3">1. Create and setup Vite project</h3>
+                <h3 className="text-lg font-black mb-3">1. Create Vite project (if new)</h3>
                 <PackageManagerTabs
                     commands={{
                         pnpm: 'pnpm create vite@latest my-app --template react-ts',

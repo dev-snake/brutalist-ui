@@ -205,22 +205,19 @@ export default function Home() {
                         </CardHeader>
                         <CardContent>
                             <p className="font-medium text-gray-700 dark:text-gray-300 text-sm sm:text-base">
-                                Custom Tailwind plugin with nb-* utilities. Easy to extend and
-                                modify to match your brand.
+                                Copy components to your codebase. Easy to extend and modify to match
+                                your brand.
                             </p>
                         </CardContent>
                     </Card>
 
                     <Card variant="default" className="dark:bg-gray-900 dark:border-white">
                         <CardHeader>
-                            <CardTitle className="text-base sm:text-lg">
-                                📦 Tree Shakeable
-                            </CardTitle>
+                            <CardTitle className="text-base sm:text-lg">📦 CLI Tool</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="font-medium text-gray-700 dark:text-gray-300 text-sm sm:text-base">
-                                Import only what you need. ESM and CJS builds available. No bundle
-                                bloat.
+                                Add components with a single command. Full control over your code.
                             </p>
                         </CardContent>
                     </Card>
@@ -249,26 +246,18 @@ export default function Home() {
                         <div className="space-y-4">
                             <div>
                                 <p className="font-bold mb-2 text-sm sm:text-base">
-                                    1. Install the package:
+                                    1. Initialize your project:
                                 </p>
                                 <pre className="bg-gray-900 text-white p-3 sm:p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-xs sm:text-sm">
-                                    <code>npm install brutalist-ui</code>
+                                    <code>npx brutx@latest init</code>
                                 </pre>
                             </div>
                             <div>
                                 <p className="font-bold mb-2 text-sm sm:text-base">
-                                    2. Add to your tailwind.config.js:
+                                    2. Add components:
                                 </p>
                                 <pre className="bg-gray-900 text-white p-3 sm:p-4 border-3 border-black dark:border-white shadow-brutal overflow-x-auto text-xs sm:text-sm">
-                                    <code>{`module.exports = {
-  content: [
-    // ... your content
-    './node_modules/brutalist-ui/**/*.{js,mjs}'
-  ],
-  plugins: [
-    require('brutalist-ui/brutalism-plugin')
-  ]
-}`}</code>
+                                    <code>npx brutx@latest add button card</code>
                                 </pre>
                             </div>
                             <div>

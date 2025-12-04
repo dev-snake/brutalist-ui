@@ -179,140 +179,89 @@ export default function InstallationPage() {
                 </div>
             </section>
 
-            {/* Two Installation Methods */}
+            {/* CLI Installation */}
             <section className="mb-12">
-                <h2 className="text-2xl font-black mb-6">Choose Your Method</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                    {/* Option A: NPM Package */}
-                    <div className="relative">
-                        <div className="absolute -top-3 left-4 px-2 bg-white dark:bg-black z-10">
-                            <span className="text-xs font-black uppercase tracking-wider text-[#4ECDC4]">
-                                Recommended
-                            </span>
-                        </div>
-                        <Card
-                            variant="default"
-                            padding="default"
-                            className="h-full border-[#4ECDC4]"
-                        >
-                            <CardContent className="p-6">
-                                <div className="w-12 h-12 bg-[#4ECDC4] border-3 border-black flex items-center justify-center mb-4">
-                                    <svg
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2.5}
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                                        />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-black mb-2">NPM Package</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                    Quick start. Install and use all 27 components immediately.
-                                </p>
-                                <pre className="bg-black text-[#4ECDC4] p-3 text-sm font-mono mb-4 overflow-x-auto">
-                                    pnpm add brutalist-ui
-                                </pre>
-                                <ul className="text-sm space-y-2 mb-4">
-                                    <li className="flex items-start gap-2">
-                                        <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
-                                        Zero config required
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
-                                        Tree-shakeable exports
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
-                                        TypeScript included
-                                    </li>
-                                </ul>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Option B: CLI */}
-                    <div>
-                        <Card variant="default" padding="default" className="h-full">
-                            <CardContent className="p-6">
-                                <div className="w-12 h-12 bg-[#FF6B6B] border-3 border-black flex items-center justify-center mb-4">
-                                    <svg
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2.5}
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                        />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-black mb-2">CLI Tool</h3>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                    Copy source code. Full control over every component.
-                                </p>
-                                <pre className="bg-black text-[#FF6B6B] p-3 text-sm font-mono mb-4 overflow-x-auto">
-                                    npx brutx@latest init
-                                </pre>
-                                <ul className="text-sm space-y-2 mb-4">
-                                    <li className="flex items-start gap-2">
-                                        <span className="w-1.5 h-1.5 mt-2 bg-[#FF6B6B]" />
-                                        Full customization
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="w-1.5 h-1.5 mt-2 bg-[#FF6B6B]" />
-                                        Pick individual components
-                                    </li>
-                                    <li className="flex items-start gap-2">
-                                        <span className="w-1.5 h-1.5 mt-2 bg-[#FF6B6B]" />
-                                        Own the code
-                                    </li>
-                                </ul>
-                                <Link
-                                    href="/docs/cli"
-                                    className="inline-flex items-center text-sm font-bold hover:text-[#FF6B6B] transition-colors"
+                <h2 className="text-2xl font-black mb-6">Installation Method</h2>
+                <div className="max-w-xl">
+                    <Card variant="default" padding="default" className="h-full border-[#4ECDC4]">
+                        <CardContent className="p-6">
+                            <div className="w-12 h-12 bg-[#4ECDC4] border-3 border-black flex items-center justify-center mb-4">
+                                <svg
+                                    className="w-6 h-6"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth={2.5}
+                                    viewBox="0 0 24 24"
                                 >
-                                    CLI Reference
-                                    <svg
-                                        className="w-4 h-4 ml-1"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 5l7 7-7 7"
-                                        />
-                                    </svg>
-                                </Link>
-                            </CardContent>
-                        </Card>
-                    </div>
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-black mb-2">CLI Tool</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Copy components into your codebase for full control and
+                                customization.
+                            </p>
+                            <pre className="bg-black text-[#4ECDC4] p-3 text-sm font-mono mb-4 overflow-x-auto">
+                                npx brutx@latest init
+                            </pre>
+                            <ul className="text-sm space-y-2 mb-4">
+                                <li className="flex items-start gap-2">
+                                    <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
+                                    Full customization control
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
+                                    Pick individual components
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
+                                    Own the code
+                                </li>
+                                <li className="flex items-start gap-2">
+                                    <span className="w-1.5 h-1.5 mt-2 bg-[#4ECDC4]" />
+                                    TypeScript included
+                                </li>
+                            </ul>
+                            <Link
+                                href="/docs/cli"
+                                className="inline-flex items-center text-sm font-bold hover:text-[#4ECDC4] transition-colors"
+                            >
+                                CLI Reference
+                                <svg
+                                    className="w-4 h-4 ml-1"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M9 5l7 7-7 7"
+                                    />
+                                </svg>
+                            </Link>
+                        </CardContent>
+                    </Card>
                 </div>
             </section>
 
             {/* Quick Start */}
             <section className="mb-12 p-6 border-3 border-black dark:border-white bg-gray-50 dark:bg-gray-900">
-                <h2 className="text-xl font-black mb-4">Quick Start with NPM</h2>
+                <h2 className="text-xl font-black mb-4">Quick Start</h2>
                 <div className="grid gap-4">
                     <div className="flex gap-4">
                         <div className="flex-shrink-0 w-8 h-8 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black text-sm">
                             1
                         </div>
                         <div className="flex-1">
-                            <p className="font-bold mb-2">Install the package</p>
+                            <p className="font-bold mb-2">Initialize your project</p>
                             <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto">
-                                pnpm add brutalist-ui
+                                npx brutx@latest init
                             </pre>
                         </div>
                     </div>
@@ -321,9 +270,9 @@ export default function InstallationPage() {
                             2
                         </div>
                         <div className="flex-1">
-                            <p className="font-bold mb-2">Import styles</p>
+                            <p className="font-bold mb-2">Add components</p>
                             <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto">
-                                {`import 'brutalist-ui/styles.css';`}
+                                npx brutx@latest add button card badge
                             </pre>
                         </div>
                     </div>
@@ -334,7 +283,7 @@ export default function InstallationPage() {
                         <div className="flex-1">
                             <p className="font-bold mb-2">Use components</p>
                             <pre className="bg-black text-white p-3 text-sm font-mono overflow-x-auto">
-                                {`import { Button, Card } from 'brutalist-ui';`}
+                                {`import { Button } from '@/components/ui/button';`}
                             </pre>
                         </div>
                     </div>
@@ -386,12 +335,8 @@ export default function InstallationPage() {
                     </h3>
                     <dl className="space-y-3 text-sm">
                         <div className="flex justify-between">
-                            <dt className="text-gray-500 dark:text-gray-400">NPM Package</dt>
-                            <dd className="font-mono font-bold">brutalist-ui</dd>
-                        </div>
-                        <div className="flex justify-between">
                             <dt className="text-gray-500 dark:text-gray-400">CLI Package</dt>
-                            <dd className="font-mono font-bold">brutalist</dd>
+                            <dd className="font-mono font-bold">brutx</dd>
                         </div>
                         <div className="flex justify-between">
                             <dt className="text-gray-500 dark:text-gray-400">Components</dt>

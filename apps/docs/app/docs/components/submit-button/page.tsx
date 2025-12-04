@@ -34,10 +34,7 @@ export default function SubmitButtonPage() {
         setIsSubmitting(false);
     };
 
-    const usageCode = `import { SubmitButton } from 'brutalist-ui/submit-button';
-
-// Or if using CLI:
-import { SubmitButton } from '@/components/ui/submit-button';`;
+    const usageCode = `import { SubmitButton } from '@/components/ui/submit-button';`;
 
     const basicExampleCode = `// Server Action example (Next.js)
 async function submitAction(formData: FormData) {
