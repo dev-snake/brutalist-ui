@@ -3,15 +3,15 @@
   "name": "slider",
   "type": "registry:ui",
   "title": "Slider",
-  "description": "A highly customizable neo-brutalist Slider component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Slider component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-slider"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/slider.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as SliderPrimitive from '@radix-ui/react-slider';\n\nimport { cn } from '@/lib/utils';\n\nconst Slider = React.forwardRef<\n    React.ElementRef<typeof SliderPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>\n>(({ className, ...props }, ref) => (\n    <SliderPrimitive.Root\n        ref={ref}\n        className={cn(\n            'relative flex w-full touch-none select-none items-center',\n            className\n        )}\n        {...props}\n    >\n        <SliderPrimitive.Track\n            className={cn(\n                'relative h-5 w-full grow overflow-hidden rounded-full',\n                'border-3 border-brutal bg-white dark:bg-gray-800',\n                'shadow-brutal-sm'\n            )}\n        >\n            <SliderPrimitive.Range className=\"absolute h-full bg-brutal-secondary\" />\n        </SliderPrimitive.Track>\n        <SliderPrimitive.Thumb\n            className={cn(\n                'block h-6 w-6 rounded-full',\n                'border-3 border-brutal bg-brutal-accent',\n                'shadow-brutal-sm',\n                'transition-all duration-150',\n                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n                'disabled:pointer-events-none disabled:opacity-50',\n                'hover:scale-110 active:scale-95',\n                'cursor-grab active:cursor-grabbing'\n            )}\n        />\n    </SliderPrimitive.Root>\n));\nSlider.displayName = SliderPrimitive.Root.displayName;\n\nexport { Slider };\n",
+      "path": "components/ui/slider/Slider.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    SliderRoot as SliderRootPrimitive,\n    SliderTrack as SliderTrackPrimitive,\n    SliderRange as SliderRangePrimitive,\n    SliderThumb as SliderThumbPrimitive,\n} from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface SliderProps {\n    defaultValue?: number[]\n    modelValue?: number[]\n    min?: number\n    max?: number\n    step?: number\n    disabled?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SliderProps>(), {\n    defaultValue: undefined,\n    modelValue: undefined,\n    min: 0,\n    max: 100,\n    step: 1,\n    class: '',\n})\n\nconst emit = defineEmits<{ 'update:modelValue': [value: number[]] }>()\n\nconst rootClasses = computed(() =>\n    cn('relative flex w-full touch-none select-none items-center', props.class)\n)\n\nconst trackClasses = computed(() =>\n    cn(\n        'relative h-5 w-full grow overflow-hidden rounded-brutal',\n        'border-3 border-brutal bg-brutal-bg',\n        'shadow-brutal-sm'\n    )\n)\n\nconst thumbClasses = computed(() =>\n    cn(\n        'block h-6 w-6 rounded-full',\n        'border-3 border-brutal bg-brutal-accent',\n        'shadow-brutal-sm',\n        'transition-all duration-150',\n        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'disabled:pointer-events-none disabled:opacity-50',\n        'hover:scale-110 active:scale-95',\n        'cursor-grab active:cursor-grabbing'\n    )\n)\n</script>\n\n<template>\n    <SliderRootPrimitive\n        :default-value=\"defaultValue\"\n        :model-value=\"modelValue\"\n        :min=\"min\"\n        :max=\"max\"\n        :step=\"step\"\n        :disabled=\"disabled\"\n        :class=\"rootClasses\"\n        @update:model-value=\"emit('update:modelValue', $event!)\"\n    >\n        <SliderTrackPrimitive :class=\"trackClasses\">\n            <SliderRangePrimitive class=\"absolute h-full bg-brutal-secondary\" />\n        </SliderTrackPrimitive>\n        <SliderThumbPrimitive :class=\"thumbClasses\" />\n    </SliderRootPrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +37,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +71,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +84,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

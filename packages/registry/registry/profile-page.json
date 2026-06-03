@@ -1,0 +1,108 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "profile-page",
+  "type": "registry:ui",
+  "title": "Profile Page",
+  "description": "A highly customizable neo-brutalist Profile Page component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "avatar",
+    "card",
+    "input",
+    "button",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "components/ui/profile-page/ProfilePage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref, watch } from 'vue'\nimport { useLocale } from '@/composables/useLocale'\nimport { cn } from '@/lib/utils'\nimport Avatar from '@/components/ui/avatar/Avatar.vue'\nimport AvatarFallback from '@/components/ui/avatar/AvatarFallback.vue'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardHeader from '@/components/ui/card/CardHeader.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport CardTitle from '@/components/ui/card/CardTitle.vue'\nimport Input from '@/components/ui/input/Input.vue'\nimport Button from '@/components/ui/button/Button.vue'\nimport Textarea from '@/components/ui/textarea/Textarea.vue'\n\ninterface ProfilePageProps {\n    title?: string\n    name?: string\n    email?: string\n    bio?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ProfilePageProps>(), {\n    title: undefined,\n    name: undefined,\n    email: undefined,\n    bio: undefined,\n    class: '',\n})\n\nconst emit = defineEmits<{\n    save: [payload: { name: string; email: string; bio: string }]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('profilePage.defaultTitle'))\nconst resolvedNameLabel = computed(() => t('profilePage.nameLabel'))\nconst resolvedEmailLabel = computed(() => t('profilePage.emailLabel'))\nconst resolvedBioLabel = computed(() => t('profilePage.bioLabel'))\nconst resolvedSaveText = computed(() => t('profilePage.saveText'))\n\nconst formName = ref(props.name ?? '')\nconst formEmail = ref(props.email ?? '')\nconst formBio = ref(props.bio ?? '')\n\nwatch(() => props.name, (val) => { formName.value = val ?? '' })\nwatch(() => props.email, (val) => { formEmail.value = val ?? '' })\nwatch(() => props.bio, (val) => { formBio.value = val ?? '' })\n\nconst avatarInitials = computed(() => {\n    if (!formName.value) return ''\n    const parts = formName.value.trim().split(/\\s+/)\n    return parts.length >= 2\n        ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()\n        : formName.value.slice(0, 2).toUpperCase()\n})\n\nfunction handleSave() {\n    emit('save', {\n        name: formName.value,\n        email: formEmail.value,\n        bio: formBio.value,\n    })\n}\n\nconst rootClasses = computed(() =>\n    cn('min-h-screen bg-brutal-bg p-4 sm:p-8', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <div class=\"w-full max-w-2xl mx-auto\">\n            <slot name=\"header\">\n                <div class=\"mb-8\">\n                    <h1 class=\"text-3xl font-black tracking-tight\">\n                        {{ resolvedTitle }}\n                    </h1>\n                </div>\n            </slot>\n\n            <slot>\n                <Card variant=\"elevated\">\n                    <CardHeader class=\"items-center text-center\">\n                        <Avatar size=\"lg\">\n                            <AvatarFallback>{{ avatarInitials }}</AvatarFallback>\n                        </Avatar>\n                        <CardTitle class=\"mt-4\">{{ formName || resolvedNameLabel }}</CardTitle>\n                    </CardHeader>\n                    <CardContent>\n                        <div class=\"space-y-6\">\n                            <div class=\"space-y-2\">\n                                <label class=\"font-bold text-sm\" for=\"profile-name\">{{ resolvedNameLabel }}</label>\n                                <Input\n                                    id=\"profile-name\"\n                                    v-model=\"formName\"\n                                    :placeholder=\"resolvedNameLabel\"\n                                />\n                            </div>\n                            <div class=\"space-y-2\">\n                                <label class=\"font-bold text-sm\" for=\"profile-email\">{{ resolvedEmailLabel }}</label>\n                                <Input\n                                    id=\"profile-email\"\n                                    v-model=\"formEmail\"\n                                    type=\"email\"\n                                    :placeholder=\"resolvedEmailLabel\"\n                                />\n                            </div>\n                            <div class=\"space-y-2\">\n                                <label class=\"font-bold text-sm\" for=\"profile-bio\">{{ resolvedBioLabel }}</label>\n                                <Textarea\n                                    id=\"profile-bio\"\n                                    v-model=\"formBio\"\n                                    :placeholder=\"resolvedBioLabel\"\n                                />\n                            </div>\n                            <div class=\"flex justify-end\">\n                                <Button variant=\"primary\" @click=\"handleSave\">\n                                    {{ resolvedSaveText }}\n                                </Button>\n                            </div>\n                        </div>\n                    </CardContent>\n                </Card>\n            </slot>\n\n            <slot name=\"footer\" />\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

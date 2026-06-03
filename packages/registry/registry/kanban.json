@@ -1,0 +1,107 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kanban",
+  "type": "registry:ui",
+  "title": "Kanban",
+  "description": "A highly customizable neo-brutalist Kanban component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/kanban/KanbanBoard.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from 'vue';\nimport { cn } from '@/lib/utils';\nimport { useLocale } from '@/composables/useLocale';\nimport { kanbanColumnVariants, kanbanCardVariants } from '@/components/ui/kanban/kanban-variants';\n\nexport interface KanbanCard {\n    id: string;\n    title: string;\n    description?: string;\n    tags?: string[];\n    color?: string;\n}\n\nexport interface KanbanColumn {\n    id: string;\n    title: string;\n    color?: string;\n    cards: KanbanCard[];\n}\n\ninterface KanbanBoardProps {\n    modelValue: KanbanColumn[];\n    class?: string;\n}\n\nconst props = defineProps<KanbanBoardProps>();\n\nconst emit = defineEmits<{\n    'update:modelValue': [columns: KanbanColumn[]];\n    'card-move': [cardId: string, fromColumn: string, toColumn: string];\n}>();\n\nconst { t } = useLocale();\n\nconst draggingCard = ref<{ cardId: string; fromColumn: string } | null>(null);\nconst dragOverColumn = ref<string | null>(null);\n\nconst columns = computed({\n    get: () => props.modelValue,\n    set: (val) => emit('update:modelValue', val),\n});\n\nfunction onDragStart(cardId: string, fromColumn: string) {\n    draggingCard.value = { cardId, fromColumn };\n}\n\nfunction onDragEnd() {\n    draggingCard.value = null;\n    dragOverColumn.value = null;\n}\n\nfunction onDragOver(e: DragEvent, columnId: string) {\n    e.preventDefault();\n    dragOverColumn.value = columnId;\n}\n\nfunction onDragLeave(columnId: string) {\n    if (dragOverColumn.value === columnId) {\n        dragOverColumn.value = null;\n    }\n}\n\nfunction onDrop(toColumnId: string) {\n    if (!draggingCard.value) return;\n    const { cardId, fromColumn } = draggingCard.value;\n    if (fromColumn === toColumnId) {\n        dragOverColumn.value = null;\n        draggingCard.value = null;\n        return;\n    }\n\n    const sourceColumn = columns.value.find((col) => col.id === fromColumn);\n    const card = sourceColumn?.cards.find((c) => c.id === cardId);\n    if (!card) {\n        draggingCard.value = null;\n        dragOverColumn.value = null;\n        return;\n    }\n\n    const newColumns = columns.value.map((col) => {\n        if (col.id === fromColumn) {\n            return { ...col, cards: col.cards.filter((c) => c.id !== cardId) };\n        }\n        if (col.id === toColumnId) {\n            return { ...col, cards: [...col.cards, card] };\n        }\n        return col;\n    });\n\n    emit('update:modelValue', newColumns);\n    emit('card-move', cardId, fromColumn, toColumnId);\n    draggingCard.value = null;\n    dragOverColumn.value = null;\n}\n\nconst boardClass = computed(() => cn('flex gap-4 overflow-x-auto pb-4', props.class));\n\nconst columnClassesMap = computed(() => {\n    const map = new Map<string, string>()\n    columns.value.forEach((col) => {\n        map.set(col.id, cn(kanbanColumnVariants({ dragOver: dragOverColumn.value === col.id })))\n    })\n    return map\n})\n\nconst cardClassesMap = computed(() => {\n    const map = new Map<string, string>()\n    columns.value.forEach((col) => {\n        col.cards.forEach((card) => {\n            map.set(card.id, cn(kanbanCardVariants({ dragging: draggingCard.value?.cardId === card.id })))\n        })\n    })\n    return map\n})\n</script>\n\n<template>\n    <div :class=\"boardClass\">\n        <div\n            v-for=\"col in columns\"\n            :key=\"col.id\"\n            :class=\"columnClassesMap.get(col.id)\"\n            @dragover=\"onDragOver($event, col.id)\"\n            @dragleave=\"onDragLeave(col.id)\"\n            @drop=\"onDrop(col.id)\"\n        >\n            <!-- Column Header -->\n            <div class=\"flex items-center justify-between mb-1\">\n                <div class=\"flex items-center gap-2\">\n                    <span\n                        v-if=\"col.color\"\n                        class=\"inline-block w-3 h-3 rounded-brutal border-3 border-brutal\"\n                        :style=\"{ background: col.color }\"\n                    />\n                    <h3 class=\"font-black text-sm tracking-wide uppercase text-brutal-fg\">{{ col.title }}</h3>\n                </div>\n                <span class=\"text-xs font-bold border-3 border-brutal px-1.5 py-0.5 rounded-brutal bg-brutal-bg shadow-brutal\">\n                    {{ col.cards.length }}\n                </span>\n            </div>\n\n            <!-- Cards -->\n            <div class=\"flex flex-col gap-2 min-h-[120px]\">\n                <div\n                    v-for=\"card in col.cards\"\n                    :key=\"card.id\"\n                    :class=\"cardClassesMap.get(card.id)\"\n                    draggable=\"true\"\n                    @dragstart=\"onDragStart(card.id, col.id)\"\n                    @dragend=\"onDragEnd\"\n                >\n                    <p class=\"font-bold text-sm text-brutal-fg\">{{ card.title }}</p>\n                    <p v-if=\"card.description\" class=\"text-xs text-brutal-fg opacity-70 mt-1\">\n                        {{ card.description }}\n                    </p>\n                    <div v-if=\"card.tags && card.tags.length\" class=\"flex flex-wrap gap-1 mt-2\">\n                        <span\n                            v-for=\"tag in card.tags\"\n                            :key=\"tag\"\n                            class=\"text-xs font-bold px-1.5 py-0.5 border-3 border-brutal rounded-brutal bg-brutal-accent\"\n                        >\n                            {{ tag }}\n                        </span>\n                    </div>\n                </div>\n\n                <!-- Empty State -->\n                <div\n                    v-if=\"col.cards.length === 0\"\n                    class=\"flex items-center justify-center h-16 border-3 border-dashed border-brutal rounded-brutal text-xs font-medium opacity-40\"\n                >\n                    {{ t('kanban.dropCardsHere') }}\n                </div>\n            </div>\n\n            <!-- Add Card Slot -->\n            <slot :name=\"`add-${col.id}`\" />\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/kanban/kanban-variants.ts",
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const kanbanColumnVariants = cva(\n    [\n        'flex flex-col gap-3 min-w-[260px] w-[280px]',\n        'border-3 border-brutal shadow-brutal rounded-brutal',\n        'bg-brutal-muted p-3',\n        'transition-shadow duration-200',\n    ].join(' '),\n    {\n        variants: {\n            dragOver: {\n                true: 'shadow-brutal-lg border-brutal-primary',\n                false: '',\n            },\n        },\n        defaultVariants: {\n            dragOver: false,\n        },\n    }\n);\n\nexport const kanbanCardVariants = cva(\n    [\n        'border-3 border-brutal shadow-brutal rounded-brutal',\n        'bg-brutal-bg px-3 py-2',\n        'cursor-grab active:cursor-grabbing',\n        'transition-all duration-150',\n        'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n    ].join(' '),\n    {\n        variants: {\n            dragging: {\n                true: 'opacity-40 shadow-none',\n                false: '',\n            },\n        },\n        defaultVariants: {\n            dragging: false,\n        },\n    }\n);\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

@@ -9,13 +9,13 @@ const pkg = require('../package.json');
 const program = new Command();
 
 program
-    .name('brutx')
-    .description('CLI for adding Brutx components to your project')
+    .name('brutx-vue')
+    .description('CLI for adding Brutx-Vue components to your project')
     .version(pkg.version);
 
 program
     .command('init')
-    .description('Initialize Brutx in your project')
+    .description('Initialize Brutx-Vue in your project')
     .option('-y, --yes', 'Skip confirmation prompts', false)
     .option('-d, --defaults', 'Use default configuration', false)
     .option('-c, --cwd <cwd>', 'The working directory', process.cwd())

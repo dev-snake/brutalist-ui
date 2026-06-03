@@ -1,0 +1,30 @@
+name: CI
+
+on:
+    push:
+        branches: [main, vue]
+    pull_request:
+        branches: [main, vue]
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: pnpm
+
+            - run: pnpm install --frozen-lockfile
+
+            - run: pnpm --filter brutx-ui-vue build
+
+            - run: pnpm --filter brutx-ui-vue typecheck
+
+            - run: pnpm --filter brutx-ui-vue lint
+
+            - run: pnpm --filter brutx-ui-vue test

@@ -3,17 +3,47 @@
   "name": "alert-dialog",
   "type": "registry:ui",
   "title": "Alert Dialog",
-  "description": "A highly customizable neo-brutalist Alert Dialog component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Alert Dialog component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-alert-dialog"
+    "reka-ui"
   ],
   "registryDependencies": [
     "button"
   ],
   "files": [
     {
-      "path": "components/ui/alert-dialog.tsx",
-      "content": "import * as React from 'react';\nimport * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';\n\nimport { cn } from '@/lib/utils';\nimport { buttonVariants } from '@/components/ui/button';\n\nconst AlertDialog = AlertDialogPrimitive.Root;\nconst AlertDialogTrigger = AlertDialogPrimitive.Trigger;\nconst AlertDialogPortal = AlertDialogPrimitive.Portal;\nconst AlertDialogCancel = AlertDialogPrimitive.Cancel;\n\nconst AlertDialogOverlay = React.forwardRef<\n    React.ElementRef<typeof AlertDialogPrimitive.Overlay>,\n    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>\n>(({ className, ...props }, ref) => (\n    <AlertDialogPrimitive.Overlay\n        ref={ref}\n        className={cn(\n            'fixed inset-0 z-50 bg-black/50',\n            'data-[state=open]:animate-in data-[state=closed]:animate-out',\n            'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n            className\n        )}\n        {...props}\n    />\n));\nAlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;\n\nconst AlertDialogContent = React.forwardRef<\n    React.ElementRef<typeof AlertDialogPrimitive.Content>,\n    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>\n>(({ className, ...props }, ref) => (\n    <AlertDialogPortal>\n        <AlertDialogOverlay />\n        <AlertDialogPrimitive.Content\n            ref={ref}\n            className={cn(\n                'fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]',\n                'w-full max-w-lg p-6',\n                'bg-brutal-bg text-brutal-fg border-3 border-brutal rounded-brutal shadow-brutal-xl',\n                'duration-200',\n                'data-[state=open]:animate-in data-[state=closed]:animate-out',\n                'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n                'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n                'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',\n                'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',\n                className\n            )}\n            {...props}\n        />\n    </AlertDialogPortal>\n));\nAlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;\n\nconst AlertDialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n    <div\n        className={cn('flex flex-col space-y-2 pb-4 border-b-3 border-brutal', className)}\n        {...props}\n    />\n);\nAlertDialogHeader.displayName = 'AlertDialogHeader';\n\nconst AlertDialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n    <div\n        className={cn(\n            'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 pt-4 border-t-3 border-brutal',\n            className\n        )}\n        {...props}\n    />\n);\nAlertDialogFooter.displayName = 'AlertDialogFooter';\n\nconst AlertDialogTitle = React.forwardRef<\n    React.ElementRef<typeof AlertDialogPrimitive.Title>,\n    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>\n>(({ className, ...props }, ref) => (\n    <AlertDialogPrimitive.Title\n        ref={ref}\n        className={cn('text-xl font-black tracking-tight', className)}\n        {...props}\n    />\n));\nAlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;\n\nconst AlertDialogDescription = React.forwardRef<\n    React.ElementRef<typeof AlertDialogPrimitive.Description>,\n    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>\n>(({ className, ...props }, ref) => (\n    <AlertDialogPrimitive.Description\n        ref={ref}\n        className={cn('text-sm text-gray-600 dark:text-gray-400 font-medium', className)}\n        {...props}\n    />\n));\nAlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;\n\nconst AlertDialogAction = React.forwardRef<\n    React.ElementRef<typeof AlertDialogPrimitive.Action>,\n    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action> & {\n        variant?: 'primary' | 'secondary' | 'accent' | 'danger' | 'outline';\n    }\n>(({ className, variant = 'primary', ...props }, ref) => (\n    <AlertDialogPrimitive.Action\n        ref={ref}\n        className={cn(buttonVariants({ variant }), className)}\n        {...props}\n    />\n));\nAlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName;\n\nexport {\n    AlertDialog,\n    AlertDialogPortal,\n    AlertDialogOverlay,\n    AlertDialogTrigger,\n    AlertDialogContent,\n    AlertDialogHeader,\n    AlertDialogFooter,\n    AlertDialogTitle,\n    AlertDialogDescription,\n    AlertDialogAction,\n    AlertDialogCancel,\n};\n",
+      "path": "components/ui/alert-dialog/AlertDialogAction.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { AlertDialogAction as AlertDialogActionPrimitive } from 'reka-ui'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { buttonVariants } from '@/components/ui/button/button-variants'\n\ntype ButtonVariantProps = VariantProps<typeof buttonVariants>\n\ninterface AlertDialogActionProps {\n    variant?: NonNullable<ButtonVariantProps['variant']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<AlertDialogActionProps>(), {\n    variant: 'primary',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(buttonVariants({ variant: props.variant }), props.class)\n)\n</script>\n\n<template>\n    <AlertDialogActionPrimitive :class=\"classes\">\n        <slot />\n    </AlertDialogActionPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/alert-dialog/AlertDialogCancel.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { AlertDialogCancel as AlertDialogCancelPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { buttonVariants } from '@/components/ui/button/button-variants'\n\ninterface AlertDialogCancelProps {\n    class?: string\n}\n\nconst props = defineProps<AlertDialogCancelProps>()\n\nconst classes = computed(() =>\n    cn(buttonVariants({ variant: 'outline' }), props.class)\n)\n</script>\n\n<template>\n    <AlertDialogCancelPrimitive :class=\"classes\">\n        <slot />\n    </AlertDialogCancelPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/alert-dialog/AlertDialogContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    AlertDialogPortal as AlertDialogPortalPrimitive,\n    AlertDialogOverlay as AlertDialogOverlayPrimitive,\n    AlertDialogContent as AlertDialogContentPrimitive,\n} from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface AlertDialogContentProps {\n    class?: string\n}\n\nconst props = defineProps<AlertDialogContentProps>()\n\nconst overlayClasses = computed(() =>\n    cn(\n        'fixed inset-0 z-50 bg-brutal-overlay',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'\n    )\n)\n\nconst contentClasses = computed(() =>\n    cn(\n        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4',\n        'bg-brutal-bg p-6 text-brutal-fg border-brutal border-3 shadow-brutal-xl rounded-brutal',\n        'duration-200',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n        'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-1/2',\n        'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-1/2',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <AlertDialogPortalPrimitive>\n        <AlertDialogOverlayPrimitive :class=\"overlayClasses\" />\n        <AlertDialogContentPrimitive :class=\"contentClasses\">\n            <slot />\n        </AlertDialogContentPrimitive>\n    </AlertDialogPortalPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/alert-dialog/AlertDialogDescription.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { AlertDialogDescription as AlertDialogDescriptionPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface AlertDialogDescriptionProps {\n    class?: string\n}\n\nconst props = defineProps<AlertDialogDescriptionProps>()\n\nconst classes = computed(() =>\n    cn('text-sm text-brutal-muted-foreground font-medium', props.class)\n)\n</script>\n\n<template>\n    <AlertDialogDescriptionPrimitive :class=\"classes\">\n        <slot />\n    </AlertDialogDescriptionPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/alert-dialog/AlertDialogFooter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface AlertDialogFooterProps {\n    class?: string\n}\n\nconst props = defineProps<AlertDialogFooterProps>()\n\nconst classes = computed(() =>\n    cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 pt-4 border-t-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/alert-dialog/AlertDialogHeader.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface AlertDialogHeaderProps {\n    class?: string\n}\n\nconst props = defineProps<AlertDialogHeaderProps>()\n\nconst classes = computed(() =>\n    cn('flex flex-col space-y-2 pb-4 border-b-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/alert-dialog/AlertDialogTitle.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { AlertDialogTitle as AlertDialogTitlePrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface AlertDialogTitleProps {\n    class?: string\n}\n\nconst props = defineProps<AlertDialogTitleProps>()\n\nconst classes = computed(() =>\n    cn('text-lg font-black tracking-tight text-brutal-fg', props.class)\n)\n</script>\n\n<template>\n    <AlertDialogTitlePrimitive :class=\"classes\">\n        <slot />\n    </AlertDialogTitlePrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -39,7 +69,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -69,7 +103,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -79,16 +116,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

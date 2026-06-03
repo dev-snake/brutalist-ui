@@ -1,0 +1,105 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "footer-section",
+  "type": "registry:ui",
+  "title": "Footer Section",
+  "description": "A highly customizable neo-brutalist Footer Section component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "button",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "components/ui/footer-section/FooterSection.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Button from '@/components/ui/button/Button.vue'\nimport Separator from '@/components/ui/separator/Separator.vue'\n\nexport interface FooterLink {\n    label: string\n    href?: string\n}\n\nexport interface FooterLinkGroup {\n    title: string\n    links: FooterLink[]\n}\n\ninterface FooterSectionProps {\n    logoText?: string\n    description?: string\n    linkGroups?: FooterLinkGroup[]\n    copyright?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<FooterSectionProps>(), {\n    logoText: undefined,\n    description: undefined,\n    linkGroups: () => [],\n    copyright: undefined,\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'link-click': [payload: { groupIndex: number; linkIndex: number }]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedLogoText = computed(() => props.logoText ?? t('footerSection.defaultLogoText'))\nconst resolvedDescription = computed(() => props.description ?? t('footerSection.defaultDescription'))\nconst resolvedCopyright = computed(() => props.copyright ?? t('footerSection.defaultCopyright'))\n\nconst rootClasses = computed(() =>\n    cn(\n        'w-full',\n        'bg-brutal-bg border-3 border-t border-brutal',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <footer :class=\"rootClasses\">\n        <div class=\"max-w-7xl mx-auto px-4 md:px-6 py-10\">\n            <slot name=\"header\">\n                <div class=\"mb-8\">\n                    <span class=\"text-xl font-black tracking-tight text-brutal-fg\">\n                        {{ resolvedLogoText }}\n                    </span>\n                    <p v-if=\"resolvedDescription\" class=\"mt-2 text-sm text-brutal-muted-foreground font-medium max-w-sm\">\n                        {{ resolvedDescription }}\n                    </p>\n                </div>\n            </slot>\n\n            <slot>\n                <div v-if=\"linkGroups.length > 0\" class=\"grid grid-cols-2 md:grid-cols-4 gap-8 mb-8\">\n                    <div v-for=\"(group, groupIndex) in linkGroups\" :key=\"groupIndex\">\n                        <h3 class=\"font-black text-sm tracking-wide text-brutal-fg mb-3\">\n                            {{ group.title }}\n                        </h3>\n                        <ul class=\"space-y-2\">\n                            <li v-for=\"(link, linkIndex) in group.links\" :key=\"linkIndex\">\n                                <Button\n                                    variant=\"ghost\"\n                                    size=\"sm\"\n                                    class=\"px-0 text-brutal-muted-foreground hover:text-brutal-fg\"\n                                    @click=\"emit('link-click', { groupIndex, linkIndex })\"\n                                >\n                                    {{ link.label }}\n                                </Button>\n                            </li>\n                        </ul>\n                    </div>\n                </div>\n            </slot>\n\n            <Separator />\n\n            <slot name=\"footer\">\n                <div class=\"pt-6 text-center\">\n                    <p class=\"text-sm text-brutal-muted-foreground font-medium\">\n                        {{ resolvedCopyright }}\n                    </p>\n                </div>\n            </slot>\n        </div>\n    </footer>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

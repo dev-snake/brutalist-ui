@@ -1,0 +1,106 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "loading-page",
+  "type": "registry:ui",
+  "title": "Loading Page",
+  "description": "A highly customizable neo-brutalist Loading Page component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "skeleton",
+    "spinner",
+    "progress"
+  ],
+  "files": [
+    {
+      "path": "components/ui/loading-page/LoadingPage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { useLocale } from '@/composables/useLocale'\nimport { cn } from '@/lib/utils'\nimport Skeleton from '@/components/ui/skeleton/Skeleton.vue'\nimport Spinner from '@/components/ui/spinner/Spinner.vue'\nimport Progress from '@/components/ui/progress/Progress.vue'\n\ninterface LoadingPageProps {\n    title?: string\n    description?: string\n    progress?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<LoadingPageProps>(), {\n    title: undefined,\n    description: undefined,\n    progress: undefined,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('loadingPage.defaultTitle'))\nconst resolvedDescription = computed(() => props.description ?? t('loadingPage.defaultDescription'))\n\nconst hasProgress = computed(() => props.progress !== undefined)\n\nconst rootClasses = computed(() =>\n    cn('min-h-screen flex items-center justify-center bg-brutal-bg p-4', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <div class=\"w-full max-w-lg text-center relative\">\n            <slot name=\"header\" />\n\n            <div class=\"relative border-3 border-brutal bg-brutal-bg shadow-brutal p-8 sm:p-12\">\n                <Skeleton variant=\"accent\" class=\"absolute -top-3 -left-3 h-6 w-24\" />\n                <Skeleton variant=\"secondary\" class=\"absolute -bottom-3 -right-3 h-6 w-32\" />\n\n                <div class=\"flex justify-center mb-6\">\n                    <Spinner size=\"lg\" />\n                </div>\n\n                <h1 class=\"text-2xl sm:text-3xl font-black tracking-tight text-brutal-fg\">\n                    {{ resolvedTitle }}\n                </h1>\n\n                <p class=\"mt-3 text-brutal-muted-foreground font-medium\">\n                    {{ resolvedDescription }}\n                </p>\n\n                <slot />\n\n                <div v-if=\"hasProgress\" class=\"mt-6\">\n                    <Progress :model-value=\"progress\" />\n                </div>\n\n                <slot name=\"footer\" />\n            </div>\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

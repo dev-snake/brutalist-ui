@@ -3,16 +3,21 @@
   "name": "radio-group",
   "type": "registry:ui",
   "title": "Radio Group",
-  "description": "A highly customizable neo-brutalist Radio Group component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Radio Group component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-radio-group",
-    "lucide-react"
+    "reka-ui",
+    "lucide-vue-next"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/radio-group.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as RadioGroupPrimitive from '@radix-ui/react-radio-group';\nimport { Circle } from 'lucide-react';\n\nimport { cn } from '@/lib/utils';\n\nconst RadioGroup = React.forwardRef<\n    React.ElementRef<typeof RadioGroupPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>\n>(({ className, ...props }, ref) => {\n    return (\n        <RadioGroupPrimitive.Root\n            className={cn('grid gap-2', className)}\n            {...props}\n            ref={ref}\n        />\n    );\n});\nRadioGroup.displayName = RadioGroupPrimitive.Root.displayName;\n\nconst RadioGroupItem = React.forwardRef<\n    React.ElementRef<typeof RadioGroupPrimitive.Item>,\n    React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>\n>(({ className, ...props }, ref) => {\n    return (\n        <RadioGroupPrimitive.Item\n            ref={ref}\n            className={cn(\n                'peer aspect-square h-6 w-6 rounded-full',\n                'border-3 border-brutal bg-white dark:bg-gray-800 text-brutal-fg',\n                'shadow-brutal-sm',\n                'transition-all duration-150',\n                'focus:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n                'disabled:cursor-not-allowed disabled:opacity-50',\n                'data-[state=checked]:bg-brutal-primary',\n                className\n            )}\n            {...props}\n        >\n            <RadioGroupPrimitive.Indicator className=\"flex items-center justify-center\">\n                <Circle className=\"h-2.5 w-2.5 fill-black dark:fill-white stroke-none\" />\n            </RadioGroupPrimitive.Indicator>\n        </RadioGroupPrimitive.Item>\n    );\n});\nRadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;\n\nexport { RadioGroup, RadioGroupItem };\n",
+      "path": "components/ui/radio-group/RadioGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { RadioGroupRoot } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface RadioGroupProps {\n    defaultValue?: string\n    modelValue?: string\n    class?: string\n}\n\nconst props = defineProps<RadioGroupProps>()\nconst emit = defineEmits<{ 'update:modelValue': [value: string] }>()\n\nconst classes = computed(() => cn('grid gap-2', props.class))\n</script>\n\n<template>\n    <RadioGroupRoot :default-value=\"defaultValue\" :model-value=\"modelValue\" :class=\"classes\" @update:model-value=\"emit('update:modelValue', $event as string)\">\n        <slot />\n    </RadioGroupRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/radio-group/RadioGroupItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { RadioGroupItem as RadioGroupItemPrimitive, RadioGroupIndicator as RadioGroupIndicatorPrimitive } from 'reka-ui'\nimport { Circle } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface RadioGroupItemProps {\n    value: string\n    disabled?: boolean\n    class?: string\n}\n\nconst props = defineProps<RadioGroupItemProps>()\n\nconst classes = computed(() =>\n    cn(\n        'peer aspect-square h-6 w-6 rounded-full',\n        'border-3 border-brutal bg-brutal-bg text-brutal-fg',\n        'shadow-brutal-sm',\n        'transition-all duration-150',\n        'focus:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'disabled:cursor-not-allowed disabled:opacity-50',\n        'data-[state=checked]:bg-brutal-primary',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <RadioGroupItemPrimitive :value=\"value\" :disabled=\"disabled\" :class=\"classes\">\n        <RadioGroupIndicatorPrimitive class=\"flex items-center justify-center\">\n            <Circle class=\"h-2.5 w-2.5 fill-current stroke-none\" />\n        </RadioGroupIndicatorPrimitive>\n    </RadioGroupItemPrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -38,7 +43,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -68,7 +77,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -78,16 +90,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

@@ -68,13 +68,16 @@ export async function getItem(name: string, source: string = DEFAULT_REGISTRY_UR
 
     if (isUrl(source)) {
         const url = `${source}/${name}.json`;
-        const res = await fetch(url);
+        const res = await fetch(url, { signal: AbortSignal.timeout(30000) });
         if (!res.ok) {
             throw new Error(`Failed to fetch component "${name}" from registry: ${res.statusText}`);
         }
         data = await res.json();
     } else {
         const filePath = path.resolve(source, `${name}.json`);
+        if (!filePath.startsWith(path.resolve(source) + path.sep)) {
+            throw new Error(`Security Error: Path traversal detected in component name "${name}".`);
+        }
         if (!(await fs.pathExists(filePath))) {
             throw new Error(`Component "${name}" not found in local registry: ${filePath}`);
         }
@@ -95,12 +98,14 @@ export async function resolveDeps(names: string[], source: string = DEFAULT_REGI
         let itemSource = source;
 
         if (fullName.includes('@')) {
-            const parts = fullName.split('@');
-            cleanName = parts[0];
-            const version = parts[1];
+            const match = fullName.match(/^([a-z0-9-]+)@([a-zA-Z0-9._-]+)$/);
+            if (match) {
+                cleanName = match[1];
+                const version = match[2];
 
-            if (source === DEFAULT_REGISTRY_URL) {
-                itemSource = `https://raw.githubusercontent.com/dev-snake/brutxui/${version}/packages/registry/registry`;
+                if (source === DEFAULT_REGISTRY_URL) {
+                    itemSource = `https://raw.githubusercontent.com/lidaixingchen/brutxui-vue3/${version}/packages/registry/registry`;
+                }
             }
         }
 

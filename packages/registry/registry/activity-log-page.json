@@ -1,0 +1,106 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "activity-log-page",
+  "type": "registry:ui",
+  "title": "Activity Log Page",
+  "description": "A highly customizable neo-brutalist Activity Log Page component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "table",
+    "badge",
+    "pagination"
+  ],
+  "files": [
+    {
+      "path": "components/ui/activity-log-page/ActivityLogPage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { useLocale } from '@/composables/useLocale'\nimport { cn } from '@/lib/utils'\nimport Table from '@/components/ui/table/Table.vue'\nimport TableHeader from '@/components/ui/table/TableHeader.vue'\nimport TableBody from '@/components/ui/table/TableBody.vue'\nimport TableRow from '@/components/ui/table/TableRow.vue'\nimport TableHead from '@/components/ui/table/TableHead.vue'\nimport TableCell from '@/components/ui/table/TableCell.vue'\nimport Badge from '@/components/ui/badge/Badge.vue'\nimport Pagination from '@/components/ui/pagination/Pagination.vue'\n\nexport interface ActivityEntry {\n    id: string\n    action: string\n    user: string\n    timestamp: string\n    details?: string\n    type?: 'info' | 'warning' | 'error' | 'success'\n}\n\ninterface ActivityLogPageProps {\n    title?: string\n    activities?: ActivityEntry[]\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ActivityLogPageProps>(), {\n    title: undefined,\n    activities: () => [],\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'entry-click': [id: string]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('activityLogPage.defaultTitle'))\nconst resolvedAction = computed(() => t('activityLogPage.action'))\nconst resolvedUser = computed(() => t('activityLogPage.user'))\nconst resolvedTimestamp = computed(() => t('activityLogPage.timestamp'))\nconst resolvedDetails = computed(() => t('activityLogPage.details'))\nconst resolvedNoActivityFound = computed(() => t('activityLogPage.noActivityFound'))\n\nconst PAGE_SIZE = 10\n\nconst currentPage = ref(1)\nconst totalPages = computed(() => Math.max(1, Math.ceil(props.activities.length / PAGE_SIZE)))\n\nconst paginatedActivities = computed(() => {\n    const start = (currentPage.value - 1) * PAGE_SIZE\n    return props.activities.slice(start, start + PAGE_SIZE)\n})\n\nconst typeVariantMap: Record<string, 'default' | 'accent' | 'danger' | 'success'> = {\n    info: 'default',\n    warning: 'accent',\n    error: 'danger',\n    success: 'success',\n}\n\nfunction getTypeBadgeVariant(type?: string): 'default' | 'accent' | 'danger' | 'success' {\n    return typeVariantMap[type ?? 'info'] ?? 'default'\n}\n\nfunction handleEntryClick(id: string) {\n    emit('entry-click', id)\n}\n\nfunction handlePageChange(page: number) {\n    currentPage.value = page\n}\n\nconst rootClasses = computed(() =>\n    cn('min-h-screen bg-brutal-bg p-4 sm:p-8', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <div class=\"w-full max-w-4xl mx-auto\">\n            <slot name=\"header\">\n                <div class=\"mb-8\">\n                    <h1 class=\"text-3xl font-black tracking-tight\">\n                        {{ resolvedTitle }}\n                    </h1>\n                </div>\n            </slot>\n\n            <slot>\n                <Table>\n                    <TableHeader>\n                        <TableRow>\n                            <TableHead>{{ resolvedAction }}</TableHead>\n                            <TableHead>{{ resolvedUser }}</TableHead>\n                            <TableHead>{{ resolvedTimestamp }}</TableHead>\n                            <TableHead>{{ resolvedDetails }}</TableHead>\n                        </TableRow>\n                    </TableHeader>\n                    <TableBody>\n                        <TableRow\n                            v-for=\"entry in paginatedActivities\"\n                            :key=\"entry.id\"\n                            class=\"cursor-pointer active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none transition-all\"\n                            @click=\"handleEntryClick(entry.id)\"\n                        >\n                            <TableCell>\n                                <div class=\"flex items-center gap-2\">\n                                    <Badge :variant=\"getTypeBadgeVariant(entry.type)\" size=\"sm\">\n                                        {{ entry.type ?? 'info' }}\n                                    </Badge>\n                                    <span class=\"font-bold\">{{ entry.action }}</span>\n                                </div>\n                            </TableCell>\n                            <TableCell>\n                                <span class=\"font-medium\">{{ entry.user }}</span>\n                            </TableCell>\n                            <TableCell>\n                                <span class=\"font-medium\">{{ entry.timestamp }}</span>\n                            </TableCell>\n                            <TableCell>\n                                <span v-if=\"entry.details\" class=\"font-medium\">{{ entry.details }}</span>\n                                <span v-else class=\"text-brutal-fg\">—</span>\n                            </TableCell>\n                        </TableRow>\n                    </TableBody>\n                </Table>\n\n                <div v-if=\"activities.length === 0\" class=\"text-center py-12\">\n                    <p class=\"text-lg font-bold text-brutal-fg\">{{ resolvedNoActivityFound }}</p>\n                </div>\n\n                <div v-if=\"totalPages > 1\" class=\"mt-8 flex justify-center\">\n                    <Pagination\n                        :current-page=\"currentPage\"\n                        :total-pages=\"totalPages\"\n                        @update:current-page=\"handlePageChange\"\n                    />\n                </div>\n            </slot>\n\n            <slot name=\"footer\" />\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

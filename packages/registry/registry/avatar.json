@@ -3,15 +3,30 @@
   "name": "avatar",
   "type": "registry:ui",
   "title": "Avatar",
-  "description": "A highly customizable neo-brutalist Avatar component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Avatar component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-avatar"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/avatar.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as AvatarPrimitive from '@radix-ui/react-avatar';\nimport { cva, type VariantProps } from 'class-variance-authority';\nimport { cn } from '@/lib/utils';\n\nconst avatarVariants = cva(\n    [\n        'relative flex shrink-0 overflow-hidden',\n        'border-3 border-black dark:border-white',\n    ],\n    {\n        variants: {\n            size: {\n                sm: 'h-8 w-8',\n                default: 'h-10 w-10',\n                lg: 'h-14 w-14',\n                xl: 'h-20 w-20',\n            },\n            shape: {\n                square: '',\n                rounded: 'rounded-lg',\n            },\n        },\n        defaultVariants: {\n            size: 'default',\n            shape: 'square',\n        },\n    }\n);\n\nexport interface AvatarProps\n    extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>,\n        VariantProps<typeof avatarVariants> {}\n\nconst Avatar = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, AvatarProps>(\n    ({ className, size, shape, ...props }, ref) => (\n        <AvatarPrimitive.Root\n            ref={ref}\n            className={cn(avatarVariants({ size, shape }), className)}\n            {...props}\n        />\n    )\n);\nAvatar.displayName = AvatarPrimitive.Root.displayName;\n\nconst AvatarImage = React.forwardRef<\n    React.ElementRef<typeof AvatarPrimitive.Image>,\n    React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>\n>(({ className, ...props }, ref) => (\n    <AvatarPrimitive.Image\n        ref={ref}\n        className={cn('aspect-square h-full w-full object-cover', className)}\n        {...props}\n    />\n));\nAvatarImage.displayName = AvatarPrimitive.Image.displayName;\n\nconst AvatarFallback = React.forwardRef<\n    React.ElementRef<typeof AvatarPrimitive.Fallback>,\n    React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>\n>(({ className, ...props }, ref) => (\n    <AvatarPrimitive.Fallback\n        ref={ref}\n        className={cn(\n            'flex h-full w-full items-center justify-center',\n            'bg-gray-200 dark:bg-gray-700',\n            'font-bold text-black dark:text-white',\n            className\n        )}\n        {...props}\n    />\n));\nAvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;\n\nexport { Avatar, AvatarImage, AvatarFallback, avatarVariants };\n",
+      "path": "components/ui/avatar/Avatar.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { AvatarRoot } from 'reka-ui'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { avatarVariants } from '@/components/ui/avatar/avatar-variants'\n\ntype AvatarVariantProps = VariantProps<typeof avatarVariants>\n\ninterface AvatarProps {\n    size?: NonNullable<AvatarVariantProps['size']>\n    shape?: NonNullable<AvatarVariantProps['shape']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<AvatarProps>(), {\n    size: 'default',\n    shape: 'square',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(avatarVariants({ size: props.size, shape: props.shape }), props.class)\n)\n</script>\n\n<template>\n    <AvatarRoot :class=\"classes\">\n        <slot />\n    </AvatarRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/avatar/AvatarFallback.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { AvatarFallback as AvatarFallbackPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface AvatarFallbackProps {\n    class?: string\n}\n\nconst props = defineProps<AvatarFallbackProps>()\n\nconst classes = computed(() =>\n    cn('flex h-full w-full items-center justify-center bg-brutal-primary text-brutal-fg font-bold', props.class)\n)\n</script>\n\n<template>\n    <AvatarFallbackPrimitive :class=\"classes\">\n        <slot />\n    </AvatarFallbackPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/avatar/AvatarImage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { AvatarImage as AvatarImagePrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface AvatarImageProps {\n    src?: string\n    alt?: string\n    class?: string\n}\n\nconst props = defineProps<AvatarImageProps>()\n\nconst classes = computed(() =>\n    cn('aspect-square h-full w-full object-cover', props.class)\n)\n</script>\n\n<template>\n    <AvatarImagePrimitive v-if=\"src\" :src=\"src\" :alt=\"alt\" :class=\"classes\" />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/avatar/avatar-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const avatarVariants = cva(\n    ['relative flex shrink-0 overflow-hidden', 'border-3 border-brutal', 'bg-brutal-muted'],\n    {\n        variants: {\n            size: {\n                sm: 'h-8 w-8',\n                default: 'h-10 w-10',\n                lg: 'h-14 w-14',\n                xl: 'h-20 w-20',\n            },\n            shape: {\n                square: '',\n                rounded: 'rounded-brutal',\n            },\n        },\n        defaultVariants: {\n            size: 'default',\n            shape: 'square',\n        },\n    }\n)\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +52,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +86,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +99,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

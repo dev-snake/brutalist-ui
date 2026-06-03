@@ -1,0 +1,107 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "header-section",
+  "type": "registry:ui",
+  "title": "Header Section",
+  "description": "A highly customizable neo-brutalist Header Section component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "reka-ui",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "button",
+    "sheet",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "components/ui/header-section/HeaderSection.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { DialogRoot } from 'reka-ui'\nimport { Menu } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Button from '@/components/ui/button/Button.vue'\nimport SheetContent from '@/components/ui/sheet/SheetContent.vue'\nimport SheetHeader from '@/components/ui/sheet/SheetHeader.vue'\nimport SheetTitle from '@/components/ui/sheet/SheetTitle.vue'\nimport SheetDescription from '@/components/ui/sheet/SheetDescription.vue'\nimport Separator from '@/components/ui/separator/Separator.vue'\n\nexport interface NavItem {\n    label: string\n    href?: string\n}\n\ninterface HeaderSectionProps {\n    logoText?: string\n    navItems?: NavItem[]\n    ctaText?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<HeaderSectionProps>(), {\n    logoText: undefined,\n    navItems: () => [],\n    ctaText: undefined,\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'cta-click': []\n    'nav-click': [index: number]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedLogoText = computed(() => props.logoText ?? t('headerSection.defaultLogoText'))\nconst resolvedCtaText = computed(() => props.ctaText ?? t('headerSection.defaultCtaText'))\nconst menuLabel = computed(() => t('headerSection.menuLabel'))\n\nconst mobileMenuOpen = ref(false)\n\nconst rootClasses = computed(() =>\n    cn(\n        'sticky top-0 z-40 w-full',\n        'bg-brutal-bg border-3 border-b border-brutal shadow-brutal-sm',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <header :class=\"rootClasses\">\n        <div class=\"flex h-16 items-center justify-between px-4 md:px-6 max-w-7xl mx-auto\">\n            <slot name=\"header\">\n                <span class=\"text-xl font-black tracking-tight text-brutal-fg\">\n                    {{ resolvedLogoText }}\n                </span>\n            </slot>\n\n            <slot>\n                <nav class=\"hidden md:flex items-center gap-1\">\n                    <Button\n                        v-for=\"(item, index) in navItems\"\n                        :key=\"index\"\n                        variant=\"ghost\"\n                        size=\"sm\"\n                        @click=\"emit('nav-click', index)\"\n                    >\n                        {{ item.label }}\n                    </Button>\n                </nav>\n            </slot>\n\n            <div class=\"flex items-center gap-3\">\n                <slot name=\"footer\">\n                    <Button\n                        variant=\"primary\"\n                        size=\"sm\"\n                        class=\"hidden md:inline-flex\"\n                        @click=\"emit('cta-click')\"\n                    >\n                        {{ resolvedCtaText }}\n                    </Button>\n                </slot>\n\n                <Button\n                    variant=\"outline\"\n                    size=\"sm\"\n                    class=\"md:hidden\"\n                    @click=\"mobileMenuOpen = true\"\n                >\n                    <Menu class=\"h-5 w-5\" />\n                    <span class=\"sr-only\">{{ menuLabel }}</span>\n                </Button>\n            </div>\n        </div>\n\n        <DialogRoot v-model:open=\"mobileMenuOpen\">\n            <SheetContent side=\"right\">\n                <SheetHeader>\n                    <SheetTitle>{{ resolvedLogoText }}</SheetTitle>\n                    <SheetDescription>{{ menuLabel }}</SheetDescription>\n                </SheetHeader>\n                <nav class=\"flex flex-col gap-2 py-4\">\n                    <Button\n                        v-for=\"(item, index) in navItems\"\n                        :key=\"index\"\n                        variant=\"ghost\"\n                        class=\"justify-start\"\n                        @click=\"emit('nav-click', index); mobileMenuOpen = false\"\n                    >\n                        {{ item.label }}\n                    </Button>\n                </nav>\n                <Separator />\n                <div class=\"pt-4\">\n                    <Button\n                        variant=\"primary\"\n                        class=\"w-full\"\n                        @click=\"emit('cta-click'); mobileMenuOpen = false\"\n                    >\n                        {{ resolvedCtaText }}\n                    </Button>\n                </div>\n            </SheetContent>\n        </DialogRoot>\n    </header>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

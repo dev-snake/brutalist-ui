@@ -81,16 +81,56 @@ describe('detectProjectType', () => {
         vi.restoreAllMocks();
     });
 
-    it('should detect nextjs if next config exists and no src dir', () => {
+    it('should detect nuxt if nuxt config exists', () => {
         vi.spyOn(fs, 'existsSync').mockImplementation((p: any) => {
             const pStr = p.toString();
-            if (pStr.endsWith('next.config.js') || pStr.endsWith('next.config.mjs') || pStr.endsWith('next.config.ts')) {
+            if (pStr.endsWith('nuxt.config.js') || pStr.endsWith('nuxt.config.ts') || pStr.endsWith('nuxt.config.mjs')) {
                 return true;
             }
             return false;
         });
         const type = detectProjectType('/dummy/path');
-        expect(type).toBe('nextjs');
+        expect(type).toBe('nuxt');
+    });
+
+    it('should detect vite-vue if vite config exists and vue dependency exists and no src dir', () => {
+        vi.spyOn(fs, 'existsSync').mockImplementation((p: any) => {
+            const pStr = p.toString();
+            if (pStr.endsWith('vite.config.js') || pStr.endsWith('vite.config.ts') || pStr.endsWith('vite.config.mjs')) {
+                return true;
+            }
+            if (pStr.endsWith('src')) {
+                return false;
+            }
+            return false;
+        });
+        vi.spyOn(fs, 'readJsonSync').mockReturnValue({
+            dependencies: {
+                vue: '^3.5.0'
+            }
+        });
+        const type = detectProjectType('/dummy/path');
+        expect(type).toBe('vite-vue');
+    });
+
+    it('should detect vite-vue-src if vite config exists and vue dependency exists and src dir exists', () => {
+        vi.spyOn(fs, 'existsSync').mockImplementation((p: any) => {
+            const pStr = p.toString();
+            if (pStr.endsWith('vite.config.js') || pStr.endsWith('vite.config.ts') || pStr.endsWith('vite.config.mjs')) {
+                return true;
+            }
+            if (pStr.endsWith('src')) {
+                return true;
+            }
+            return false;
+        });
+        vi.spyOn(fs, 'readJsonSync').mockReturnValue({
+            dependencies: {
+                vue: '^3.5.0'
+            }
+        });
+        const type = detectProjectType('/dummy/path');
+        expect(type).toBe('vite-vue-src');
     });
 });
 

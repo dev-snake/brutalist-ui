@@ -1,0 +1,107 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "upload-card",
+  "type": "registry:ui",
+  "title": "Upload Card",
+  "description": "A highly customizable neo-brutalist Upload Card component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "card",
+    "button",
+    "progress",
+    "spinner"
+  ],
+  "files": [
+    {
+      "path": "components/ui/upload-card/UploadCard.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { Upload } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport Button from '@/components/ui/button/Button.vue'\nimport Progress from '@/components/ui/progress/Progress.vue'\nimport Spinner from '@/components/ui/spinner/Spinner.vue'\n\ninterface UploadCardProps {\n    title?: string\n    description?: string\n    accept?: string\n    maxSize?: number\n    uploading?: boolean\n    progress?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<UploadCardProps>(), {\n    title: undefined,\n    description: undefined,\n    accept: undefined,\n    maxSize: undefined,\n    uploading: false,\n    progress: 0,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst emit = defineEmits<{\n    upload: [files: File[]]\n    drop: [files: File[]]\n}>()\n\nconst isDragging = ref(false)\nconst fileInput = ref<HTMLInputElement | null>(null)\n\nconst rootClasses = computed(() => cn('w-full max-w-lg mx-auto', props.class))\n\nconst resolvedTitle = computed(() => props.title ?? t('uploadCard.defaultTitle'))\nconst resolvedDescription = computed(() => props.description ?? t('uploadCard.defaultDescription'))\nconst resolvedBrowseText = computed(() => t('uploadCard.browseText'))\nconst resolvedDropText = computed(() => t('uploadCard.dropText'))\n\nconst dropZoneClasses = computed(() =>\n    cn(\n        'flex flex-col items-center justify-center p-8 border-3 border-dashed border-brutal rounded-brutal transition-all cursor-pointer',\n        isDragging.value ? 'bg-brutal-muted shadow-brutal' : 'bg-brutal-bg',\n        props.uploading && 'pointer-events-none'\n    )\n)\n\nfunction handleDragEnter(event: DragEvent) {\n    event.preventDefault()\n    isDragging.value = true\n}\n\nfunction handleDragOver(event: DragEvent) {\n    event.preventDefault()\n}\n\nfunction handleDragLeave(event: DragEvent) {\n    event.preventDefault()\n    isDragging.value = false\n}\n\nfunction handleDrop(event: DragEvent) {\n    event.preventDefault()\n    isDragging.value = false\n    const files = Array.from(event.dataTransfer?.files ?? [])\n    if (files.length > 0) {\n        emit('drop', files)\n    }\n}\n\nfunction handleBrowse() {\n    fileInput.value?.click()\n}\n\nfunction handleFileChange(event: Event) {\n    const target = event.target as HTMLInputElement\n    const files = Array.from(target.files ?? [])\n    if (files.length > 0) {\n        emit('upload', files)\n    }\n    target.value = ''\n}\n</script>\n\n<template>\n    <Card :class=\"rootClasses\" variant=\"default\">\n        <CardContent class=\"pt-6\">\n            <div\n                :class=\"dropZoneClasses\"\n                @dragenter=\"handleDragEnter\"\n                @dragover=\"handleDragOver\"\n                @dragleave=\"handleDragLeave\"\n                @drop=\"handleDrop\"\n                @click=\"handleBrowse\"\n            >\n                <input\n                    ref=\"fileInput\"\n                    type=\"file\"\n                    multiple\n                    :accept=\"accept\"\n                    class=\"hidden\"\n                    @change=\"handleFileChange\"\n                >\n                <template v-if=\"uploading\">\n                    <Spinner size=\"default\" class=\"mb-4\" />\n                    <Progress :model-value=\"progress\" class=\"w-full max-w-xs mb-2\" />\n                </template>\n                <template v-else>\n                    <Upload class=\"h-10 w-10 stroke-[3] text-brutal-muted-foreground mb-4\" />\n                    <h3 class=\"text-lg font-black tracking-tight\">\n{{ resolvedTitle }}\n</h3>\n                    <p class=\"mt-1 text-sm text-brutal-muted-foreground font-medium\">\n{{ resolvedDescription }}\n</p>\n                    <Button variant=\"primary\" size=\"sm\" class=\"mt-4\" @click.stop=\"handleBrowse\">\n                        {{ resolvedBrowseText }}\n                    </Button>\n                    <p class=\"mt-2 text-xs text-brutal-muted-foreground font-medium\">\n{{ resolvedDropText }}\n</p>\n                </template>\n            </div>\n            <slot name=\"actions\" />\n        </CardContent>\n    </Card>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

@@ -16,39 +16,36 @@ function findFirstExisting(cwd: string, files: readonly string[]): string | null
     return null;
 }
 
-export function detectProjectType(cwd: string): ProjectType {
-    const hasNext = hasAnyFile(cwd, CONFIG_FILES.next);
-    const hasVite = hasAnyFile(cwd, CONFIG_FILES.vite);
-    const hasRemix = hasAnyFile(cwd, CONFIG_FILES.remix);
-
-    const hasSrc = fs.existsSync(path.join(cwd, 'src'));
-    const hasSrcApp = fs.existsSync(path.join(cwd, 'src', 'app'));
-
-    if (hasRemix) return 'remix';
-
-    if (hasNext) {
-        return hasSrc && hasSrcApp ? 'nextjs-src' : 'nextjs';
-    }
-
-    if (hasVite) {
-        return hasSrc ? 'vite-src' : 'vite';
-    }
-
-    if (isCRA(cwd)) return 'cra';
-
-    return 'unknown';
-}
-
-function isCRA(cwd: string): boolean {
+function hasVueDependency(cwd: string): boolean {
     try {
         const packageJson = fs.readJsonSync(path.join(cwd, 'package.json'));
         return Boolean(
-            packageJson.dependencies?.['react-scripts'] ||
-                packageJson.devDependencies?.['react-scripts']
+            packageJson.dependencies?.['vue'] ||
+                packageJson.devDependencies?.['vue'] ||
+                packageJson.dependencies?.['nuxt'] ||
+                packageJson.devDependencies?.['nuxt']
         );
     } catch {
         return false;
     }
+}
+
+export function detectProjectType(cwd: string): ProjectType {
+    const hasNuxt = hasAnyFile(cwd, CONFIG_FILES.nuxt);
+    const hasVite = hasAnyFile(cwd, CONFIG_FILES.vite);
+    const hasSrc = fs.existsSync(path.join(cwd, 'src'));
+
+    if (hasNuxt) return 'nuxt';
+
+    if (hasVite && hasVueDependency(cwd)) {
+        return hasSrc ? 'vite-vue-src' : 'vite-vue';
+    }
+
+    if (hasVueDependency(cwd)) {
+        return hasSrc ? 'vite-vue-src' : 'vite-vue';
+    }
+
+    return 'unknown';
 }
 
 export function detectPackageManager(cwd: string): PackageManager {
@@ -69,7 +66,7 @@ export function readTsConfig(cwd: string): TsConfig | null {
 
         try {
             const content = fs.readFileSync(configPath, 'utf-8');
-            const jsonContent = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+            const jsonContent = content.replace(/\/\*[\s\S]*?\*\/|(?<!:)\/\/.*/g, '');
             return JSON.parse(jsonContent);
         } catch {
             continue;
@@ -147,12 +144,9 @@ function resolveByProjectType(cwd: string, relativePath: string): string {
     const projectType = detectProjectType(cwd);
 
     const projectTypeToBase: Record<ProjectType, string> = {
-        'nextjs-src': 'src',
-        'vite-src': 'src',
-        cra: 'src',
-        nextjs: '',
-        vite: '',
-        remix: 'app',
+        'vite-vue-src': 'src',
+        'vite-vue': '',
+        nuxt: '',
         unknown: fs.existsSync(path.join(cwd, 'src')) ? 'src' : '',
     };
 
@@ -175,25 +169,12 @@ export function resolveImportAlias(content: string, config: BrutalistConfig): st
         .replace(/["']@\/components\/(.*?)["']/g, `"${config.aliases.components}/$1"`);
 }
 
-/**
- * Checks whether a resolved path stays inside the target workspace.
- *
- * @param targetPath - Path selected for a write operation.
- * @param cwd - Workspace root that must contain the target.
- * @returns Whether the target path is within the workspace.
- */
 export function isSafePath(targetPath: string, cwd: string): boolean {
-    const resolvedTarget = path.resolve(targetPath);
-    const resolvedCwd = path.resolve(cwd);
-    return resolvedTarget.startsWith(resolvedCwd);
+    const resolvedTarget = path.resolve(targetPath).toLowerCase();
+    const resolvedCwd = path.resolve(cwd).toLowerCase();
+    return resolvedTarget.startsWith(resolvedCwd + path.sep) || resolvedTarget === resolvedCwd;
 }
 
-/**
- * Detects the Tailwind CSS major version used by a project.
- *
- * @param cwd - Project root to inspect.
- * @returns Tailwind version inferred from package.json or config files.
- */
 export function detectTailwindVersion(cwd: string): 'v3' | 'v4' {
     try {
         const pkgJsonPath = path.join(cwd, 'package.json');
@@ -217,4 +198,3 @@ export function detectTailwindVersion(cwd: string): 'v3' | 'v4' {
 
     return inferTailwindVersionFromConfig(cwd);
 }
-

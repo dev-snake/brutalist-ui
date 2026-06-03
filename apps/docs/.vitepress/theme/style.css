@@ -1,0 +1,928 @@
+@import 'v-calendar/dist/style.css';
+@import 'brutx-ui-vue/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   DESIGN TOKENS — Override VitePress defaults
+   ============================================ */
+
+:root {
+    /* --- BrutxUI brand --- */
+    --vp-c-brand-1: var(--brutal-primary);
+    --vp-c-brand-2: var(--brutal-secondary);
+    --vp-c-brand-3: var(--brutal-accent);
+    --vp-c-brand-soft: var(--brutal-muted);
+
+    /* --- Fonts --- */
+    --vp-font-family-base: 'Space Grotesk', system-ui, sans-serif;
+    --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+    /* --- Backgrounds: pure white, no soft grays --- */
+    --vp-c-bg: #ffffff;
+    --vp-c-bg-alt: #ffffff;
+    --vp-c-bg-elv: #ffffff;
+    --vp-c-bg-soft: #f5f5f5;
+
+    /* --- Text: maximum contrast --- */
+    --vp-c-text-1: #000000;
+    --vp-c-text-2: #1a1a1a;
+    --vp-c-text-3: #333333;
+
+    /* --- Borders/dividers: thick and black --- */
+    --vp-c-border: #000000;
+    --vp-c-divider: #000000;
+    --vp-c-gutter: #000000;
+
+    /* --- Shadows: hard brutalist, no blur --- */
+    --vp-shadow-1: 3px 3px 0px 0px #000000;
+    --vp-shadow-2: 4px 4px 0px 0px #000000;
+    --vp-shadow-3: 6px 6px 0px 0px #000000;
+    --vp-shadow-4: 8px 8px 0px 0px #000000;
+    --vp-shadow-5: 10px 10px 0px 0px #000000;
+
+    /* --- Buttons --- */
+    --vp-button-brand-border: #000000;
+    --vp-button-brand-text: #000000;
+    --vp-button-brand-bg: var(--brutal-primary);
+    --vp-button-brand-hover-border: #000000;
+    --vp-button-brand-hover-text: #000000;
+    --vp-button-brand-hover-bg: var(--brutal-secondary);
+    --vp-button-alt-border: #000000;
+    --vp-button-alt-text: #000000;
+    --vp-button-alt-bg: var(--brutal-accent);
+    --vp-button-alt-hover-border: #000000;
+    --vp-button-alt-hover-text: #000000;
+    --vp-button-alt-hover-bg: var(--brutal-primary);
+
+    /* --- Home hero --- */
+    --vp-home-hero-name-color: var(--brutal-primary);
+    --vp-home-hero-name-background: transparent;
+    --vp-home-hero-image-background-image: none;
+    --vp-home-hero-image-filter: none;
+
+    /* --- Nav --- */
+    --vp-nav-height: 72px;
+    --vp-nav-bg-color: rgba(255, 255, 255, 0.95);
+
+    /* --- Sidebar --- */
+    --vp-sidebar-bg-color: #ffffff;
+
+    /* --- Code blocks --- */
+    --vp-code-block-bg: var(--brutal-muted);
+    --vp-code-block-color: var(--brutal-fg);
+    --vp-code-bg: var(--brutal-muted);
+    --vp-code-color: var(--brutal-primary);
+
+    /* --- Misc --- */
+    --vp-c-tip-text: var(--brutal-primary);
+    --vp-c-warning-text: var(--brutal-accent);
+    --vp-c-danger-text: var(--brutal-destructive);
+}
+
+.dark {
+    --vp-c-brand-1: var(--brutal-primary);
+    --vp-c-brand-2: var(--brutal-secondary);
+    --vp-c-brand-3: var(--brutal-accent);
+    --vp-c-brand-soft: var(--brutal-muted);
+
+    --vp-c-bg: #141414;
+    --vp-c-bg-alt: #1a1a1a;
+    --vp-c-bg-elv: #1e1e1e;
+    --vp-c-bg-soft: #252525;
+
+    --vp-c-text-1: #ffffff;
+    --vp-c-text-2: #e5e5e5;
+    --vp-c-text-3: #cccccc;
+
+    --vp-c-border: var(--brutal-border-color);
+    --vp-c-divider: var(--brutal-border-color);
+    --vp-c-gutter: var(--brutal-border-color);
+
+    --vp-shadow-1: 3px 3px 0px 0px var(--brutal-shadow-color);
+    --vp-shadow-2: 4px 4px 0px 0px var(--brutal-shadow-color);
+    --vp-shadow-3: 6px 6px 0px 0px var(--brutal-shadow-color);
+    --vp-shadow-4: 8px 8px 0px 0px var(--brutal-shadow-color);
+    --vp-shadow-5: 10px 10px 0px 0px var(--brutal-shadow-color);
+
+    --vp-button-brand-border: var(--brutal-border-color);
+    --vp-button-brand-text: #000000;
+    --vp-button-brand-hover-border: var(--brutal-border-color);
+    --vp-button-brand-hover-text: #000000;
+    --vp-button-alt-border: var(--brutal-border-color);
+    --vp-button-alt-text: #000000;
+    --vp-button-alt-hover-border: var(--brutal-border-color);
+    --vp-button-alt-hover-text: #000000;
+
+    --vp-nav-bg-color: rgba(20, 20, 20, 0.95);
+    --vp-sidebar-bg-color: #141414;
+
+    /* --- Code blocks dark mode overrides --- */
+    --vp-code-block-bg: #111827;
+    --vp-code-block-color: #f3f4f6;
+}
+
+/* ============================================
+   GLOBAL RESETS — Kill all rounded corners
+   ============================================ */
+
+body {
+    font-family: 'Space Grotesk', system-ui, sans-serif !important;
+}
+
+/* Scoped border-radius reset — covers VitePress UI + docs components */
+.VPButton,
+.VPFeature,
+.VPNav,
+.VPSidebar,
+.VPSidebarItem .link,
+.VPSwitch,
+.VPFooter,
+.VPNavBarSearch button,
+.VPLocalNavOutlineDropdown .items,
+.VPDocFooter .edit-link-button,
+.VPDocFooter .pager-link,
+.vp-doc table,
+.vp-doc blockquote,
+.vp-doc code,
+.vp-doc div[class*='language-'],
+.vp-doc div[class*='language-'] > button,
+.vp-doc .VPBadge,
+.custom-block {
+    border-radius: 0;
+}
+
+::selection {
+    background-color: var(--brutal-accent);
+    color: #000000;
+}
+
+/* ============================================
+   NAVBAR — Bold top bar with thick border
+   ============================================ */
+
+.VPNav {
+    border-bottom: 4px solid var(--brutal-border-color) !important;
+    backdrop-filter: none !important;
+    padding-right: var(--scrollbar-width, 0px) !important;
+}
+
+.VPNavBar {
+    border-bottom: none !important;
+}
+
+.VPNavBar .wrapper {
+    border-bottom: none !important;
+}
+
+/* Kill VitePress default background transitions */
+.VPNavBar .container {
+    transition: none !important;
+}
+
+/* Nav links: bold uppercase */
+.VPNavBar .menu a,
+.VPNavBarMenuLink {
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-size: 0.85rem !important;
+    border-bottom: 3px solid transparent !important;
+    transition: border-color 150ms, background-color 150ms !important;
+}
+
+.VPNavBar .menu a:hover,
+.VPNavBarMenuLink:hover {
+    border-bottom-color: var(--brutal-primary) !important;
+    background-color: var(--brutal-muted) !important;
+}
+
+/* Divider between nav sections */
+.VPNavBar .divider {
+    height: 0 !important;
+}
+
+.VPNavBar .divider-line {
+    height: 4px !important;
+    background-color: var(--brutal-border-color) !important;
+}
+
+/* ============================================
+   SIDEBAR — Sharp, bold navigation
+   ============================================ */
+
+.VPSidebar {
+    border-right: 4px solid var(--brutal-border-color) !important;
+    background-color: var(--vp-sidebar-bg-color) !important;
+    padding-top: 0 !important;
+}
+
+@media (min-width: 960px) {
+    .VPSidebar {
+        padding-top: var(--vp-nav-height) !important;
+    }
+}
+
+@media (min-width: 1440px) {
+    .VPSidebar {
+        padding-left: max(32px, calc((100% - var(--scrollbar-width, 0px) - (var(--vp-layout-max-width) - 64px)) / 2)) !important;
+        width: calc((100% - var(--scrollbar-width, 0px) - (var(--vp-layout-max-width) - 64px)) / 2 + var(--vp-sidebar-width) - 32px) !important;
+    }
+}
+
+/* Colored accent bar at top of sidebar */
+.VPSidebar::before {
+    content: '';
+    display: block;
+    height: 4px;
+    background: linear-gradient(
+        90deg,
+        var(--brutal-primary) 0%,
+        var(--brutal-primary) 33%,
+        var(--brutal-secondary) 33%,
+        var(--brutal-secondary) 66%,
+        var(--brutal-accent) 66%,
+        var(--brutal-accent) 100%
+    );
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Hide VitePress default left indicator */
+.VPSidebarItem .indicator {
+    display: none !important;
+}
+
+/* Remove nested left border on sub-items */
+.VPSidebarItem .items {
+    border-left: none !important;
+    padding-left: 0;
+}
+
+/* Section headers (level-0 groups) */
+.VPSidebarItem.level-0 > .item > .text {
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    font-size: 0.7rem !important;
+    color: var(--brutal-primary) !important;
+    padding: 0.5rem 0 0.25rem;
+}
+
+/* Inactive sidebar links */
+.VPSidebarItem.level-0 > .item > .link,
+.VPSidebarItem.level-1 > .item > .link,
+.VPSidebarItem.level-2 > .item > .link {
+    border: 3px solid transparent;
+    transition: background-color 100ms, border-color 100ms;
+    padding: 0.35rem 0.75rem;
+}
+
+.VPSidebarItem.level-0 > .item > .link:hover,
+.VPSidebarItem.level-1 > .item > .link:hover,
+.VPSidebarItem.level-2 > .item > .link:hover {
+    background-color: var(--brutal-muted);
+    border-left: 4px solid var(--brutal-primary);
+    padding-left: calc(0.75rem - 1px);
+}
+
+.dark .VPSidebarItem.level-0 > .item > .link:hover,
+.dark .VPSidebarItem.level-1 > .item > .link:hover,
+.dark .VPSidebarItem.level-2 > .item > .link:hover {
+    background-color: var(--brutal-muted);
+    border-left: 4px solid var(--brutal-primary);
+    padding-left: calc(0.75rem - 1px);
+}
+
+/* Active sidebar links - accent bg, bold text, brutal border + shadow */
+.VPSidebarItem.is-active > .item > .link {
+    background-color: var(--brutal-accent) !important;
+    color: var(--brutal-fg) !important;
+    border: 4px solid var(--brutal-border-color) !important;
+    box-shadow: 4px 4px 0px 0px var(--brutal-border-color) !important;
+    font-weight: 700;
+}
+
+.VPSidebarItem.is-active > .item > .link > .text {
+    color: var(--brutal-fg) !important;
+    font-weight: 800;
+}
+
+.dark .VPSidebarItem.is-active > .item > .link {
+    background-color: var(--brutal-accent) !important;
+    color: var(--brutal-fg) !important;
+    border-color: var(--brutal-border-color) !important;
+    box-shadow: 4px 4px 0px 0px var(--brutal-border-color) !important;
+}
+
+.dark .VPSidebarItem.is-active > .item > .link > .text {
+    color: var(--brutal-fg) !important;
+}
+
+/* Hover text color override */
+.VPSidebarItem .item .link:hover .text {
+    color: var(--brutal-primary);
+}
+
+/* ============================================
+   BUTTONS — Hard shadows, zero radius
+   ============================================ */
+
+.VPButton {
+    font-weight: 800 !important;
+    letter-spacing: 0.025em !important;
+    text-transform: uppercase !important;
+    font-size: 0.85rem !important;
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.VPButton.brand {
+    border-width: 3px !important;
+    border-style: solid !important;
+    border-color: #000000 !important;
+    box-shadow: 4px 4px 0 0 #000000 !important;
+    background-color: var(--brutal-primary) !important;
+    color: #000000 !important;
+}
+
+.VPButton.brand:hover {
+    transform: translate(-2px, -2px) !important;
+    box-shadow: 6px 6px 0 0 #000000 !important;
+    background-color: var(--brutal-secondary) !important;
+}
+
+.VPButton.brand:active {
+    transform: translateY(2px) !important;
+    box-shadow: none !important;
+}
+
+.VPButton.alt {
+    border-width: 3px !important;
+    border-style: solid !important;
+    border-color: #000000 !important;
+    box-shadow: 4px 4px 0 0 #000000 !important;
+    background-color: var(--brutal-accent) !important;
+    color: #000000 !important;
+}
+
+.VPButton.alt:hover {
+    transform: translate(-2px, -2px) !important;
+    box-shadow: 6px 6px 0 0 #000000 !important;
+    background-color: var(--brutal-primary) !important;
+}
+
+.VPButton.alt:active {
+    transform: translateY(2px) !important;
+    box-shadow: none !important;
+}
+
+/* Dark mode buttons */
+.dark .VPButton.brand,
+.dark .VPButton.alt {
+    border-color: var(--brutal-border-color) !important;
+    box-shadow: 4px 4px 0 0 var(--brutal-border-color) !important;
+}
+
+.dark .VPButton.brand:hover,
+.dark .VPButton.alt:hover {
+    box-shadow: 6px 6px 0 0 var(--brutal-border-color) !important;
+}
+
+/* ============================================
+   HERO — Bold, geometric, high impact
+   ============================================ */
+
+.VPHero .name {
+    font-weight: 900 !important;
+    letter-spacing: -0.03em !important;
+}
+
+.VPHero .name.clip {
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: var(--brutal-primary) !important;
+    background-image: none !important;
+}
+
+.VPHero .text {
+    font-weight: 900 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--vp-c-text-1) !important;
+}
+
+.VPHero .tagline {
+    font-weight: 600 !important;
+    color: var(--vp-c-text-2) !important;
+    max-width: 560px !important;
+    line-height: 1.6 !important;
+}
+
+/* Kill the blurred gradient blob only — keep .image-src visible for custom hero images */
+.VPHero .image-container .image-bg {
+    display: none !important;
+}
+
+/* ============================================
+   FEATURE CARDS — Brutalist grid cards
+   ============================================ */
+
+.VPFeature {
+    border: 3px solid #000000 !important;
+    box-shadow: 4px 4px 0 0 #000000 !important;
+    background-color: #ffffff !important;
+    padding: 1.5rem !important;
+    transition: transform 150ms, box-shadow 150ms !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.VPFeature:hover {
+    transform: translate(-2px, -2px) !important;
+    box-shadow: 6px 6px 0 0 #000000 !important;
+}
+
+.VPFeature .title {
+    font-weight: 900 !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 0.01em !important;
+}
+
+.VPFeature .details {
+    font-weight: 500 !important;
+    color: var(--vp-c-text-2) !important;
+    line-height: 1.6 !important;
+}
+
+/* Colored accent strips on feature cards */
+.VPFeatures .VPFeature::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: var(--feature-accent, var(--brutal-primary));
+}
+
+.VPFeatures .VPFeature:nth-child(6n+1) { --feature-accent: var(--brutal-primary); }
+.VPFeatures .VPFeature:nth-child(6n+2) { --feature-accent: var(--brutal-secondary); }
+.VPFeatures .VPFeature:nth-child(6n+3) { --feature-accent: var(--brutal-accent); }
+.VPFeatures .VPFeature:nth-child(6n+4) { --feature-accent: var(--brutal-destructive); }
+.VPFeatures .VPFeature:nth-child(6n+5) { --feature-accent: var(--brutal-success); }
+.VPFeatures .VPFeature:nth-child(6n+6) { --feature-accent: var(--brutal-info); }
+
+/* Dark mode features */
+.dark .VPFeature {
+    border-color: var(--brutal-border-color) !important;
+    box-shadow: 4px 4px 0 0 var(--brutal-border-color) !important;
+    background-color: var(--brutal-bg) !important;
+}
+
+.dark .VPFeature:hover {
+    box-shadow: 6px 6px 0 0 var(--brutal-border-color) !important;
+}
+
+/* ============================================
+   CONTENT AREA — Typography & structure
+   ============================================ */
+
+.VPContent {
+    scrollbar-gutter: stable;
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+}
+
+.vp-doc h1 {
+    font-size: 2.25rem;
+    letter-spacing: -0.02em;
+    border-bottom: 4px solid var(--brutal-border-color);
+    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.vp-doc h2 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    border-top: none !important;
+    border-bottom: 3px solid var(--brutal-border-color);
+    padding-top: 0;
+    padding-bottom: 0.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.vp-doc h3 {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+}
+
+.vp-doc a {
+    color: var(--brutal-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+    font-weight: 600;
+}
+
+.vp-doc a:hover {
+    color: var(--brutal-secondary);
+}
+
+.vp-doc blockquote {
+    border-left: 4px solid var(--brutal-primary);
+    background-color: var(--brutal-muted);
+    padding: 0.75rem 1rem;
+    box-shadow: 4px 4px 0 0 var(--brutal-border-color);
+}
+
+.vp-doc code {
+    background-color: var(--brutal-muted);
+    border: 2px solid var(--brutal-border-color);
+    padding: 0.125rem 0.375rem;
+    font-weight: 700;
+    font-size: 0.875em;
+}
+
+/* code inside pre inherits the pre's formatting and background */
+.vp-doc pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+.vp-doc hr {
+    border: none;
+    border-top: 3px solid var(--brutal-border-color);
+    margin: 2rem 0;
+}
+
+/* ============================================
+   CODE BLOCKS — Hard edges, bold labels
+   ============================================ */
+
+.vp-doc div[class*='language-'] {
+    border: 2px solid var(--brutal-border-color) !important;
+    box-shadow: 2px 2px 0 0 var(--brutal-border-color) !important;
+    position: relative;
+}
+
+/* CodeBlock accent bar via pseudo-element (no extra DOM node) */
+.codeblock-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--brutal-primary);
+    z-index: 10;
+}
+
+.vp-doc div[class*='language-'] > button {
+    border: 2px solid var(--brutal-border-color) !important;
+    background-color: var(--brutal-secondary) !important;
+    color: #000000 !important;
+    font-weight: 700;
+}
+
+.vp-doc div[class*='language-'] > button:hover {
+    background-color: var(--brutal-accent) !important;
+}
+
+/* Language label bar */
+.vp-doc div[class*='language-'] > span.lang {
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    font-size: 0.65rem !important;
+    background-color: var(--brutal-primary) !important;
+    color: #000000 !important;
+    padding: 0.25rem 0.75rem !important;
+    border-bottom: 2px solid var(--brutal-border-color) !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1;
+}
+
+/* Line numbers */
+.vp-doc div[class*='language-'].line-numbers-mode .line-numbers {
+    border-right: 2px solid var(--brutal-border-color) !important;
+}
+
+/* ============================================
+   TABLES — Brutalist data grids
+   ============================================ */
+
+.vp-doc table {
+    border: 3px solid var(--brutal-border-color);
+    border-collapse: separate;
+    border-spacing: 0;
+    display: table;
+    width: 100%;
+    min-width: 600px;
+    box-shadow: 4px 4px 0 0 var(--brutal-border-color);
+}
+
+.vp-doc table th,
+.vp-doc table td {
+    border-right: 2px solid var(--brutal-border-color);
+    border-bottom: 2px solid var(--brutal-border-color);
+    padding: 0.5rem 1rem;
+}
+
+.vp-doc table th:last-child,
+.vp-doc table td:last-child {
+    border-right: none;
+}
+
+.vp-doc table tr:last-child td {
+    border-bottom: none;
+}
+
+.vp-doc table th {
+    background-color: var(--brutal-accent);
+    font-weight: 900;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+}
+
+.vp-doc table tr:nth-child(even) td {
+    background-color: var(--brutal-muted);
+}
+
+.dark .vp-doc table th {
+    background-color: var(--brutal-accent);
+    color: #000000;
+}
+
+/* ============================================
+   CATEGORY BADGES — Sharp, bold labels
+   ============================================ */
+
+.vp-doc .VPBadge {
+    display: inline-block;
+    padding: 2px 10px;
+    border: 2px solid #000000;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--brutal-primary);
+    color: #000000;
+    box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.vp-doc .VPBadge.tip {
+    background-color: var(--brutal-primary);
+    border-color: #000000;
+    color: #000000;
+}
+
+.vp-doc .VPBadge.info {
+    background-color: var(--brutal-accent);
+    border-color: #000000;
+    color: #000000;
+}
+
+.vp-doc .VPBadge.warning {
+    background-color: var(--brutal-accent);
+    border-color: #000000;
+    color: #000000;
+}
+
+.vp-doc .VPBadge.danger {
+    background-color: var(--brutal-destructive);
+    border-color: #000000;
+    color: #000000;
+}
+
+/* ============================================
+   CUSTOM BLOCKS — Bold callouts
+   ============================================ */
+
+.custom-block {
+    box-shadow: 4px 4px 0 0 var(--brutal-border-color);
+}
+
+.custom-block.tip {
+    border: 3px solid var(--brutal-primary);
+    background-color: var(--brutal-muted);
+}
+
+.custom-block.warning {
+    border: 3px solid var(--brutal-accent);
+    background-color: var(--brutal-muted);
+}
+
+.custom-block.danger {
+    border: 3px solid var(--brutal-destructive);
+    background-color: var(--brutal-muted);
+}
+
+.custom-block.info {
+    border: 3px solid var(--brutal-info);
+    background-color: var(--brutal-muted);
+}
+
+.custom-block .custom-block-title {
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-size: 0.8rem !important;
+}
+
+/* ============================================
+   OUTLINE / TOC
+   ============================================ */
+
+.VPLocalNavOutlineDropdown .items {
+    border: 3px solid var(--brutal-border-color);
+    box-shadow: 4px 4px 0 0 var(--brutal-border-color);
+}
+
+.VPDocOutlineItem .outline-link {
+    font-weight: 600;
+    border-left: 3px solid transparent;
+    transition: border-color 100ms;
+}
+
+.VPDocOutlineItem .outline-link.active {
+    border-left-color: var(--brutal-primary);
+    color: var(--brutal-primary);
+    font-weight: 800;
+}
+
+/* ============================================
+   SEARCH BOX — Brutalist search
+   ============================================ */
+
+.VPNavBarSearch button {
+    border: 3px solid var(--brutal-border-color) !important;
+    box-shadow: 3px 3px 0 0 var(--brutal-border-color) !important;
+    background-color: var(--brutal-bg) !important;
+    font-weight: 600 !important;
+    transition: box-shadow 150ms !important;
+}
+
+.VPNavBarSearch button:hover {
+    box-shadow: 4px 4px 0 0 var(--brutal-primary) !important;
+}
+
+.VPNavBarSearch button:focus {
+    outline: 3px solid var(--brutal-primary) !important;
+    outline-offset: 2px !important;
+}
+
+/* ============================================
+   FOOTER — Bold bottom bar
+   ============================================ */
+
+.VPFooter {
+    border-top: 4px solid var(--brutal-border-color) !important;
+    background-color: var(--brutal-accent) !important;
+    color: #000000 !important;
+    box-shadow: 0 -4px 0 0 var(--brutal-border-color) !important;
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+    font-weight: 800 !important;
+    letter-spacing: 0.02em;
+}
+
+/* ============================================
+   MISC UI ELEMENTS
+   ============================================ */
+
+.VPSwitch {
+    border: 3px solid var(--brutal-border-color) !important;
+}
+
+.VPSwitch:hover {
+    box-shadow: 2px 2px 0 0 var(--brutal-border-color);
+}
+
+.VPSocialLink:hover {
+    color: var(--brutal-primary);
+}
+
+/* Page-level edit link */
+.VPDocFooter .edit-link-button {
+    border: 2px solid var(--brutal-border-color);
+    font-weight: 700;
+    transition: background-color 100ms, box-shadow 100ms;
+}
+
+.VPDocFooter .edit-link-button:hover {
+    background-color: var(--brutal-muted);
+    box-shadow: 3px 3px 0 0 var(--brutal-border-color);
+}
+
+/* Prev/Next navigation */
+.VPDocFooter .pager-link {
+    border: 3px solid var(--brutal-border-color) !important;
+    box-shadow: 3px 3px 0 0 var(--brutal-border-color) !important;
+    transition: transform 150ms, box-shadow 150ms !important;
+}
+
+.VPDocFooter .pager-link:hover {
+    transform: translate(-2px, -2px) !important;
+    box-shadow: 5px 5px 0 0 var(--brutal-border-color) !important;
+}
+
+/* ============================================
+   SCROLLBAR — Thick, visible
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--brutal-muted);
+    border-left: 2px solid var(--brutal-border-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--brutal-border-color);
+    border: 2px solid var(--brutal-muted);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--brutal-primary);
+}
+
+/* ============================================
+   MOBILE — Reduce weight on small screens
+   ============================================ */
+
+@media (max-width: 640px) {
+    .VPFeature {
+        border-width: 2px !important;
+        box-shadow: 2px 2px 0 0 #000000 !important;
+    }
+
+    .VPFeature:hover {
+        box-shadow: 3px 3px 0 0 #000000 !important;
+    }
+
+    .VPButton.brand,
+    .VPButton.alt {
+        border-width: 2px !important;
+        box-shadow: 2px 2px 0 0 #000000 !important;
+    }
+
+    .VPButton.brand:hover,
+    .VPButton.alt:hover {
+        box-shadow: 3px 3px 0 0 #000000 !important;
+    }
+
+    .vp-doc div[class*='language-'] {
+        border-width: 2px !important;
+        box-shadow: 2px 2px 0 0 var(--brutal-border-color) !important;
+    }
+
+    .vp-doc div[class*='language-']:hover {
+        box-shadow: 3px 3px 0 0 var(--brutal-border-color) !important;
+    }
+
+    .vp-doc table {
+        box-shadow: 2px 2px 0 0 var(--brutal-border-color);
+    }
+
+    .VPSidebar {
+        border-right-width: 3px !important;
+    }
+
+    .VPNav {
+        border-bottom-width: 3px !important;
+    }
+}
+
+/* BrutxUI focus ring override - ensure buttons show outline focus ring even on click in the docs */
+.vp-doc button:focus,
+.vp-doc button:focus-visible {
+    outline: 3px solid var(--brutal-ring, #000000) !important;
+    outline-offset: 2px !important;
+}
+

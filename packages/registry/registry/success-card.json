@@ -1,0 +1,105 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "success-card",
+  "type": "registry:ui",
+  "title": "Success Card",
+  "description": "A highly customizable neo-brutalist Success Card component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "card",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "components/ui/success-card/SuccessCard.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { Check } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport Button from '@/components/ui/button/Button.vue'\n\ninterface SuccessCardProps {\n    title?: string\n    description?: string\n    confirmText?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SuccessCardProps>(), {\n    title: undefined,\n    description: undefined,\n    confirmText: undefined,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst emit = defineEmits<{\n    confirm: []\n}>()\n\nconst rootClasses = computed(() => cn('w-full max-w-md', props.class))\n\nconst resolvedTitle = computed(() => props.title ?? t('successCard.defaultTitle'))\nconst resolvedDescription = computed(() => props.description ?? t('successCard.defaultDescription'))\nconst resolvedConfirmText = computed(() => props.confirmText ?? t('successCard.defaultConfirmText'))\n</script>\n\n<template>\n    <Card :class=\"rootClasses\" variant=\"default\">\n        <div class=\"h-2 bg-brutal-success border-b-3 border-brutal\" />\n        <CardContent class=\"pt-6\">\n            <div class=\"flex flex-col items-center text-center\">\n                <div class=\"relative mb-4\">\n                    <div class=\"absolute inset-0 bg-brutal-muted border-3 border-brutal translate-x-2 translate-y-2\" />\n                    <div class=\"relative h-16 w-16 flex items-center justify-center bg-brutal-success border-3 border-brutal shadow-brutal\">\n                        <Check class=\"h-8 w-8 stroke-[3]\" />\n                    </div>\n                </div>\n                <h3 class=\"text-xl font-black tracking-tight\">\n{{ resolvedTitle }}\n</h3>\n                <p v-if=\"resolvedDescription\" class=\"mt-2 text-sm text-brutal-muted-foreground font-medium\">\n{{ resolvedDescription }}\n</p>\n                <Button variant=\"primary\" class=\"mt-6\" @click=\"emit('confirm')\">\n                    {{ resolvedConfirmText }}\n                </Button>\n                <slot name=\"actions\" />\n            </div>\n        </CardContent>\n    </Card>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

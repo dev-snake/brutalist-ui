@@ -3,15 +3,15 @@
   "name": "progress",
   "type": "registry:ui",
   "title": "Progress",
-  "description": "A highly customizable neo-brutalist Progress component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Progress component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-progress"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/progress.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as ProgressPrimitive from '@radix-ui/react-progress';\n\nimport { cn } from '@/lib/utils';\n\nconst Progress = React.forwardRef<\n    React.ElementRef<typeof ProgressPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>\n>(({ className, value, ...props }, ref) => (\n    <ProgressPrimitive.Root\n        ref={ref}\n        value={value}\n        className={cn(\n            'relative h-6 w-full overflow-hidden rounded-brutal',\n            'border-3 border-brutal bg-white dark:bg-gray-800',\n            'shadow-brutal-sm',\n            className\n        )}\n        {...props}\n    >\n        <ProgressPrimitive.Indicator\n            className=\"h-full w-full flex-1 bg-brutal-primary transition-all duration-300 ease-out\"\n            style={{ transform: `translateX(-${100 - (value || 0)}%)` }}\n        />\n    </ProgressPrimitive.Root>\n));\nProgress.displayName = ProgressPrimitive.Root.displayName;\n\nexport { Progress };\n",
+      "path": "components/ui/progress/Progress.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { ProgressRoot, ProgressIndicator } from 'reka-ui'\n\ninterface ProgressProps {\n    class?: string\n    modelValue?: number\n    max?: number\n}\n\nconst props = withDefaults(defineProps<ProgressProps>(), {\n    class: '',\n    modelValue: 0,\n    max: 100,\n})\n\nconst classes = computed(() =>\n    cn(\n        'relative h-6 w-full overflow-hidden rounded-brutal',\n        'border-3 border-brutal bg-brutal-bg',\n        'shadow-brutal-sm',\n        props.class\n    )\n)\n\nconst percentage = computed(() => props.modelValue ?? 0)\n</script>\n\n<template>\n    <ProgressRoot :class=\"classes\" :model-value=\"modelValue\" :max=\"max\">\n        <ProgressIndicator\n            class=\"h-full w-full flex-1 bg-brutal-primary transition-all duration-300 ease-out\"\n            :style=\"{ transform: `translateX(-${100 - percentage}%)` }\"\n        />\n    </ProgressRoot>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +37,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +71,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +84,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

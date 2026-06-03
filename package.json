@@ -2,18 +2,18 @@
     "name": "brutx-monorepo",
     "version": "1.0.0",
     "private": true,
-    "description": "Neo-Brutalism UI Library Monorepo",
+    "description": "Neo-Brutalism UI Library Monorepo (Vue 3)",
     "scripts": {
         "dev": "pnpm --filter docs dev",
-        "build": "pnpm --filter brutx-ui build && pnpm --filter docs build",
-        "build:ui": "pnpm --filter brutx-ui build",
+        "build": "pnpm --filter brutx-ui-vue build",
+        "build:ui": "pnpm --filter brutx-ui-vue build",
         "build:docs": "pnpm --filter docs build",
         "lint": "pnpm -r lint",
         "clean": "pnpm -r clean",
         "typecheck": "pnpm -r typecheck",
-        "test": "pnpm --filter brutx-ui test && pnpm --filter brutx test",
-        "test:watch": "pnpm --filter brutx-ui test:watch",
-        "test:coverage": "pnpm --filter brutx-ui test:coverage"
+        "test": "pnpm --filter brutx-ui-vue test",
+        "test:watch": "pnpm --filter brutx-ui-vue test:watch",
+        "test:coverage": "pnpm --filter brutx-ui-vue test:coverage"
     },
     "devDependencies": {
         "typescript": "^5.7.2"

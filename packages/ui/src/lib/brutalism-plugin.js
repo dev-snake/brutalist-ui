@@ -4,42 +4,42 @@ const brutalismPlugin = plugin(
     function ({ addUtilities, addComponents, theme }) {
         const utilities = {
             '.nb-border': {
-                borderWidth: '3px',
+                borderWidth: 'var(--brutal-border-width, 3px)',
                 borderStyle: 'solid',
-                borderColor: '#000000',
+                borderColor: 'var(--brutal-border-color, #000000)',
             },
             '.nb-border-2': {
                 borderWidth: '2px',
                 borderStyle: 'solid',
-                borderColor: '#000000',
+                borderColor: 'var(--brutal-border-color, #000000)',
             },
             '.nb-border-4': {
                 borderWidth: '4px',
                 borderStyle: 'solid',
-                borderColor: '#000000',
+                borderColor: 'var(--brutal-border-color, #000000)',
             },
             '.nb-shadow': {
-                boxShadow: '4px 4px 0px 0px #000000',
+                boxShadow: 'var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)',
             },
             '.nb-shadow-sm': {
-                boxShadow: '2px 2px 0px 0px #000000',
+                boxShadow: 'calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)',
             },
             '.nb-shadow-lg': {
-                boxShadow: '6px 6px 0px 0px #000000',
+                boxShadow: 'calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)',
             },
             '.nb-shadow-xl': {
-                boxShadow: '8px 8px 0px 0px #000000',
+                boxShadow: 'calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)',
             },
             '.nb-press': {
-                transform: 'translateY(2px)',
+                transform: 'translateY(var(--brutal-pressed-offset, 2px))',
                 boxShadow: 'none',
             },
             '.nb-press-sm': {
-                transform: 'translateY(1px)',
+                transform: 'translateY(calc(var(--brutal-pressed-offset, 2px) / 2))',
                 boxShadow: 'none',
             },
             '.nb-press-lg': {
-                transform: 'translateY(3px)',
+                transform: 'translateY(calc(var(--brutal-pressed-offset, 2px) * 1.5))',
                 boxShadow: 'none',
             },
             '.nb-font': {
@@ -55,7 +55,7 @@ const brutalismPlugin = plugin(
                 letterSpacing: '0.015em',
             },
             '.nb-no-radius': {
-                borderRadius: '0px',
+                borderRadius: 'var(--brutal-radius, 0px)',
             },
             '.nb-transition': {
                 transitionProperty: 'transform, box-shadow',
@@ -67,23 +67,23 @@ const brutalismPlugin = plugin(
         const interactiveUtilities = {
             '.nb-hover': {
                 '&:hover': {
-                    transform: 'translate(-2px, -2px)',
-                    boxShadow: '6px 6px 0px 0px #000000',
+                    transform: 'translate(calc(var(--brutal-shadow-offset-x, 4px) / -2), calc(var(--brutal-shadow-offset-y, 4px) / -2))',
+                    boxShadow: 'calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)',
                 },
             },
             '.nb-active': {
                 '&:active': {
-                    transform: 'translateY(2px)',
+                    transform: 'translateY(var(--brutal-pressed-offset, 2px))',
                     boxShadow: 'none',
                 },
             },
             '.nb-focus': {
                 '&:focus': {
-                    outline: '3px solid #000000',
+                    outline: '3px solid var(--brutal-ring, #000000)',
                     outlineOffset: '2px',
                 },
                 '&:focus-visible': {
-                    outline: '3px solid #000000',
+                    outline: '3px solid var(--brutal-ring, #000000)',
                     outlineOffset: '2px',
                 },
             },
@@ -101,24 +101,24 @@ const brutalismPlugin = plugin(
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderWidth: '3px',
+                borderWidth: 'var(--brutal-border-width, 3px)',
                 borderStyle: 'solid',
-                borderColor: '#000000',
-                backgroundColor: '#FFFFFF',
-                boxShadow: '4px 4px 0px 0px #000000',
+                borderColor: 'var(--brutal-border-color, #000000)',
+                backgroundColor: 'var(--brutal-bg, #ffffff)',
+                boxShadow: 'var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)',
                 fontWeight: '900',
                 letterSpacing: '0.025em',
-                borderRadius: '0px',
+                borderRadius: 'var(--brutal-radius, 0px)',
                 transitionProperty: 'transform, box-shadow',
                 transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
                 transitionDuration: '150ms',
                 cursor: 'pointer',
                 '&:hover': {
-                    transform: 'translate(-2px, -2px)',
-                    boxShadow: '6px 6px 0px 0px #000000',
+                    transform: 'translate(calc(var(--brutal-shadow-offset-x, 4px) / -2), calc(var(--brutal-shadow-offset-y, 4px) / -2))',
+                    boxShadow: 'calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)',
                 },
                 '&:active': {
-                    transform: 'translateY(2px)',
+                    transform: 'translateY(var(--brutal-pressed-offset, 2px))',
                     boxShadow: 'none',
                 },
                 '&:disabled': {
@@ -128,27 +128,28 @@ const brutalismPlugin = plugin(
                 },
             },
             '.nb-card': {
-                borderWidth: '3px',
+                borderWidth: 'var(--brutal-border-width, 3px)',
                 borderStyle: 'solid',
-                borderColor: '#000000',
-                backgroundColor: '#FFFFFF',
-                boxShadow: '4px 4px 0px 0px #000000',
-                borderRadius: '0px',
+                borderColor: 'var(--brutal-border-color, #000000)',
+                backgroundColor: 'var(--brutal-bg, #ffffff)',
+                boxShadow: 'var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)',
+                borderRadius: 'var(--brutal-radius, 0px)',
                 padding: '1rem',
             },
             '.nb-input': {
-                borderWidth: '3px',
+                borderWidth: 'var(--brutal-border-width, 3px)',
                 borderStyle: 'solid',
-                borderColor: '#000000',
-                backgroundColor: '#FFFFFF',
-                borderRadius: '0px',
+                borderColor: 'var(--brutal-border-color, #000000)',
+                backgroundColor: 'var(--brutal-bg, #ffffff)',
+                borderRadius: 'var(--brutal-radius, 0px)',
                 fontWeight: '500',
                 '&:focus': {
-                    outline: 'none',
-                    boxShadow: '4px 4px 0px 0px #000000',
+                    outline: '2px solid var(--brutal-ring, #000000)',
+                    outlineOffset: '2px',
+                    boxShadow: 'var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)',
                 },
                 '&::placeholder': {
-                    color: '#6B7280',
+                    color: 'var(--brutal-placeholder, #9CA3AF)',
                     fontWeight: '400',
                 },
             },
@@ -162,29 +163,36 @@ const brutalismPlugin = plugin(
         theme: {
             extend: {
                 colors: {
-                    brutalism: {
-                        bg: '#FFFFFF',
-                        text: '#000000',
-                        primary: '#FF6B6B',
-                        secondary: '#4ECDC4',
-                        accent: '#FFE66D',
-                        success: '#7FB069',
-                        warning: '#F9A825',
-                        danger: '#EF476F',
-                        info: '#4A90D9',
-                        muted: '#9CA3AF',
+                    brutal: {
+                        bg: 'var(--brutal-bg)',
+                        fg: 'var(--brutal-fg)',
+                        primary: 'var(--brutal-primary)',
+                        secondary: 'var(--brutal-secondary)',
+                        accent: 'var(--brutal-accent)',
+                        destructive: 'var(--brutal-destructive)',
+                        success: 'var(--brutal-success)',
+                        muted: 'var(--brutal-muted)',
+                        'muted-foreground': 'var(--brutal-muted-foreground)',
+                        ring: 'var(--brutal-ring)',
+                        info: 'var(--brutal-info)',
+                        overlay: 'var(--brutal-overlay)',
+                        placeholder: 'var(--brutal-placeholder)',
                     },
                 },
                 boxShadow: {
-                    brutal: '4px 4px 0px 0px #000000',
-                    'brutal-sm': '2px 2px 0px 0px #000000',
-                    'brutal-lg': '6px 6px 0px 0px #000000',
-                    'brutal-xl': '8px 8px 0px 0px #000000',
-                    'brutal-primary': '4px 4px 0px 0px #FF6B6B',
-                    'brutal-secondary': '4px 4px 0px 0px #4ECDC4',
+                    brutal: 'var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)',
+                    'brutal-sm': 'calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)',
+                    'brutal-lg': 'calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)',
+                    'brutal-xl': 'calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)',
                 },
                 borderWidth: {
                     3: '3px',
+                },
+                borderRadius: {
+                    brutal: 'var(--brutal-radius, 0px)',
+                },
+                borderColor: {
+                    brutal: 'var(--brutal-border-color, #000000)',
                 },
             },
         },

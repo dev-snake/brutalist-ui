@@ -3,20 +3,55 @@
   "name": "form",
   "type": "registry:ui",
   "title": "Form",
-  "description": "A highly customizable neo-brutalist Form component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Form component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "react-hook-form",
+    "vee-validate",
+    "@vee-validate/zod",
     "zod",
-    "@radix-ui/react-label",
-    "@radix-ui/react-slot"
+    "reka-ui"
   ],
   "registryDependencies": [
     "label"
   ],
   "files": [
     {
-      "path": "components/ui/form.tsx",
-      "content": "import * as React from 'react';\nimport * as LabelPrimitive from '@radix-ui/react-label';\nimport { Slot } from '@radix-ui/react-slot';\nimport {\n    Controller,\n    ControllerProps,\n    FieldPath,\n    FieldValues,\n    FormProvider,\n    useFormContext,\n} from 'react-hook-form';\n\nimport { cn } from '@/lib/utils';\nimport { Label } from '@/components/ui/label';\n\nconst Form = FormProvider;\n\ntype FormFieldContextValue<\n    TFieldValues extends FieldValues = FieldValues,\n    TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,\n> = {\n    name: TName;\n};\n\nconst FormFieldContext = React.createContext<FormFieldContextValue>(\n    {} as FormFieldContextValue\n);\n\nconst FormField = <\n    TFieldValues extends FieldValues = FieldValues,\n    TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,\n>({\n    ...props\n}: ControllerProps<TFieldValues, TName>) => {\n    return (\n        <FormFieldContext.Provider value={{ name: props.name }}>\n            <Controller {...props} />\n        </FormFieldContext.Provider>\n    );\n};\n\nconst useFormField = () => {\n    const fieldContext = React.useContext(FormFieldContext);\n    const itemContext = React.useContext(FormItemContext);\n    const { getFieldState, formState } = useFormContext();\n\n    const fieldState = getFieldState(fieldContext.name, formState);\n\n    if (!fieldContext) {\n        throw new Error('useFormField should be used within <FormField>');\n    }\n\n    const { id } = itemContext;\n\n    return {\n        id,\n        name: fieldContext.name,\n        formItemId: `${id}-form-item`,\n        formDescriptionId: `${id}-form-item-description`,\n        formMessageId: `${id}-form-item-message`,\n        ...fieldState,\n    };\n};\n\ntype FormItemContextValue = {\n    id: string;\n};\n\nconst FormItemContext = React.createContext<FormItemContextValue>(\n    {} as FormItemContextValue\n);\n\nconst FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n    ({ className, ...props }, ref) => {\n        const id = React.useId();\n\n        return (\n            <FormItemContext.Provider value={{ id }}>\n                <div ref={ref} className={cn('space-y-1.5', className)} {...props} />\n            </FormItemContext.Provider>\n        );\n    }\n);\nFormItem.displayName = 'FormItem';\n\nconst FormLabel = React.forwardRef<\n    React.ElementRef<typeof LabelPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>\n>(({ className, ...props }, ref) => {\n    const { error, formItemId } = useFormField();\n\n    return (\n        <Label\n            ref={ref}\n            className={cn(error && 'text-[#EF476F]', className)}\n            htmlFor={formItemId}\n            {...props}\n        />\n    );\n});\nFormLabel.displayName = 'FormLabel';\n\nconst FormControl = React.forwardRef<\n    React.ElementRef<typeof Slot>,\n    React.ComponentPropsWithoutRef<typeof Slot>\n>(({ ...props }, ref) => {\n    const { error, formItemId, formDescriptionId, formMessageId } = useFormField();\n\n    return (\n        <Slot\n            ref={ref}\n            id={formItemId}\n            aria-describedby={\n                !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`\n            }\n            aria-invalid={!!error}\n            {...props}\n        />\n    );\n});\nFormControl.displayName = 'FormControl';\n\nconst FormDescription = React.forwardRef<\n    HTMLParagraphElement,\n    React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, ...props }, ref) => {\n    const { formDescriptionId } = useFormField();\n\n    return (\n        <p\n            ref={ref}\n            id={formDescriptionId}\n            className={cn('text-xs text-gray-500 dark:text-gray-400 font-bold', className)}\n            {...props}\n        />\n    );\n});\nFormDescription.displayName = 'FormDescription';\n\nconst FormMessage = React.forwardRef<\n    HTMLParagraphElement,\n    React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, children, ...props }, ref) => {\n    const { error, formMessageId } = useFormField();\n    const body = error ? String(error?.message) : children;\n\n    if (!body) {\n        return null;\n    }\n\n    return (\n        <p\n            ref={ref}\n            id={formMessageId}\n            className={cn('text-xs font-bold text-[#EF476F]', className)}\n            {...props}\n        >\n            {body}\n        </p>\n    );\n});\nFormMessage.displayName = 'FormMessage';\n\nexport {\n    useFormField,\n    Form,\n    FormItem,\n    FormLabel,\n    FormControl,\n    FormDescription,\n    FormMessage,\n    FormField,\n};\n",
+      "path": "components/ui/form/Form.vue",
+      "content": "<script setup lang=\"ts\">\nimport { provide } from 'vue'\nimport { useForm, type FormContext as VeeFormContext } from 'vee-validate'\nimport { formContextKey } from '@/components/ui/form/form-context'\n\ninterface FormProps {\n    class?: string\n    initialValues?: Record<string, unknown>\n    validationSchema?: unknown\n}\n\nconst props = defineProps<FormProps>()\n\nconst emit = defineEmits<{\n    submit: [values: Record<string, unknown>]\n}>()\n\nconst { handleSubmit, ...formContext } = useForm({\n    initialValues: props.initialValues,\n    validationSchema: props.validationSchema,\n})\n\nconst onSubmit = handleSubmit((values) => {\n    emit('submit', values)\n})\n\nprovide(formContextKey, formContext as unknown as VeeFormContext)\n</script>\n\n<template>\n    <form :class=\"props.class\" @submit=\"onSubmit\">\n        <slot />\n    </form>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/form/FormControl.vue",
+      "content": "<script setup lang=\"ts\">\nimport { inject, ref, type Ref } from 'vue'\nimport { formFieldKey, formItemKey } from '@/components/ui/form/form-context'\n\ninterface FormControlProps {\n    class?: string\n}\n\ndefineProps<FormControlProps>()\n\nconst fieldContext = inject(formFieldKey, {\n    name: '',\n    error: ref<string | undefined>(undefined) as Ref<string | undefined>,\n    value: ref<unknown>(undefined),\n    setValue: () => {},\n})\nconst itemContext = inject(formItemKey, { id: '', formItemId: '', formDescriptionId: '', formMessageId: '' })\n</script>\n\n<template>\n    <slot\n        :id=\"itemContext.formItemId\"\n        :aria-describedby=\"!fieldContext.error?.value ? itemContext.formDescriptionId : `${itemContext.formDescriptionId} ${itemContext.formMessageId}`\"\n        :aria-invalid=\"!!fieldContext.error?.value\"\n    />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/form/FormDescription.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, inject } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { formItemKey } from '@/components/ui/form/form-context'\n\ninterface FormDescriptionProps {\n    class?: string\n}\n\nconst props = defineProps<FormDescriptionProps>()\n\nconst itemContext = inject(formItemKey, { id: '', formItemId: '', formDescriptionId: '', formMessageId: '' })\n\nconst classes = computed(() =>\n    cn('text-sm text-brutal-muted-foreground font-medium', props.class)\n)\n</script>\n\n<template>\n    <p :id=\"itemContext.formDescriptionId\" :class=\"classes\">\n        <slot />\n    </p>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/form/FormField.vue",
+      "content": "<script setup lang=\"ts\">\nimport { provide, computed } from 'vue'\nimport { useField } from 'vee-validate'\nimport { formFieldKey } from '@/components/ui/form/form-context'\n\ninterface FormFieldProps {\n    name: string\n}\n\nconst props = defineProps<FormFieldProps>()\n\nconst fieldName = computed(() => props.name)\nconst { errorMessage, value, setValue } = useField(fieldName)\n\nprovide(formFieldKey, {\n    name: props.name,\n    error: errorMessage,\n    value,\n    setValue,\n})\n</script>\n\n<template>\n    <slot />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/form/FormItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, provide, useId } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { formItemKey } from '@/components/ui/form/form-context'\n\ninterface FormItemProps {\n    class?: string\n}\n\nconst props = defineProps<FormItemProps>()\n\nconst id = useId()\n\nprovide(formItemKey, {\n    id,\n    formItemId: `${id}-form-item`,\n    formDescriptionId: `${id}-form-item-description`,\n    formMessageId: `${id}-form-item-message`,\n})\n\nconst classes = computed(() => cn('space-y-2', props.class))\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/form/FormLabel.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, inject, ref } from 'vue'\nimport { cn } from '@/lib/utils'\nimport LabelRoot from '@/components/ui/label/Label.vue'\nimport { formFieldKey, formItemKey } from '@/components/ui/form/form-context'\n\ninterface FormLabelProps {\n    class?: string\n}\n\nconst props = defineProps<FormLabelProps>()\n\nconst fieldContext = inject(formFieldKey, { name: '', error: computed(() => undefined), value: ref<unknown>(undefined), setValue: () => {} })\nconst itemContext = inject(formItemKey, { id: '', formItemId: '', formDescriptionId: '', formMessageId: '' })\n\nconst classes = computed(() =>\n    cn(\n        fieldContext.error.value && 'text-brutal-destructive',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <LabelRoot :class=\"classes\" :for=\"itemContext.formItemId\">\n        <slot />\n    </LabelRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/form/FormMessage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, inject, ref } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { formFieldKey, formItemKey } from '@/components/ui/form/form-context'\n\ninterface FormMessageProps {\n    class?: string\n}\n\nconst props = defineProps<FormMessageProps>()\n\nconst fieldContext = inject(formFieldKey, { name: '', error: computed(() => undefined), value: ref<unknown>(undefined), setValue: () => {} })\nconst itemContext = inject(formItemKey, { id: '', formItemId: '', formDescriptionId: '', formMessageId: '' })\n\nconst body = computed(() => fieldContext.error.value)\n\nconst classes = computed(() =>\n    cn('text-sm font-black text-brutal-destructive', props.class)\n)\n</script>\n\n<template>\n    <p v-if=\"body\" :id=\"itemContext.formMessageId\" role=\"alert\" :class=\"classes\">\n        {{ body }}\n    </p>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/form/form-context.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport type { FormContext as VeeFormContext } from 'vee-validate'\n\nexport interface FormFieldContext {\n    name: string\n    error: Ref<string | undefined>\n    value: Ref<unknown>\n    setValue: (value: unknown) => void\n}\n\nexport interface FormItemContext {\n    id: string\n    formItemId: string\n    formDescriptionId: string\n    formMessageId: string\n}\n\nexport const formContextKey: InjectionKey<VeeFormContext> = Symbol('formContext')\nexport const formFieldKey: InjectionKey<FormFieldContext> = Symbol('formField')\nexport const formItemKey: InjectionKey<FormItemContext> = Symbol('formItem')\n",
       "type": "registry:ui"
     }
   ],
@@ -42,7 +77,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -72,7 +111,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -82,16 +124,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

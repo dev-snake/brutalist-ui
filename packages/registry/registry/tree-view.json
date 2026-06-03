@@ -1,0 +1,113 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tree-view",
+  "type": "registry:ui",
+  "title": "Tree View",
+  "description": "A highly customizable neo-brutalist Tree View component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "reka-ui",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/tree-view/TreeView.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed, watch } from 'vue';\nimport { cn } from '@/lib/utils';\nimport TreeViewNode from '@/components/ui/tree-view/TreeViewNode.vue';\nimport { useLocale } from '@/composables/useLocale';\n\nexport interface TreeNode {\n    id: string;\n    label: string;\n    icon?: string;\n    children?: TreeNode[];\n    data?: unknown;\n}\n\ninterface TreeViewProps {\n    nodes: TreeNode[];\n    modelValue?: string | null;\n    defaultExpanded?: string[];\n    class?: string;\n}\n\nconst props = withDefaults(defineProps<TreeViewProps>(), {\n    modelValue: null,\n    defaultExpanded: () => [],\n});\n\nconst emit = defineEmits<{\n    'update:modelValue': [id: string | null];\n    'select': [node: TreeNode];\n    'expand': [id: string, expanded: boolean];\n}>();\n\nconst { t } = useLocale();\n\nconst expandedIds = ref<Set<string>>(new Set(props.defaultExpanded));\n\nwatch(() => props.defaultExpanded, (newVal) => {\n    expandedIds.value = new Set(newVal);\n});\n\nfunction toggleExpand(id: string) {\n    const next = !expandedIds.value.has(id);\n    if (next) {\n        expandedIds.value.add(id);\n    } else {\n        expandedIds.value.delete(id);\n    }\n    emit('expand', id, next);\n}\n\nfunction selectNode(node: TreeNode) {\n    emit('update:modelValue', node.id);\n    emit('select', node);\n}\n\nconst rootClass = computed(() => cn('flex flex-col gap-0.5', props.class));\n</script>\n\n<template>\n    <div :class=\"rootClass\" role=\"tree\" :aria-label=\"t('treeView.fileTree')\">\n        <TreeViewNode\n            v-for=\"node in nodes\"\n            :key=\"node.id\"\n            :node=\"node\"\n            :selected-id=\"modelValue\"\n            :expanded-ids=\"expandedIds\"\n            :depth=\"0\"\n            @toggle=\"toggleExpand\"\n            @select=\"selectNode\"\n        />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/tree-view/TreeViewNode.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\nimport { ChevronRight, File, Folder, FolderOpen } from 'lucide-vue-next';\nimport { cn } from '@/lib/utils';\nimport { treeItemVariants } from '@/components/ui/tree-view/tree-view-variants';\nimport type { TreeNode } from '@/components/ui/tree-view/TreeView.vue';\n\nconst INDENT_PER_DEPTH = 20\nconst BASE_INDENT = 4\n\ninterface TreeViewNodeProps {\n    node: TreeNode;\n    selectedId?: string | null;\n    expandedIds: Set<string>;\n    depth?: number;\n}\n\nconst props = withDefaults(defineProps<TreeViewNodeProps>(), {\n    selectedId: null,\n    depth: 0,\n});\n\nconst emit = defineEmits<{\n    'toggle': [id: string];\n    'select': [node: TreeNode];\n}>();\n\nconst isLeaf = computed(() => !props.node.children || props.node.children.length === 0);\nconst isExpanded = computed(() => props.expandedIds.has(props.node.id));\nconst isSelected = computed(() => props.selectedId === props.node.id);\n\nconst itemClass = computed(() =>\n    cn(treeItemVariants({ selected: isSelected.value }))\n);\n\nconst indentStyle = computed(() => ({\n    paddingLeft: `${props.depth * INDENT_PER_DEPTH + BASE_INDENT}px`,\n}));\n</script>\n\n<template>\n    <div role=\"treeitem\" :aria-expanded=\"!isLeaf ? isExpanded : undefined\" :aria-selected=\"isSelected\">\n        <div\n            :class=\"itemClass\"\n            :style=\"indentStyle\"\n            @click=\"isLeaf ? emit('select', node) : (emit('toggle', node.id), emit('select', node))\"\n        >\n            <ChevronRight\n                v-if=\"!isLeaf\"\n                :class=\"cn('w-4 h-4 flex-shrink-0 transition-transform duration-150', isExpanded && 'rotate-90')\"\n            />\n            <span v-else class=\"w-4 flex-shrink-0\" />\n\n            <FolderOpen v-if=\"!isLeaf && isExpanded\" class=\"w-4 h-4 flex-shrink-0 text-brutal-primary\" />\n            <Folder v-else-if=\"!isLeaf\" class=\"w-4 h-4 flex-shrink-0\" />\n            <File v-else class=\"w-4 h-4 flex-shrink-0 opacity-60\" />\n\n            <span class=\"truncate\">{{ node.label }}</span>\n        </div>\n\n        <Transition name=\"tree-expand\">\n            <div v-if=\"!isLeaf && isExpanded\" role=\"group\">\n                <TreeViewNode\n                    v-for=\"child in node.children\"\n                    :key=\"child.id\"\n                    :node=\"child\"\n                    :selected-id=\"selectedId\"\n                    :expanded-ids=\"expandedIds\"\n                    :depth=\"depth + 1\"\n                    @toggle=\"emit('toggle', $event)\"\n                    @select=\"emit('select', $event)\"\n                />\n            </div>\n        </Transition>\n    </div>\n</template>\n\n<style scoped>\n.tree-expand-enter-active,\n.tree-expand-leave-active {\n    transition: opacity 0.15s ease, grid-template-rows 0.2s ease;\n    overflow: hidden;\n    display: grid;\n    grid-template-rows: 1fr;\n}\n.tree-expand-enter-from,\n.tree-expand-leave-to {\n    opacity: 0;\n    grid-template-rows: 0fr;\n}\n</style>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/tree-view/tree-view-variants.ts",
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const treeItemVariants = cva(\n    [\n        'flex items-center gap-2 px-2 py-1.5 cursor-pointer select-none',\n        'border-3 border-transparent rounded-brutal',\n        'text-sm text-brutal-fg font-medium',\n        'transition-all duration-150',\n        'hover:border-brutal hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n    ].join(' '),\n    {\n        variants: {\n            selected: {\n                true: 'bg-brutal-primary border-brutal shadow-brutal',\n                false: '',\n            },\n        },\n        defaultVariants: {\n            selected: false,\n        },\n    }\n);\n\nexport const treeBranchLineVariants = cva(\n    'absolute left-0 top-0 bottom-0 border-l-3 border-brutal'\n);\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

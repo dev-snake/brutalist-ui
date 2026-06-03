@@ -3,15 +3,21 @@
   "name": "button",
   "type": "registry:ui",
   "title": "Button",
-  "description": "A highly customizable neo-brutalist Button component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Button component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-slot"
+    "reka-ui",
+    "lucide-vue-next"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/button.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport { Slot } from '@radix-ui/react-slot';\nimport { cva, type VariantProps } from 'class-variance-authority';\nimport { cn } from '@/lib/utils';\nimport { Loader2 } from 'lucide-react';\n\nconst buttonVariants = cva(\n    [\n        'inline-flex items-center justify-center gap-2',\n        'border-3 border-brutal rounded-brutal',\n        'font-black tracking-wide',\n        'transition-all duration-150',\n        'focus:outline-none focus:ring-2 focus:ring-brutal-ring focus:ring-offset-2',\n        'disabled:opacity-50 disabled:pointer-events-none',\n    ],\n    {\n        variants: {\n            variant: {\n                default: [\n                    'bg-brutal-bg text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                ],\n                primary: [\n                    'bg-brutal-primary text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                ],\n                secondary: [\n                    'bg-brutal-secondary text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                ],\n                accent: [\n                    'bg-brutal-accent text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                ],\n                danger: [\n                    'bg-brutal-destructive text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                ],\n                success: [\n                    'bg-brutal-success text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                ],\n                outline: [\n                    'bg-transparent text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:bg-brutal-fg hover:text-brutal-bg',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                ],\n                ghost: [\n                    'bg-transparent text-brutal-fg border-transparent',\n                    'shadow-none',\n                    'hover:bg-brutal-muted hover:border-brutal',\n                ],\n                link: [\n                    'bg-transparent text-brutal-fg border-transparent',\n                    'shadow-none underline-offset-4',\n                    'hover:underline',\n                ],\n            },\n            size: {\n                sm: 'h-9 px-3 py-1 text-sm',\n                default: 'h-11 px-5 py-2 text-base',\n                lg: 'h-12 px-8 py-3 text-lg',\n                xl: 'h-16 px-10 py-4 text-xl',\n                icon: 'h-11 w-11 p-0',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            size: 'default',\n        },\n    }\n);\n\nexport interface ButtonProps\n    extends React.ButtonHTMLAttributes<HTMLButtonElement>,\n        VariantProps<typeof buttonVariants> {\n    asChild?: boolean;\n    loading?: boolean;\n}\n\nconst Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n    (\n        {\n            className,\n            variant,\n            size,\n            asChild = false,\n            loading = false,\n            disabled,\n            children,\n            ...props\n        },\n        ref\n    ) => {\n        const Comp = asChild ? Slot : 'button';\n        const isDisabled = disabled || loading;\n\n        return (\n            <Comp\n                className={cn(buttonVariants({ variant, size, className }))}\n                ref={ref}\n                disabled={isDisabled}\n                {...props}\n            >\n                {loading ? (\n                    <>\n                        <Loader2 className=\"h-4 w-4 animate-spin\" />\n                        {children}\n                    </>\n                ) : (\n                    children\n                )}\n            </Comp>\n        );\n    }\n);\nButton.displayName = 'Button';\n\nexport { Button, buttonVariants };\n",
+      "path": "components/ui/button/Button.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { Loader2 } from 'lucide-vue-next'\nimport { Primitive } from 'reka-ui'\nimport { buttonVariants } from '@/components/ui/button/button-variants'\n\ntype ButtonVariantProps = VariantProps<typeof buttonVariants>\n\ninterface ButtonProps {\n    variant?: NonNullable<ButtonVariantProps['variant']>\n    size?: NonNullable<ButtonVariantProps['size']>\n    asChild?: boolean\n    loading?: boolean\n    disabled?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ButtonProps>(), {\n    variant: 'default',\n    size: 'default',\n    asChild: false,\n    loading: false,\n    disabled: false,\n    class: '',\n})\n\nconst isDisabled = computed(() => props.disabled || props.loading)\n\nconst classes = computed(() =>\n    cn(buttonVariants({ variant: props.variant, size: props.size }), props.class)\n)\n</script>\n\n<template>\n    <Primitive\n        :as=\"asChild ? undefined : 'button'\"\n        :as-child=\"asChild\"\n        :class=\"classes\"\n        :disabled=\"!asChild && isDisabled\"\n        :aria-disabled=\"asChild && isDisabled ? true : undefined\"\n    >\n        <Loader2 v-if=\"loading\" class=\"h-4 w-4 animate-spin\" />\n        <slot />\n    </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/button/button-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const buttonVariants = cva(\n    [\n        'inline-flex items-center justify-center gap-2',\n        'border-3 border-brutal',\n        'font-black tracking-wide',\n        'transition-all duration-150',\n        'focus:outline focus:outline-[3px] focus:outline-brutal-ring focus:outline-offset-2',\n        'disabled:opacity-50 disabled:pointer-events-none',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n    ],\n    {\n        variants: {\n            variant: {\n                default: [\n                    'bg-brutal-bg text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                ],\n                primary: [\n                    'bg-brutal-primary text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                ],\n                secondary: [\n                    'bg-brutal-secondary text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                ],\n                accent: [\n                    'bg-brutal-accent text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                ],\n                danger: [\n                    'bg-brutal-destructive text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                ],\n                success: [\n                    'bg-brutal-success text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                ],\n                outline: [\n                    'bg-transparent text-brutal-fg',\n                    'shadow-brutal',\n                    'hover:bg-brutal-fg hover:text-brutal-bg',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                ],\n                ghost: [\n                    'bg-transparent text-brutal-fg border-transparent',\n                    'shadow-none',\n                    'hover:bg-brutal-muted hover:border-brutal',\n                ],\n                link: [\n                    'bg-transparent text-brutal-fg border-transparent',\n                    'shadow-none underline-offset-4',\n                    'hover:underline',\n                ],\n            },\n            size: {\n                sm: 'h-9 px-3 py-1 text-sm',\n                default: 'h-11 px-5 py-2 text-base',\n                lg: 'h-14 px-8 py-3 text-lg',\n                xl: 'h-16 px-10 py-4 text-xl',\n                icon: 'h-11 w-11 p-0',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            size: 'default',\n        },\n    }\n)\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +43,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +77,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +90,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

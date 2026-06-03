@@ -1,0 +1,113 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel",
+  "type": "registry:ui",
+  "title": "Carousel",
+  "description": "A highly customizable neo-brutalist Carousel component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "embla-carousel-vue",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/carousel/Carousel.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed, onMounted, onUnmounted, watch } from 'vue';\nimport useEmblaCarousel from 'embla-carousel-vue';\nimport { ChevronLeft, ChevronRight } from 'lucide-vue-next';\nimport { cn } from '@/lib/utils';\nimport { carouselRootVariants, carouselButtonVariants } from '@/components/ui/carousel/carousel-variants';\nimport { useLocale } from '@/composables/useLocale';\n\nconst { t } = useLocale();\n\nconst DEFAULT_AUTOPLAY_DELAY = 3000\n\ninterface CarouselProps {\n    loop?: boolean;\n    autoplay?: boolean;\n    autoplayDelay?: number;\n    showArrows?: boolean;\n    showDots?: boolean;\n    size?: 'sm' | 'md' | 'lg' | 'full' | 'auto';\n    class?: string;\n}\n\nconst props = withDefaults(defineProps<CarouselProps>(), {\n    loop: false,\n    autoplay: false,\n    autoplayDelay: DEFAULT_AUTOPLAY_DELAY,\n    showArrows: true,\n    showDots: true,\n    size: 'auto',\n});\n\nconst [emblaRef, emblaApi] = useEmblaCarousel({ loop: props.loop });\n\nconst selectedIndex = ref(0);\nconst scrollSnaps = ref<number[]>([]);\nlet autoplayTimer: ReturnType<typeof setInterval> | null = null;\n\nconst canScrollPrev = computed(() => props.loop || selectedIndex.value > 0);\nconst canScrollNext = computed(() => props.loop || selectedIndex.value < scrollSnaps.value.length - 1);\n\nfunction onInit() {\n    if (!emblaApi.value) return;\n    scrollSnaps.value = emblaApi.value.scrollSnapList();\n    selectedIndex.value = emblaApi.value.selectedScrollSnap();\n}\n\nfunction onSelect() {\n    if (!emblaApi.value) return;\n    selectedIndex.value = emblaApi.value.selectedScrollSnap();\n}\n\nfunction scrollPrev() {\n    emblaApi.value?.scrollPrev();\n}\n\nfunction scrollNext() {\n    emblaApi.value?.scrollNext();\n}\n\nfunction scrollTo(index: number) {\n    emblaApi.value?.scrollTo(index);\n}\n\nfunction startAutoplay() {\n    stopAutoplay();\n    if (!props.autoplay) return;\n    autoplayTimer = setInterval(() => {\n        if (emblaApi.value) {\n            if (!props.loop && selectedIndex.value === scrollSnaps.value.length - 1) {\n                emblaApi.value.scrollTo(0);\n            } else {\n                emblaApi.value.scrollNext();\n            }\n        }\n    }, props.autoplayDelay);\n}\n\nfunction stopAutoplay() {\n    if (autoplayTimer) {\n        clearInterval(autoplayTimer);\n        autoplayTimer = null;\n    }\n}\n\nonMounted(() => {\n    if (!emblaApi.value) return;\n    emblaApi.value.on('init', onInit);\n    emblaApi.value.on('select', onSelect);\n    emblaApi.value.on('reInit', onInit);\n    onInit();\n    startAutoplay();\n});\n\nwatch(() => props.autoplay, (val) => {\n    if (val) startAutoplay();\n    else stopAutoplay();\n});\n\nwatch(() => props.loop, () => {\n    if (emblaApi.value) emblaApi.value.reInit({ loop: props.loop });\n});\n\nwatch(() => props.autoplayDelay, () => {\n    if (props.autoplay) startAutoplay();\n});\n\nonUnmounted(() => {\n    stopAutoplay();\n});\n\nconst rootClass = computed(() =>\n    cn(carouselRootVariants({ size: props.size }), props.class)\n);\n\nconst prevButtonClass = computed(() =>\n    cn(carouselButtonVariants({ direction: 'prev' }))\n);\n\nconst nextButtonClass = computed(() =>\n    cn(carouselButtonVariants({ direction: 'next' }))\n);\n\nconst dotActiveClasses = cn(\n    'w-3 h-3 border-3 border-brutal rounded-brutal cursor-pointer transition-all duration-150',\n    'bg-brutal-primary shadow-brutal'\n)\n\nconst dotInactiveClasses = cn(\n    'w-3 h-3 border-3 border-brutal rounded-brutal cursor-pointer transition-all duration-150',\n    'bg-brutal-bg hover:bg-brutal-muted'\n);\n</script>\n\n<template>\n    <div :class=\"rootClass\" @mouseenter=\"stopAutoplay\" @mouseleave=\"startAutoplay\">\n        <div ref=\"emblaRef\" class=\"overflow-hidden h-full\">\n            <div class=\"flex h-full\">\n                <slot />\n            </div>\n        </div>\n\n        <button\n            v-if=\"showArrows\"\n            type=\"button\"\n            :class=\"prevButtonClass\"\n            :disabled=\"!canScrollPrev\"\n            :aria-label=\"t('carousel.previousSlide')\"\n            @click=\"scrollPrev\"\n        >\n            <ChevronLeft class=\"w-5 h-5\" />\n        </button>\n\n        <button\n            v-if=\"showArrows\"\n            type=\"button\"\n            :class=\"nextButtonClass\"\n            :disabled=\"!canScrollNext\"\n            :aria-label=\"t('carousel.nextSlide')\"\n            @click=\"scrollNext\"\n        >\n            <ChevronRight class=\"w-5 h-5\" />\n        </button>\n\n        <div\n            v-if=\"showDots && scrollSnaps.length > 1\"\n            class=\"absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10\"\n        >\n            <button\n                v-for=\"(_, i) in scrollSnaps\"\n                :key=\"i\"\n                type=\"button\"\n                :aria-label=\"t('carousel.goToSlide', { index: i + 1 })\"\n                :class=\"i === selectedIndex ? dotActiveClasses : dotInactiveClasses\"\n                @click=\"scrollTo(i)\"\n            />\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/carousel/CarouselItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\nimport { cn } from '@/lib/utils';\n\ninterface CarouselItemProps {\n    class?: string;\n}\n\nconst props = withDefaults(defineProps<CarouselItemProps>(), {});\n\nconst itemClass = computed(() =>\n    cn('flex-none w-full h-full', props.class)\n);\n</script>\n\n<template>\n    <div :class=\"itemClass\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/carousel/carousel-variants.ts",
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const carouselRootVariants = cva(\n    'relative overflow-hidden border-3 border-brutal shadow-brutal rounded-brutal',\n    {\n        variants: {\n            size: {\n                sm: 'h-48',\n                md: 'h-64',\n                lg: 'h-96',\n                full: 'h-full',\n                auto: '',\n            },\n        },\n        defaultVariants: {\n            size: 'auto',\n        },\n    }\n);\n\nexport const carouselButtonVariants = cva(\n    [\n        'absolute z-10 top-1/2 -translate-y-1/2',\n        'flex items-center justify-center',\n        'bg-brutal-bg border-3 border-brutal shadow-brutal rounded-brutal',\n        'w-10 h-10 cursor-pointer',\n        'transition-all duration-150',\n        'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-[calc(50%+2px)]',\n        'active:translate-y-[calc(-50%+var(--brutal-pressed-offset,2px))] active:shadow-none',\n        'disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-brutal',\n    ].join(' '),\n    {\n        variants: {\n            direction: {\n                prev: 'left-2',\n                next: 'right-2',\n            },\n        },\n        defaultVariants: {\n            direction: 'prev',\n        },\n    }\n);\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

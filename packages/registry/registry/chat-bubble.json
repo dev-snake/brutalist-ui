@@ -1,0 +1,108 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-bubble",
+  "type": "registry:ui",
+  "title": "Chat Bubble",
+  "description": "A highly customizable neo-brutalist Chat Bubble component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "reka-ui",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/chat-bubble/ChatBubble.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue';\nimport { cn } from '@/lib/utils';\nimport { chatBubbleVariants, chatAvatarVariants } from '@/components/ui/chat-bubble/chat-bubble-variants';\n\ninterface ChatMessage {\n    id: string;\n    content: string;\n    variant?: 'sent' | 'received' | 'system';\n    avatar?: string;\n    name?: string;\n    timestamp?: string;\n}\n\ninterface ChatBubbleProps {\n    message: ChatMessage;\n    showAvatar?: boolean;\n    class?: string;\n}\n\nconst props = withDefaults(defineProps<ChatBubbleProps>(), {\n    showAvatar: true,\n});\n\nconst isSent = computed(() => props.message.variant === 'sent');\nconst isSystem = computed(() => props.message.variant === 'system');\n\nconst wrapperClass = computed(() =>\n    cn(\n        'flex gap-2 w-full',\n        isSent.value ? 'flex-row-reverse' : 'flex-row',\n        isSystem.value ? 'justify-center' : '',\n    )\n);\n\nconst bubbleClass = computed(() =>\n    cn(chatBubbleVariants({ variant: props.message.variant ?? 'received' }), props.class)\n);\n\nconst avatarClass = computed(() => cn(chatAvatarVariants()));\n\nconst initials = computed(() => {\n    const name = props.message.name ?? '?';\n    return name.slice(0, 2).toUpperCase();\n});\n</script>\n\n<template>\n    <div :class=\"wrapperClass\">\n        <!-- Avatar -->\n        <div\n            v-if=\"showAvatar && !isSystem\"\n            :class=\"avatarClass\"\n            :title=\"message.name\"\n        >\n            <img\n                v-if=\"message.avatar\"\n                :src=\"message.avatar\"\n                :alt=\"message.name\"\n                class=\"w-full h-full object-cover rounded-brutal\"\n            />\n            <span v-else>{{ initials }}</span>\n        </div>\n\n        <!-- Content -->\n        <div :class=\"cn('flex flex-col gap-1', isSent ? 'items-end' : 'items-start')\">\n            <span v-if=\"message.name && !isSystem\" class=\"text-xs font-bold text-brutal-fg opacity-60 px-1\">\n                {{ message.name }}\n            </span>\n            <div :class=\"bubbleClass\">\n                <slot>{{ message.content }}</slot>\n            </div>\n            <span v-if=\"message.timestamp\" class=\"text-xs opacity-40 font-medium px-1\">\n                {{ message.timestamp }}\n            </span>\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/chat-bubble/chat-bubble-variants.ts",
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const chatBubbleVariants = cva(\n    [\n        'relative max-w-[75%] px-4 py-2.5',\n        'border-3 border-brutal rounded-brutal',\n        'text-sm font-medium leading-relaxed',\n        'shadow-brutal',\n    ].join(' '),\n    {\n        variants: {\n            variant: {\n                sent: 'bg-brutal-primary text-brutal-fg ml-auto',\n                received: 'bg-brutal-bg text-brutal-fg mr-auto',\n                system: 'bg-brutal-muted text-brutal-fg mx-auto text-center text-xs italic border-dashed shadow-none',\n            },\n        },\n        defaultVariants: {\n            variant: 'received',\n        },\n    }\n);\n\nexport const chatAvatarVariants = cva(\n    [\n        'flex-shrink-0 w-8 h-8 rounded-brutal border-3 border-brutal',\n        'flex items-center justify-center font-bold text-xs',\n        'bg-brutal-secondary text-brutal-fg',\n    ].join(' ')\n);\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

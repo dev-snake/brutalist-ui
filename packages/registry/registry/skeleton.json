@@ -3,13 +3,38 @@
   "name": "skeleton",
   "type": "registry:ui",
   "title": "Skeleton",
-  "description": "A highly customizable neo-brutalist Skeleton component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Skeleton component built with Brutx design tokens for Vue 3.",
   "dependencies": [],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/skeleton.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport { cva, type VariantProps } from 'class-variance-authority';\nimport { cn } from '@/lib/utils';\n\nconst skeletonVariants = cva(['animate-pulse', 'border-3 border-brutal'], {\n    variants: {\n        variant: {\n            default: 'bg-gray-200 dark:bg-gray-800',\n            primary: 'bg-[#FF6B6B]/30',\n            secondary: 'bg-[#4ECDC4]/30',\n            accent: 'bg-[#FFE66D]/30',\n        },\n    },\n    defaultVariants: {\n        variant: 'default',\n    },\n});\n\nexport interface SkeletonProps\n    extends React.HTMLAttributes<HTMLDivElement>,\n        VariantProps<typeof skeletonVariants> {}\n\nconst Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(\n    ({ className, variant, ...props }, ref) => {\n        return (\n            <div ref={ref} className={cn(skeletonVariants({ variant, className }))} {...props} />\n        );\n    }\n);\nSkeleton.displayName = 'Skeleton';\n\nconst SkeletonText = React.forwardRef<\n    HTMLDivElement,\n    SkeletonProps & { lines?: number; lastLineWidth?: string }\n>(({ className, lines = 3, lastLineWidth = '60%', variant, ...props }, ref) => {\n    return (\n        <div ref={ref} className={cn('space-y-2', className)} {...props}>\n            {Array.from({ length: lines }).map((_, index) => (\n                <Skeleton\n                    key={index}\n                    variant={variant}\n                    className=\"h-4\"\n                    style={{\n                        width: index === lines - 1 ? lastLineWidth : '100%',\n                    }}\n                />\n            ))}\n        </div>\n    );\n});\nSkeletonText.displayName = 'SkeletonText';\n\nconst SkeletonAvatar = React.forwardRef<\n    HTMLDivElement,\n    SkeletonProps & { size?: 'sm' | 'default' | 'lg' | 'xl' }\n>(({ className, size = 'default', variant, ...props }, ref) => {\n    const sizeClasses = {\n        sm: 'h-8 w-8',\n        default: 'h-10 w-10',\n        lg: 'h-12 w-12',\n        xl: 'h-16 w-16',\n    };\n\n    return (\n        <Skeleton\n            ref={ref}\n            variant={variant}\n            className={cn(sizeClasses[size], className)}\n            {...props}\n        />\n    );\n});\nSkeletonAvatar.displayName = 'SkeletonAvatar';\n\nconst SkeletonCard = React.forwardRef<HTMLDivElement, SkeletonProps>(\n    ({ className, variant, ...props }, ref) => {\n        return (\n            <div\n                ref={ref}\n                className={cn(\n                    'p-4 border-3 border-brutal shadow-brutal',\n                    'bg-white dark:bg-gray-900',\n                    className\n                )}\n                {...props}\n            >\n                <div className=\"space-y-4\">\n                    <Skeleton variant={variant} className=\"h-32 w-full\" />\n                    <Skeleton variant={variant} className=\"h-6 w-3/4\" />\n                    <SkeletonText variant={variant} lines={2} />\n                    <div className=\"flex gap-2\">\n                        <Skeleton variant={variant} className=\"h-10 w-24\" />\n                        <Skeleton variant={variant} className=\"h-10 w-24\" />\n                    </div>\n                </div>\n            </div>\n        );\n    }\n);\nSkeletonCard.displayName = 'SkeletonCard';\n\nconst SkeletonTable = React.forwardRef<\n    HTMLDivElement,\n    SkeletonProps & { rows?: number; columns?: number }\n>(({ className, rows = 5, columns = 4, variant, ...props }, ref) => {\n    return (\n        <div\n            ref={ref}\n            className={cn('border-3 border-brutal overflow-hidden', className)}\n            {...props}\n        >\n            <div className=\"flex bg-[#FFE66D] border-b-3 border-brutal\">\n                {Array.from({ length: columns }).map((_, index) => (\n                    <div\n                        key={`header-${index}`}\n                        className={cn(\n                            'flex-1 p-3',\n                            index < columns - 1 && 'border-r-3 border-brutal'\n                        )}\n                    >\n                        <Skeleton variant={variant} className=\"h-5 w-3/4 bg-black/20\" />\n                    </div>\n                ))}\n            </div>\n            {Array.from({ length: rows }).map((_, rowIndex) => (\n                <div\n                    key={`row-${rowIndex}`}\n                    className={cn(\n                        'flex',\n                        rowIndex < rows - 1 && 'border-b-3 border-brutal',\n                        rowIndex % 2 === 1 && 'bg-gray-50 dark:bg-gray-800'\n                    )}\n                >\n                    {Array.from({ length: columns }).map((_, colIndex) => (\n                        <div\n                            key={`cell-${rowIndex}-${colIndex}`}\n                            className={cn(\n                                'flex-1 p-3',\n                                colIndex < columns - 1 &&\n                                    'border-r-3 border-brutal'\n                            )}\n                        >\n                            <Skeleton\n                                variant={variant}\n                                className=\"h-4\"\n                                style={{ width: `${60 + Math.random() * 30}%` }}\n                            />\n                        </div>\n                    ))}\n                </div>\n            ))}\n        </div>\n    );\n});\nSkeletonTable.displayName = 'SkeletonTable';\n\nexport { Skeleton, SkeletonText, SkeletonAvatar, SkeletonCard, SkeletonTable, skeletonVariants };\n",
+      "path": "components/ui/skeleton/Skeleton.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { skeletonVariants } from '@/components/ui/skeleton/skeleton-variants'\n\ntype SkeletonVariantProps = VariantProps<typeof skeletonVariants>\n\ninterface SkeletonProps {\n    variant?: NonNullable<SkeletonVariantProps['variant']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SkeletonProps>(), {\n    variant: 'default',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(skeletonVariants({ variant: props.variant }), props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/skeleton/SkeletonAvatar.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { skeletonVariants } from '@/components/ui/skeleton/skeleton-variants'\nimport Skeleton from '@/components/ui/skeleton/Skeleton.vue'\n\ntype SkeletonVariantProps = VariantProps<typeof skeletonVariants>\n\ninterface SkeletonAvatarProps {\n    variant?: NonNullable<SkeletonVariantProps['variant']>\n    size?: 'sm' | 'default' | 'lg' | 'xl'\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SkeletonAvatarProps>(), {\n    variant: 'default',\n    size: 'default',\n    class: '',\n})\n\nconst sizeClasses: Record<string, string> = {\n    sm: 'h-8 w-8',\n    default: 'h-10 w-10',\n    lg: 'h-12 w-12',\n    xl: 'h-16 w-16',\n}\n\nconst classes = computed(() => cn(sizeClasses[props.size], props.class))\n</script>\n\n<template>\n    <Skeleton :variant=\"variant\" :class=\"classes\" />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/skeleton/SkeletonCard.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { skeletonVariants } from '@/components/ui/skeleton/skeleton-variants'\nimport Skeleton from '@/components/ui/skeleton/Skeleton.vue'\nimport SkeletonText from '@/components/ui/skeleton/SkeletonText.vue'\n\ntype SkeletonVariantProps = VariantProps<typeof skeletonVariants>\n\ninterface SkeletonCardProps {\n    variant?: NonNullable<SkeletonVariantProps['variant']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SkeletonCardProps>(), {\n    variant: 'default',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn('p-4 border-3 border-brutal shadow-brutal bg-brutal-bg', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <div class=\"space-y-4\">\n            <Skeleton :variant=\"variant\" class=\"h-32 w-full\" />\n            <Skeleton :variant=\"variant\" class=\"h-6 w-3/4\" />\n            <SkeletonText :variant=\"variant\" :lines=\"2\" />\n            <div class=\"flex gap-2\">\n                <Skeleton :variant=\"variant\" class=\"h-10 w-24\" />\n                <Skeleton :variant=\"variant\" class=\"h-10 w-24\" />\n            </div>\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/skeleton/SkeletonTable.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { skeletonVariants } from '@/components/ui/skeleton/skeleton-variants'\nimport Skeleton from '@/components/ui/skeleton/Skeleton.vue'\n\ntype SkeletonVariantProps = VariantProps<typeof skeletonVariants>\n\ninterface SkeletonTableProps {\n    variant?: NonNullable<SkeletonVariantProps['variant']>\n    rows?: number\n    columns?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SkeletonTableProps>(), {\n    variant: 'default',\n    rows: 5,\n    columns: 4,\n    class: '',\n})\n\nconst DEFAULT_CELL_WIDTH_RATIOS = [0.85, 0.7, 0.9, 0.65]\nconst FALLBACK_CELL_WIDTH_RATIO = 0.75\n\nconst containerClasses = computed(() =>\n    cn('border-3 border-brutal overflow-hidden', props.class)\n)\n\nconst headerCellClasses = computed(() =>\n    Array.from({ length: props.columns }, (_, i) =>\n        cn('flex-1 p-3', i < props.columns - 1 && 'border-r-3 border-brutal')\n    )\n)\n\nconst rowClasses = computed(() =>\n    Array.from({ length: props.rows }, (_, i) =>\n        cn('flex', i < props.rows - 1 && 'border-b-3 border-brutal', i % 2 === 0 && 'bg-brutal-muted')\n    )\n)\n\nconst cellClasses = computed(() =>\n    Array.from({ length: props.columns }, (_, i) =>\n        cn('flex-1 p-3', i < props.columns - 1 && 'border-r-3 border-brutal')\n    )\n)\n</script>\n\n<template>\n    <div :class=\"containerClasses\">\n        <div class=\"flex bg-brutal-accent border-b-3 border-brutal\">\n            <div\n                v-for=\"(headerClass, colIndex) in headerCellClasses\"\n                :key=\"`header-${colIndex}`\"\n                :class=\"headerClass\"\n            >\n                <Skeleton :variant=\"variant\" class=\"h-5 w-3/4 bg-brutal-fg/20\" />\n            </div>\n        </div>\n        <div\n            v-for=\"(rowClass, rowIndex) in rowClasses\"\n            :key=\"`row-${rowIndex}`\"\n            :class=\"rowClass\"\n        >\n            <div\n                v-for=\"(cellClass, colIndex) in cellClasses\"\n                :key=\"`cell-${rowIndex}-${colIndex}`\"\n                :class=\"cellClass\"\n            >\n                <Skeleton\n                    :variant=\"variant\"\n                    class=\"h-4\"\n                    :style=\"{ width: `${(DEFAULT_CELL_WIDTH_RATIOS[colIndex % DEFAULT_CELL_WIDTH_RATIOS.length] ?? FALLBACK_CELL_WIDTH_RATIO) * 100}%` }\"\n                />\n            </div>\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/skeleton/SkeletonText.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { skeletonVariants } from '@/components/ui/skeleton/skeleton-variants'\nimport Skeleton from '@/components/ui/skeleton/Skeleton.vue'\n\ntype SkeletonVariantProps = VariantProps<typeof skeletonVariants>\n\ninterface SkeletonTextProps {\n    variant?: NonNullable<SkeletonVariantProps['variant']>\n    lines?: number\n    lastLineWidth?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SkeletonTextProps>(), {\n    variant: 'default',\n    lines: 3,\n    lastLineWidth: '60%',\n    class: '',\n})\n\nconst classes = computed(() => cn('space-y-2', props.class))\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <Skeleton\n            v-for=\"index in props.lines\"\n            :key=\"index\"\n            :variant=\"variant\"\n            class=\"h-4\"\n            :style=\"{ width: index === props.lines ? props.lastLineWidth : '100%' }\"\n        />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/skeleton/skeleton-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const skeletonVariants = cva(\n    ['animate-pulse', 'border-3 border-brutal'],\n    {\n        variants: {\n            variant: {\n                default: 'bg-brutal-muted',\n                primary: 'bg-brutal-primary/30',\n                secondary: 'bg-brutal-secondary/30',\n                accent: 'bg-brutal-accent/30',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n        },\n    }\n)\n",
       "type": "registry:ui"
     }
   ],
@@ -35,7 +60,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -65,7 +94,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -75,16 +107,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

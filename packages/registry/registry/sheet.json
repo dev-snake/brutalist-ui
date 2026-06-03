@@ -3,16 +3,41 @@
   "name": "sheet",
   "type": "registry:ui",
   "title": "Sheet",
-  "description": "A highly customizable neo-brutalist Sheet component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Sheet component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-dialog",
-    "lucide-react"
+    "reka-ui",
+    "lucide-vue-next"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/sheet.tsx",
-      "content": "import * as React from 'react';\nimport * as SheetPrimitive from '@radix-ui/react-dialog';\nimport { cva, type VariantProps } from 'class-variance-authority';\nimport { X } from 'lucide-react';\n\nimport { cn } from '@/lib/utils';\n\nconst Sheet = SheetPrimitive.Root;\nconst SheetTrigger = SheetPrimitive.Trigger;\nconst SheetClose = SheetPrimitive.Close;\nconst SheetPortal = SheetPrimitive.Portal;\n\nconst SheetOverlay = React.forwardRef<\n    React.ElementRef<typeof SheetPrimitive.Overlay>,\n    React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>\n>(({ className, ...props }, ref) => (\n    <SheetPrimitive.Overlay\n        ref={ref}\n        className={cn(\n            'fixed inset-0 z-50 bg-black/50',\n            'data-[state=open]:animate-in data-[state=closed]:animate-out',\n            'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n            className\n        )}\n        {...props}\n    />\n));\nSheetOverlay.displayName = SheetPrimitive.Overlay.displayName;\n\nconst sheetVariants = cva(\n    'fixed z-50 gap-4 bg-brutal-bg p-6 border-brutal border-3 text-brutal-fg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',\n    {\n        variants: {\n            side: {\n                top: 'inset-x-0 top-0 border-b-3 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',\n                bottom: 'inset-x-0 bottom-0 border-t-3 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',\n                left: 'inset-y-0 left-0 h-full w-3/4 border-r-3 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',\n                right: 'inset-y-0 right-0 h-full w-3/4 border-l-3 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',\n            },\n        },\n        defaultVariants: {\n            side: 'right',\n        },\n    }\n);\n\ninterface SheetContentProps\n    extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,\n        VariantProps<typeof sheetVariants> {}\n\nconst SheetContent = React.forwardRef<\n    React.ElementRef<typeof SheetPrimitive.Content>,\n    SheetContentProps\n>(({ side = 'right', className, children, ...props }, ref) => (\n    <SheetPortal>\n        <SheetOverlay />\n        <SheetPrimitive.Content\n            ref={ref}\n            className={cn(sheetVariants({ side }), className)}\n            {...props}\n        >\n            {children}\n            <SheetPrimitive.Close\n                className={cn(\n                    'absolute right-4 top-4',\n                    'h-8 w-8 flex items-center justify-center',\n                    'border-3 border-brutal bg-brutal-bg text-brutal-fg',\n                    'shadow-brutal-sm',\n                    'transition-all duration-150',\n                    'hover:bg-brutal-destructive hover:text-brutal-fg',\n                    'hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                    'focus:outline-none focus:ring-2 focus:ring-brutal-ring focus:ring-offset-2'\n                )}\n            >\n                <X className=\"h-4 w-4 stroke-[3]\" />\n                <span className=\"sr-only\">Close</span>\n            </SheetPrimitive.Close>\n        </SheetPrimitive.Content>\n    </SheetPortal>\n));\nSheetContent.displayName = SheetPrimitive.Content.displayName;\n\nconst SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n    <div\n        className={cn('flex flex-col space-y-2 pb-4 border-b-3 border-brutal', className)}\n        {...props}\n    />\n);\nSheetHeader.displayName = 'SheetHeader';\n\nconst SheetFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n    <div\n        className={cn(\n            'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 pt-4 border-t-3 border-brutal',\n            className\n        )}\n        {...props}\n    />\n);\nSheetFooter.displayName = 'SheetFooter';\n\nconst SheetTitle = React.forwardRef<\n    React.ElementRef<typeof SheetPrimitive.Title>,\n    React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>\n>(({ className, ...props }, ref) => (\n    <SheetPrimitive.Title\n        ref={ref}\n        className={cn('text-lg font-black tracking-tight text-brutal-fg', className)}\n        {...props}\n    />\n));\nSheetTitle.displayName = SheetPrimitive.Title.displayName;\n\nconst SheetDescription = React.forwardRef<\n    React.ElementRef<typeof SheetPrimitive.Description>,\n    React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>\n>(({ className, ...props }, ref) => (\n    <SheetPrimitive.Description\n        ref={ref}\n        className={cn('text-sm text-gray-600 dark:text-gray-400 font-medium', className)}\n        {...props}\n    />\n));\nSheetDescription.displayName = SheetPrimitive.Description.displayName;\n\nexport {\n    Sheet,\n    SheetPortal,\n    SheetOverlay,\n    SheetTrigger,\n    SheetClose,\n    SheetContent,\n    SheetHeader,\n    SheetFooter,\n    SheetTitle,\n    SheetDescription,\n};\n",
+      "path": "components/ui/sheet/SheetContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    DialogPortal as DialogPortalPrimitive,\n    DialogOverlay as DialogOverlayPrimitive,\n    DialogContent as DialogContentPrimitive,\n    DialogClose as DialogClosePrimitive,\n} from 'reka-ui'\nimport { type VariantProps } from 'class-variance-authority'\nimport { X } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { sheetVariants } from '@/components/ui/sheet/sheet-variants'\nimport { useLocale } from '@/composables/useLocale'\n\ntype SheetVariantProps = VariantProps<typeof sheetVariants>\n\ninterface SheetContentProps {\n    side?: NonNullable<SheetVariantProps['side']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SheetContentProps>(), {\n    side: 'right',\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst overlayClasses = computed(() =>\n    cn(\n        'fixed inset-0 z-50 bg-brutal-overlay',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'\n    )\n)\n\nconst contentClasses = computed(() =>\n    cn(sheetVariants({ side: props.side }), props.class)\n)\n\nconst closeClasses = computed(() =>\n    cn(\n        'absolute right-4 top-4',\n        'h-8 w-8 flex items-center justify-center',\n        'border-3 border-brutal bg-brutal-bg text-brutal-fg',\n        'shadow-brutal-sm',\n        'transition-all duration-150',\n        'hover:bg-brutal-destructive hover:text-brutal-fg',\n        'hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'focus:outline-none focus:ring-2 focus:ring-brutal-ring focus:ring-offset-2'\n    )\n)\n</script>\n\n<template>\n    <DialogPortalPrimitive>\n        <DialogOverlayPrimitive :class=\"overlayClasses\" />\n        <DialogContentPrimitive :class=\"contentClasses\">\n            <slot />\n            <DialogClosePrimitive :class=\"closeClasses\">\n                <X class=\"h-4 w-4 stroke-[3]\" />\n                <span class=\"sr-only\">{{ t('sheet.close') }}</span>\n            </DialogClosePrimitive>\n        </DialogContentPrimitive>\n    </DialogPortalPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/sheet/SheetDescription.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DialogDescription as DialogDescriptionPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface SheetDescriptionProps {\n    class?: string\n}\n\nconst props = defineProps<SheetDescriptionProps>()\n\nconst classes = computed(() =>\n    cn('text-sm text-brutal-muted-foreground font-medium', props.class)\n)\n</script>\n\n<template>\n    <DialogDescriptionPrimitive :class=\"classes\">\n        <slot />\n    </DialogDescriptionPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/sheet/SheetFooter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface SheetFooterProps {\n    class?: string\n}\n\nconst props = defineProps<SheetFooterProps>()\n\nconst classes = computed(() =>\n    cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 pt-4 border-t-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/sheet/SheetHeader.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface SheetHeaderProps {\n    class?: string\n}\n\nconst props = defineProps<SheetHeaderProps>()\n\nconst classes = computed(() =>\n    cn('flex flex-col space-y-2 pb-4 border-b-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/sheet/SheetTitle.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DialogTitle as DialogTitlePrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface SheetTitleProps {\n    class?: string\n}\n\nconst props = defineProps<SheetTitleProps>()\n\nconst classes = computed(() =>\n    cn('text-lg font-black tracking-tight text-brutal-fg', props.class)\n)\n</script>\n\n<template>\n    <DialogTitlePrimitive :class=\"classes\">\n        <slot />\n    </DialogTitlePrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/sheet/sheet-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const sheetVariants = cva(\n    'fixed z-50 gap-4 bg-brutal-bg p-6 border-brutal border-3 rounded-brutal shadow-brutal-xl text-brutal-fg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',\n    {\n        variants: {\n            side: {\n                top: 'inset-x-0 top-0 border-b-3 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',\n                bottom: 'inset-x-0 bottom-0 border-t-3 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',\n                left: 'inset-y-0 left-0 h-full w-3/4 border-r-3 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',\n                right: 'inset-y-0 right-0 h-full w-3/4 border-l-3 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',\n            },\n        },\n        defaultVariants: {\n            side: 'right',\n        },\n    }\n)\n",
       "type": "registry:ui"
     }
   ],
@@ -38,7 +63,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -68,7 +97,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -78,16 +110,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

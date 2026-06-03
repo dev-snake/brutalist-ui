@@ -1,0 +1,106 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stepper-section",
+  "type": "registry:ui",
+  "title": "Stepper Section",
+  "description": "A highly customizable neo-brutalist Stepper Section component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "stepper",
+    "button",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "components/ui/stepper-section/StepperSection.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { ChevronLeft, ChevronRight } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Stepper from '@/components/ui/stepper/Stepper.vue'\nimport Button from '@/components/ui/button/Button.vue'\nimport Card from '@/components/ui/card/Card.vue'\n\nexport interface StepperStepItem {\n    title: string\n    description?: string\n}\n\ninterface StepperSectionProps {\n    title?: string\n    steps?: StepperStepItem[]\n    currentStep?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<StepperSectionProps>(), {\n    title: undefined,\n    steps: () => [],\n    currentStep: 0,\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'step-click': [index: number]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('stepperSection.defaultTitle'))\nconst resolvedPrevious = computed(() => t('stepperSection.previous'))\nconst resolvedNext = computed(() => t('stepperSection.next'))\n\nconst stepperSteps = computed(() =>\n    props.steps.map((step, index) => ({\n        id: index,\n        title: step.title,\n        description: step.description,\n    }))\n)\n\nconst canGoPrevious = computed(() => props.currentStep > 0)\nconst canGoNext = computed(() => props.currentStep < props.steps.length - 1)\n\nconst rootClasses = computed(() => cn('w-full max-w-3xl mx-auto', props.class))\n\nfunction handleStepClick(index: number) {\n    emit('step-click', index)\n}\n\nfunction handlePrevious() {\n    if (canGoPrevious.value) {\n        emit('step-click', props.currentStep - 1)\n    }\n}\n\nfunction handleNext() {\n    if (canGoNext.value) {\n        emit('step-click', props.currentStep + 1)\n    }\n}\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <slot name=\"header\">\n            <div class=\"text-center mb-8\">\n                <h2 class=\"text-3xl font-black tracking-tight\">\n                    {{ resolvedTitle }}\n                </h2>\n            </div>\n        </slot>\n\n        <slot>\n            <Stepper\n                :steps=\"stepperSteps\"\n                :model-value=\"currentStep\"\n                orientation=\"horizontal\"\n                @step-click=\"handleStepClick\"\n            />\n\n            <Card variant=\"default\" class=\"mt-6\">\n                <div class=\"p-6\">\n                    <slot name=\"default\" />\n                </div>\n            </Card>\n\n            <div class=\"flex items-center justify-between mt-6\">\n                <Button\n                    variant=\"outline\"\n                    :disabled=\"!canGoPrevious\"\n                    @click=\"handlePrevious\"\n                >\n                    <ChevronLeft class=\"h-4 w-4 mr-1\" />\n                    {{ resolvedPrevious }}\n                </Button>\n                <Button\n                    variant=\"primary\"\n                    :disabled=\"!canGoNext\"\n                    @click=\"handleNext\"\n                >\n                    {{ resolvedNext }}\n                    <ChevronRight class=\"h-4 w-4 ml-1\" />\n                </Button>\n            </div>\n        </slot>\n\n        <slot name=\"footer\" />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

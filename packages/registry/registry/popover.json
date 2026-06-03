@@ -3,15 +3,15 @@
   "name": "popover",
   "type": "registry:ui",
   "title": "Popover",
-  "description": "A highly customizable neo-brutalist Popover component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Popover component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-popover"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/popover.tsx",
-      "content": "import * as React from 'react';\nimport * as PopoverPrimitive from '@radix-ui/react-popover';\nimport { cn } from '@/lib/utils';\n\nconst Popover = PopoverPrimitive.Root;\nconst PopoverTrigger = PopoverPrimitive.Trigger;\nconst PopoverAnchor = PopoverPrimitive.Anchor;\n\nconst PopoverContent = React.forwardRef<\n    React.ElementRef<typeof PopoverPrimitive.Content>,\n    React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>\n>(({ className, align = 'center', sideOffset = 8, ...props }, ref) => (\n    <PopoverPrimitive.Portal>\n        <PopoverPrimitive.Content\n            ref={ref}\n            align={align}\n            sideOffset={sideOffset}\n            className={cn(\n                'z-50 w-72 p-4',\n                'bg-white dark:bg-gray-900 border-3 border-brutal shadow-brutal dark:text-white',\n                'outline-none',\n                'data-[state=open]:animate-in data-[state=closed]:animate-out',\n                'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n                'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n                'data-[side=bottom]:slide-in-from-top-2',\n                'data-[side=left]:slide-in-from-right-2',\n                'data-[side=right]:slide-in-from-left-2',\n                'data-[side=top]:slide-in-from-bottom-2',\n                className\n            )}\n            {...props}\n        />\n    </PopoverPrimitive.Portal>\n));\nPopoverContent.displayName = PopoverPrimitive.Content.displayName;\n\nexport { Popover, PopoverTrigger, PopoverContent, PopoverAnchor };\n",
+      "path": "components/ui/popover/PopoverContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    PopoverPortal as PopoverPortalPrimitive,\n    PopoverContent as PopoverContentPrimitive,\n} from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface PopoverContentProps {\n    align?: 'center' | 'start' | 'end'\n    sideOffset?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<PopoverContentProps>(), {\n    align: 'center',\n    sideOffset: 8,\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(\n        'z-50 w-72 p-4',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal shadow-brutal rounded-brutal',\n        'outline-none',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n        'data-[side=bottom]:slide-in-from-top-2',\n        'data-[side=left]:slide-in-from-right-2',\n        'data-[side=right]:slide-in-from-left-2',\n        'data-[side=top]:slide-in-from-bottom-2',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <PopoverPortalPrimitive>\n        <PopoverContentPrimitive :align=\"align\" :side-offset=\"sideOffset\" :class=\"classes\">\n            <slot />\n        </PopoverContentPrimitive>\n    </PopoverPortalPrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +37,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +71,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +84,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

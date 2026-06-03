@@ -3,17 +3,27 @@
   "name": "toggle-group",
   "type": "registry:ui",
   "title": "Toggle Group",
-  "description": "A highly customizable neo-brutalist Toggle Group component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Toggle Group component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-toggle-group"
+    "reka-ui"
   ],
   "registryDependencies": [
     "toggle"
   ],
   "files": [
     {
-      "path": "components/ui/toggle-group.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';\nimport { VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/lib/utils';\nimport { toggleVariants } from '@/components/ui/toggle';\n\nconst ToggleGroupContext = React.createContext<\n    VariantProps<typeof toggleVariants>\n>({\n    size: 'default',\n    variant: 'default',\n});\n\nconst ToggleGroup = React.forwardRef<\n    React.ElementRef<typeof ToggleGroupPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &\n        VariantProps<typeof toggleVariants>\n>(({ className, variant, size, children, ...props }, ref) => (\n    <ToggleGroupPrimitive.Root\n        ref={ref}\n        className={cn('flex items-center justify-center gap-1.5', className)}\n        {...props}\n    >\n        <ToggleGroupContext.Provider value={{ variant, size }}>\n            {children}\n        </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n));\n\nToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;\n\nconst ToggleGroupItem = React.forwardRef<\n    React.ElementRef<typeof ToggleGroupPrimitive.Item>,\n    React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &\n        VariantProps<typeof toggleVariants>\n>(({ className, children, variant, size, ...props }, ref) => {\n    const context = React.useContext(ToggleGroupContext);\n\n    return (\n        <ToggleGroupPrimitive.Item\n            ref={ref}\n            className={cn(\n                toggleVariants({\n                    variant: context.variant || variant,\n                    size: context.size || size,\n                }),\n                className\n            )}\n            {...props}\n        >\n            {children}\n        </ToggleGroupPrimitive.Item>\n    );\n});\n\nToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;\n\nexport { ToggleGroup, ToggleGroupItem };\n",
+      "path": "components/ui/toggle-group/ToggleGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, provide } from 'vue'\nimport { ToggleGroupRoot } from 'reka-ui'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { toggleVariants } from '@/components/ui/toggle/toggle-variants'\nimport { toggleGroupKey } from '@/components/ui/toggle-group/toggle-group-key'\n\ntype ToggleVariantProps = VariantProps<typeof toggleVariants>\n\ninterface ToggleGroupProps {\n    type?: 'single' | 'multiple'\n    defaultValue?: string | string[]\n    modelValue?: string | string[]\n    variant?: NonNullable<ToggleVariantProps['variant']>\n    size?: NonNullable<ToggleVariantProps['size']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ToggleGroupProps>(), {\n    type: 'single',\n    defaultValue: undefined,\n    modelValue: undefined,\n    variant: 'default',\n    size: 'default',\n    class: '',\n})\n\nconst emit = defineEmits<{ 'update:modelValue': [value: string | string[]] }>()\n\nconst classes = computed(() =>\n    cn('flex items-center justify-center gap-1.5', props.class)\n)\n\nprovide(toggleGroupKey, {\n    variant: computed(() => props.variant),\n    size: computed(() => props.size),\n})\n</script>\n\n<template>\n    <ToggleGroupRoot\n        :type=\"type\"\n        :default-value=\"defaultValue\"\n        :model-value=\"modelValue\"\n        :class=\"classes\"\n        @update:model-value=\"emit('update:modelValue', $event as string | string[])\"\n    >\n        <slot />\n    </ToggleGroupRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/toggle-group/ToggleGroupItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, inject } from 'vue'\nimport { ToggleGroupItem as ToggleGroupItemPrimitive } from 'reka-ui'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { toggleVariants } from '@/components/ui/toggle/toggle-variants'\nimport { toggleGroupKey } from '@/components/ui/toggle-group/toggle-group-key'\n\ntype ToggleVariantProps = VariantProps<typeof toggleVariants>\n\ninterface ToggleGroupItemProps {\n    value: string\n    variant?: NonNullable<ToggleVariantProps['variant']>\n    size?: NonNullable<ToggleVariantProps['size']>\n    disabled?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ToggleGroupItemProps>(), {\n    variant: 'default',\n    size: 'default',\n    disabled: false,\n    class: '',\n})\n\nconst context = inject(toggleGroupKey, { variant: computed<NonNullable<ToggleVariantProps['variant']> | undefined>(() => undefined), size: computed<NonNullable<ToggleVariantProps['size']> | undefined>(() => undefined) })\n\nconst classes = computed(() =>\n    cn(\n        toggleVariants({\n            variant: context.variant.value || props.variant,\n            size: context.size.value || props.size,\n        }),\n        props.class\n    )\n)\n</script>\n\n<template>\n    <ToggleGroupItemPrimitive :value=\"value\" :disabled=\"disabled\" :class=\"classes\">\n        <slot />\n    </ToggleGroupItemPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/toggle-group/toggle-group-key.ts",
+      "content": "import type { InjectionKey, Ref } from 'vue'\nimport type { VariantProps } from 'class-variance-authority'\nimport { toggleVariants } from '@/components/ui/toggle/toggle-variants'\n\ntype ToggleVariantProps = VariantProps<typeof toggleVariants>\n\nexport const toggleGroupKey: InjectionKey<{\n    variant: Ref<NonNullable<ToggleVariantProps['variant']> | undefined>\n    size: Ref<NonNullable<ToggleVariantProps['size']> | undefined>\n}> = Symbol('toggleGroup')\n",
       "type": "registry:ui"
     }
   ],
@@ -39,7 +49,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -69,7 +83,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -79,16 +96,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

@@ -3,15 +3,25 @@
   "name": "tabs",
   "type": "registry:ui",
   "title": "Tabs",
-  "description": "A highly customizable neo-brutalist Tabs component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Tabs component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-tabs"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/tabs.tsx",
-      "content": "import * as React from 'react';\nimport * as TabsPrimitive from '@radix-ui/react-tabs';\nimport { cn } from '@/lib/utils';\n\nconst Tabs = TabsPrimitive.Root;\n\nconst TabsList = React.forwardRef<\n    React.ElementRef<typeof TabsPrimitive.List>,\n    React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>\n>(({ className, ...props }, ref) => (\n    <TabsPrimitive.List\n        ref={ref}\n        className={cn(\n            'inline-flex h-12 items-center justify-center p-1 gap-1',\n            'bg-white dark:bg-gray-900 border-3 border-brutal',\n            className\n        )}\n        {...props}\n    />\n));\nTabsList.displayName = TabsPrimitive.List.displayName;\n\nconst TabsTrigger = React.forwardRef<\n    React.ElementRef<typeof TabsPrimitive.Trigger>,\n    React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>\n>(({ className, ...props }, ref) => (\n    <TabsPrimitive.Trigger\n        ref={ref}\n        className={cn(\n            'inline-flex items-center justify-center whitespace-nowrap px-4 py-2',\n            'font-bold text-sm tracking-wide dark:text-white',\n            'border-3 border-transparent',\n            'transition-all duration-150',\n            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2',\n            'disabled:pointer-events-none disabled:opacity-50',\n            'data-[state=active]:bg-[#FFE66D] data-[state=active]:text-black data-[state=active]:border-brutal data-[state=active]:shadow-brutal-sm',\n            'data-[state=inactive]:hover:bg-gray-100 dark:data-[state=inactive]:hover:bg-gray-800',\n            className\n        )}\n        {...props}\n    />\n));\nTabsTrigger.displayName = TabsPrimitive.Trigger.displayName;\n\nconst TabsContent = React.forwardRef<\n    React.ElementRef<typeof TabsPrimitive.Content>,\n    React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>\n>(({ className, ...props }, ref) => (\n    <TabsPrimitive.Content\n        ref={ref}\n        className={cn(\n            'mt-3 p-4',\n            'bg-white dark:bg-gray-900 border-3 border-brutal shadow-brutal dark:text-white',\n            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2',\n            className\n        )}\n        {...props}\n    />\n));\nTabsContent.displayName = TabsPrimitive.Content.displayName;\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent };\n",
+      "path": "components/ui/tabs/TabsContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { TabsContent as TabsContentPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface TabsContentProps {\n    value: string\n    class?: string\n}\n\nconst props = defineProps<TabsContentProps>()\n\nconst classes = computed(() =>\n    cn(\n        'mt-3 p-4',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal shadow-brutal',\n        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <TabsContentPrimitive :value=\"value\" :class=\"classes\">\n        <slot />\n    </TabsContentPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/tabs/TabsList.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { TabsList as TabsListPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface TabsListProps {\n    class?: string\n}\n\nconst props = defineProps<TabsListProps>()\n\nconst classes = computed(() =>\n    cn(\n        'inline-flex h-12 items-center justify-center p-1 gap-1',\n        'bg-brutal-bg border-3 border-brutal shadow-brutal',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <TabsListPrimitive :class=\"classes\">\n        <slot />\n    </TabsListPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/tabs/TabsTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { TabsTrigger as TabsTriggerPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface TabsTriggerProps {\n    value: string\n    disabled?: boolean\n    class?: string\n}\n\nconst props = defineProps<TabsTriggerProps>()\n\nconst classes = computed(() =>\n    cn(\n        'inline-flex items-center justify-center whitespace-nowrap px-4 py-2',\n        'font-bold text-sm tracking-wide',\n        'border-3 border-transparent',\n        'transition-all duration-150',\n        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'disabled:pointer-events-none disabled:opacity-50',\n        'data-[state=active]:bg-brutal-accent data-[state=active]:text-brutal-fg data-[state=active]:border-brutal data-[state=active]:shadow-brutal-sm',\n        'data-[state=inactive]:hover:bg-brutal-muted',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <TabsTriggerPrimitive :value=\"value\" :disabled=\"disabled\" :class=\"classes\">\n        <slot />\n    </TabsTriggerPrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +47,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +81,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +94,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sketchy-chart",
+  "type": "registry:ui",
+  "title": "Sketchy Chart",
+  "description": "A highly customizable neo-brutalist Sketchy Chart component built with Brutx design tokens for Vue 3.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/sketchy-chart/SketchyChart.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, useId } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport { sketchyChartVariants } from '@/components/ui/sketchy-chart/sketchy-chart-variants'\n\ninterface ChartDataItem {\n    label: string\n    value: number\n}\n\ninterface SketchyChartProps {\n    type?: 'line' | 'bar' | 'pie'\n    data?: ChartDataItem[]\n    sketchiness?: number\n    grid?: boolean\n    width?: number\n    height?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SketchyChartProps>(), {\n    type: 'line',\n    data: () => [],\n    sketchiness: 2,\n    grid: true,\n    width: 600,\n    height: 400,\n    class: '',\n})\n\n// 回退版唯一 ID 保证兼容性\nconst getUniqueId = () => {\n    try {\n        const id = useId()\n        return id.replace(/:/g, '-') // 去除 ID 中可能的冒号\n    } catch {\n        return Math.random().toString(36).substring(2, 9)\n    }\n}\n\nconst uid = getUniqueId()\nconst filterId = `brutal-sketch-filter-${uid}`\nconst hatchId = `hatch-pattern-${uid}`\nconst { t } = useLocale()\n\nconst chartAriaLabel = computed(() => {\n    if (props.type === 'line') return t('sketchyChart.lineAriaLabel')\n    if (props.type === 'bar') return t('sketchyChart.barAriaLabel')\n    return t('sketchyChart.pieAriaLabel')\n})\n\n// 手绘抖动强度对应的基准频率\nconst BASE_FREQUENCY_FACTOR = 0.015\nconst baseFrequency = computed(() =>\n    (props.sketchiness * BASE_FREQUENCY_FACTOR).toFixed(3)\n)\n\n// 数据预处理（空数组、大容量降采样、负数取绝对值）\nconst processedData = computed(() => {\n    if (!props.data || props.data.length === 0) return []\n    \n    // 负数取绝对值\n    let items = props.data.map(d => ({\n        label: d.label,\n        value: Math.abs(d.value)\n    }))\n\n    // 大容量降采样（超过 30 项，隔项采样以防重叠）\n    if (items.length > 30) {\n        const step = Math.ceil(items.length / 30)\n        items = items.filter((_, idx) => idx % step === 0)\n    }\n\n    return items\n})\n\nconst CHART_PADDING = { top: 30, right: 30, bottom: 40, left: 60 }\n\nconst plotWidth = computed(() => props.width - CHART_PADDING.left - CHART_PADDING.right)\nconst plotHeight = computed(() => props.height - CHART_PADDING.top - CHART_PADDING.bottom)\n\nconst maxValue = computed(() => {\n    if (processedData.value.length === 0) return 100\n    const max = Math.max(...processedData.value.map(d => d.value))\n    return max === 0 ? 100 : max\n})\n\n// 坐标映射\nconst dataToSvgX = (index: number) => {\n    if (processedData.value.length <= 1) return CHART_PADDING.left + plotWidth.value / 2\n    return CHART_PADDING.left + (index / (processedData.value.length - 1)) * plotWidth.value\n}\n\nconst dataToSvgY = (value: number) => {\n    return CHART_PADDING.top + plotHeight.value - (value / maxValue.value) * plotHeight.value\n}\n\n// 折线图 Paths\nconst linePath = computed(() => {\n    if (processedData.value.length === 0) return ''\n    return processedData.value\n        .map((d, i) => `${i === 0 ? 'M' : 'L'} ${dataToSvgX(i)} ${dataToSvgY(d.value)}`)\n        .join(' ')\n})\n\n// 折线图填充区域（Neobrutalist 阴影面效果）\nconst lineAreaPath = computed(() => {\n    if (processedData.value.length === 0) return ''\n    const startX = dataToSvgX(0)\n    const endX = dataToSvgX(processedData.value.length - 1)\n    const bottomY = CHART_PADDING.top + plotHeight.value\n    return `${linePath.value} L ${endX} ${bottomY} L ${startX} ${bottomY} Z`\n})\n\n// 柱状图各 Column 算定\nconst BAR_GAP_RATIO = 0.25\nconst barWidth = computed(() => {\n    const totalBars = processedData.value.length\n    if (totalBars === 0) return 0\n    return (plotWidth.value / totalBars) * (1 - BAR_GAP_RATIO)\n})\n\nconst getBarX = (index: number) => {\n    const totalBars = processedData.value.length\n    const slotWidth = plotWidth.value / totalBars\n    return CHART_PADDING.left + index * slotWidth + (slotWidth - barWidth.value) / 2\n}\n\n// 饼图计算\nconst PIE_COLORS = [\n    'var(--brutal-primary, #FF6B6B)',\n    'var(--brutal-secondary, #4ECDC4)',\n    'var(--brutal-accent, #FFE66D)',\n    'var(--brutal-info, #4A90D9)',\n    'var(--brutal-success, #7FB069)',\n    'var(--brutal-destructive, #EF476F)',\n]\n\nconst pieSlices = computed(() => {\n    if (processedData.value.length === 0) return []\n    const total = processedData.value.reduce((sum, d) => sum + d.value, 0)\n    if (total === 0) return []\n    const cx = props.width / 2\n    const cy = props.height / 2\n    const radius = Math.min(cx, cy) * 0.7\n    let currentAngle = -Math.PI / 2\n    return processedData.value.map((d, i) => {\n        const sliceAngle = (d.value / total) * Math.PI * 2\n        const startAngle = currentAngle\n        const endAngle = currentAngle + sliceAngle\n        const largeArc = sliceAngle > Math.PI ? 1 : 0\n        const x1 = cx + radius * Math.cos(startAngle)\n        const y1 = cy + radius * Math.sin(startAngle)\n        const x2 = cx + radius * Math.cos(endAngle)\n        const y2 = cy + radius * Math.sin(endAngle)\n        const path = [\n            `M ${cx} ${cy}`,\n            `L ${x1} ${y1}`,\n            `A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`,\n            'Z',\n        ].join(' ')\n        currentAngle = endAngle\n        return {\n            path,\n            color: PIE_COLORS[i % PIE_COLORS.length],\n            label: d.label,\n            midAngle: (startAngle + endAngle) / 2,\n            cx,\n            cy,\n            labelRadius: radius * 0.55,\n        }\n    })\n})\n\n// 自动生成 Y 轴 5 等分刻度\nconst yTicks = computed(() => {\n    const ticks = []\n    const step = maxValue.value / 4\n    for (let i = 0; i <= 4; i++) {\n        const val = Math.round(step * i)\n        ticks.push({\n            value: val,\n            y: dataToSvgY(val)\n        })\n    }\n    return ticks\n})\n\nconst containerClasses = computed(() =>\n    cn(sketchyChartVariants(), props.class)\n)\n</script>\n\n<template>\n    <div :class=\"containerClasses\">\n        <svg\n            role=\"img\"\n            :aria-label=\"chartAriaLabel\"\n            :viewBox=\"`0 0 ${width} ${height}`\"\n            class=\"w-full h-auto overflow-visible select-none\"\n        >\n            <title>{{ chartAriaLabel }}</title>\n            \n            <defs>\n                <!-- 手绘波动滤镜 -->\n                <filter :id=\"filterId\">\n                    <feTurbulence\n                        type=\"fractalNoise\"\n                        :baseFrequency=\"baseFrequency\"\n                        numOctaves=\"3\"\n                        result=\"noise\"\n                    />\n                    <feDisplacementMap\n                        in=\"SourceGraphic\"\n                        in2=\"noise\"\n                        :scale=\"sketchiness\"\n                        xChannelSelector=\"R\"\n                        yChannelSelector=\"G\"\n                    />\n                </filter>\n                \n                <!-- 斜向条纹 Hatch Fill -->\n                <pattern\n                    :id=\"hatchId\"\n                    patternUnits=\"userSpaceOnUse\"\n                    width=\"10\"\n                    height=\"10\"\n                    patternTransform=\"rotate(45)\"\n                >\n                    <line\n                        x1=\"0\"\n                        y1=\"0\"\n                        x2=\"0\"\n                        y2=\"10\"\n                        stroke=\"var(--brutal-border-color, #000000)\"\n                        stroke-width=\"2\"\n                    />\n                </pattern>\n            </defs>\n\n            <!-- 背景网格线 -->\n            <g v-if=\"grid\" class=\"chart-grid\">\n                <line\n                    v-for=\"tick in yTicks\"\n                    :key=\"'grid-' + tick.value\"\n                    :x1=\"CHART_PADDING.left\"\n                    :y1=\"tick.y\"\n                    :x2=\"width - CHART_PADDING.right\"\n                    :y2=\"tick.y\"\n                    stroke=\"var(--brutal-muted, #f3f4f6)\"\n                    stroke-width=\"1.5\"\n                    stroke-dasharray=\"4 4\"\n                />\n            </g>\n\n            <!-- 坐标轴 -->\n            <g :filter=\"`url(#${filterId})`\" class=\"chart-axes\">\n                <!-- Y 轴 -->\n                <line\n                    :x1=\"CHART_PADDING.left\"\n                    :y1=\"CHART_PADDING.top\"\n                    :x2=\"CHART_PADDING.left\"\n                    :y2=\"height - CHART_PADDING.bottom\"\n                    stroke=\"var(--brutal-border-color, #000000)\"\n                    stroke-width=\"3\"\n                />\n                <!-- X 轴 -->\n                <line\n                    :x1=\"CHART_PADDING.left\"\n                    :y1=\"height - CHART_PADDING.bottom\"\n                    :x2=\"width - CHART_PADDING.right\"\n                    :y2=\"height - CHART_PADDING.bottom\"\n                    stroke=\"var(--brutal-border-color, #000000)\"\n                    stroke-width=\"3\"\n                />\n            </g>\n\n            <!-- 数据图形展示 -->\n            <g :filter=\"`url(#${filterId})`\" class=\"chart-data\">\n                <!-- 1. 折线图 -->\n                <template v-if=\"type === 'line' && processedData.length > 0\">\n                    <!-- 阴影填充区 -->\n                    <path\n                        :d=\"lineAreaPath\"\n                        :fill=\"`url(#${hatchId})`\"\n                        class=\"opacity-60\"\n                    />\n                    <!-- 核心折线 -->\n                    <path\n                        :d=\"linePath\"\n                        fill=\"none\"\n                        stroke=\"var(--brutal-primary, #FF6B6B)\"\n                        stroke-width=\"4\"\n                    />\n                    <!-- 折线拐点圆圈（Brutalist 粗黑边圆圈） -->\n                    <circle\n                        v-for=\"(d, i) in processedData\"\n                        :key=\"'dot-' + i\"\n                        :cx=\"dataToSvgX(i)\"\n                        :cy=\"dataToSvgY(d.value)\"\n                        r=\"6\"\n                        fill=\"var(--brutal-accent, #FFE66D)\"\n                        stroke=\"var(--brutal-border-color, #000000)\"\n                        stroke-width=\"2.5\"\n                    />\n                </template>\n\n                <!-- 2. 柱状图 -->\n                <template v-if=\"type === 'bar' && processedData.length > 0\">\n                    <g v-for=\"(d, i) in processedData\" :key=\"'bar-' + i\">\n                        <!-- 柱体硬影子（Neobrutalist 偏移底色块） -->\n                        <rect\n                            :x=\"getBarX(i) + 4\"\n                            :y=\"dataToSvgY(d.value) + 4\"\n                            :width=\"barWidth\"\n                            :height=\"height - CHART_PADDING.bottom - dataToSvgY(d.value)\"\n                            fill=\"var(--brutal-border-color, #000000)\"\n                        />\n                        <!-- 柱体本体（Hatch 填充 + 粗黑边框） -->\n                        <rect\n                            :x=\"getBarX(i)\"\n                            :y=\"dataToSvgY(d.value)\"\n                            :width=\"barWidth\"\n                            :height=\"height - CHART_PADDING.bottom - dataToSvgY(d.value)\"\n                            :fill=\"`url(#${hatchId})`\"\n                            stroke=\"var(--brutal-border-color, #000000)\"\n                            stroke-width=\"3\"\n                        />\n                    </g>\n                </template>\n\n                <!-- 3. 饼图 -->\n                <template v-if=\"type === 'pie' && pieSlices.length > 0\">\n                    <g v-for=\"(slice, i) in pieSlices\" :key=\"'pie-' + i\">\n                        <path\n                            :d=\"slice.path\"\n                            :fill=\"slice.color\"\n                            stroke=\"var(--brutal-border-color, #000000)\"\n                            stroke-width=\"3\"\n                        />\n                    </g>\n                </template>\n            </g>\n\n            <!-- 坐标轴文本与刻度标签 -->\n            <g class=\"chart-labels\" fill=\"var(--brutal-fg, #000000)\" font-size=\"12\" font-weight=\"bold\">\n                <!-- Y 轴刻度标签 -->\n                <text\n                    v-for=\"tick in yTicks\"\n                    :key=\"'lbl-y-' + tick.value\"\n                    :x=\"CHART_PADDING.left - 12\"\n                    :y=\"tick.y + 4\"\n                    text-anchor=\"end\"\n                >\n                    {{ tick.value }}\n                </text>\n\n                <!-- X 轴刻度标签 -->\n                <text\n                    v-for=\"(d, i) in processedData\"\n                    :key=\"'lbl-x-' + i\"\n                    :x=\"type === 'line' ? dataToSvgX(i) : getBarX(i) + barWidth / 2\"\n                    :y=\"height - CHART_PADDING.bottom + 20\"\n                    text-anchor=\"middle\"\n                >\n                    {{ d.label }}\n                </text>\n            </g>\n        </svg>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/sketchy-chart/sketchy-chart-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const sketchyChartVariants = cva(\n    [\n        'border-3 border-brutal',\n        'rounded-brutal',\n        'bg-brutal-bg',\n        'p-4',\n    ]\n)\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

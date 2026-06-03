@@ -3,13 +3,43 @@
   "name": "card",
   "type": "registry:ui",
   "title": "Card",
-  "description": "A highly customizable neo-brutalist Card component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Card component built with Brutx design tokens for Vue 3.",
   "dependencies": [],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/card.tsx",
-      "content": "import * as React from 'react';\nimport { cva, type VariantProps } from 'class-variance-authority';\nimport { cn } from '@/lib/utils';\n\nconst cardVariants = cva(\n    [\n        'border-3 border-brutal rounded-brutal',\n        'bg-brutal-bg text-brutal-fg',\n        'transition-all duration-150',\n    ],\n    {\n        variants: {\n            variant: {\n                default: 'shadow-brutal',\n                elevated: 'shadow-brutal-lg',\n                flat: 'shadow-none',\n                interactive: [\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'cursor-pointer',\n                ],\n                primary: 'shadow-[var(--brutal-shadow-offset-x,4px)_var(--brutal-shadow-offset-y,4px)_0px_0px_var(--brutal-primary,#FF6B6B)] border-[var(--brutal-primary,#FF6B6B)]',\n                secondary: 'shadow-[var(--brutal-shadow-offset-x,4px)_var(--brutal-shadow-offset-y,4px)_0px_0px_var(--brutal-secondary,#4ECDC4)] border-[var(--brutal-secondary,#4ECDC4)]',\n            },\n            padding: {\n                none: 'p-0',\n                sm: 'p-3',\n                default: 'p-5',\n                lg: 'p-8',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            padding: 'default',\n        },\n    }\n);\n\nexport interface CardProps\n    extends React.HTMLAttributes<HTMLDivElement>,\n        VariantProps<typeof cardVariants> {}\n\nconst Card = React.forwardRef<HTMLDivElement, CardProps>(\n    ({ className, variant, padding, ...props }, ref) => (\n        <div ref={ref} className={cn(cardVariants({ variant, padding, className }))} {...props} />\n    )\n);\nCard.displayName = 'Card';\n\nconst CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n    ({ className, ...props }, ref) => (\n        <div ref={ref} className={cn('flex flex-col space-y-1.5 pb-4', className)} {...props} />\n    )\n);\nCardHeader.displayName = 'CardHeader';\n\nconst CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(\n    ({ className, ...props }, ref) => (\n        <h3\n            ref={ref}\n            className={cn('text-2xl font-black tracking-tight leading-none', className)}\n            {...props}\n        />\n    )\n);\nCardTitle.displayName = 'CardTitle';\n\nconst CardDescription = React.forwardRef<\n    HTMLParagraphElement,\n    React.HTMLAttributes<HTMLParagraphElement>\n>(({ className, ...props }, ref) => (\n    <p\n        ref={ref}\n        className={cn('text-sm text-gray-600 dark:text-gray-400 font-medium', className)}\n        {...props}\n    />\n));\nCardDescription.displayName = 'CardDescription';\n\nconst CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n    ({ className, ...props }, ref) => <div ref={ref} className={cn('', className)} {...props} />\n);\nCardContent.displayName = 'CardContent';\n\nconst CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(\n    ({ className, ...props }, ref) => (\n        <div\n            ref={ref}\n            className={cn(\n                'flex items-center pt-4 border-t-3 border-brutal',\n                className\n            )}\n            {...props}\n        />\n    )\n);\nCardFooter.displayName = 'CardFooter';\n\nexport { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, cardVariants };\n",
+      "path": "components/ui/card/Card.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { cardVariants } from '@/components/ui/card/card-variants'\n\ntype CardVariantProps = VariantProps<typeof cardVariants>\n\ninterface CardProps {\n    variant?: NonNullable<CardVariantProps['variant']>\n    padding?: NonNullable<CardVariantProps['padding']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<CardProps>(), {\n    variant: 'default',\n    padding: 'default',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(cardVariants({ variant: props.variant, padding: props.padding }), props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/card/CardContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CardContentProps {\n    class?: string\n}\n\nconst props = defineProps<CardContentProps>()\n\nconst classes = computed(() => cn(props.class))\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/card/CardDescription.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CardDescriptionProps {\n    class?: string\n}\n\nconst props = defineProps<CardDescriptionProps>()\n\nconst classes = computed(() =>\n    cn('text-sm text-brutal-muted-foreground font-medium', props.class)\n)\n</script>\n\n<template>\n    <p :class=\"classes\">\n        <slot />\n    </p>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/card/CardFooter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CardFooterProps {\n    class?: string\n}\n\nconst props = defineProps<CardFooterProps>()\n\nconst classes = computed(() =>\n    cn('flex items-center pt-4 border-t-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/card/CardHeader.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CardHeaderProps {\n    class?: string\n}\n\nconst props = defineProps<CardHeaderProps>()\n\nconst classes = computed(() =>\n    cn('flex flex-col space-y-1.5 pb-4', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/card/CardTitle.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CardTitleProps {\n    class?: string\n}\n\nconst props = defineProps<CardTitleProps>()\n\nconst classes = computed(() =>\n    cn('text-2xl font-black tracking-tight leading-none', props.class)\n)\n</script>\n\n<template>\n    <h3 :class=\"classes\">\n        <slot />\n    </h3>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/card/card-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const cardVariants = cva(\n    [\n        'border-3 border-brutal',\n        'bg-brutal-bg text-brutal-fg',\n        'transition-all duration-150',\n    ],\n    {\n        variants: {\n            variant: {\n                default: 'shadow-brutal',\n                elevated: 'shadow-brutal-lg',\n                flat: 'shadow-none',\n                interactive: [\n                    'shadow-brutal',\n                    'hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5',\n                    'cursor-pointer',\n                ],\n                primary: 'shadow-brutal-primary border-[var(--brutal-primary)]',\n                secondary: 'shadow-brutal-secondary border-[var(--brutal-secondary)]',\n            },\n            padding: {\n                none: 'p-0',\n                sm: 'p-3',\n                default: 'p-5',\n                lg: 'p-8',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            padding: 'default',\n        },\n    }\n)\n",
       "type": "registry:ui"
     }
   ],
@@ -35,7 +65,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -65,7 +99,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -75,16 +112,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

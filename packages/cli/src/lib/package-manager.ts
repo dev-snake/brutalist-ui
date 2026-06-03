@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import type { PackageManager } from './types.js';
 
 const INSTALL_COMMANDS: Record<PackageManager, string> = {
@@ -15,8 +15,8 @@ export function installPackages(
 ): void {
     if (packages.length === 0) return;
 
-    const command = `${INSTALL_COMMANDS[packageManager]} ${packages.join(' ')}`;
-    execSync(command, { stdio: 'inherit', cwd });
+    const [command, ...baseArgs] = INSTALL_COMMANDS[packageManager].split(' ');
+    execFileSync(command, [...baseArgs, ...packages], { stdio: 'inherit', cwd });
 }
 
 export function getInstallCommand(packageManager: PackageManager, packages: string[]): string {

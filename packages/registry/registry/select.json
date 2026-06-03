@@ -3,16 +3,46 @@
   "name": "select",
   "type": "registry:ui",
   "title": "Select",
-  "description": "A highly customizable neo-brutalist Select component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Select component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-select",
-    "lucide-react"
+    "reka-ui",
+    "lucide-vue-next"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/select.tsx",
-      "content": "import * as React from 'react';\nimport * as SelectPrimitive from '@radix-ui/react-select';\nimport { Check, ChevronDown, ChevronUp } from 'lucide-react';\nimport { cn } from '@/lib/utils';\n\nconst Select = SelectPrimitive.Root;\nconst SelectGroup = SelectPrimitive.Group;\nconst SelectValue = SelectPrimitive.Value;\n\nconst SelectTrigger = React.forwardRef<\n    React.ElementRef<typeof SelectPrimitive.Trigger>,\n    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>\n>(({ className, children, ...props }, ref) => (\n    <SelectPrimitive.Trigger\n        ref={ref}\n        className={cn(\n            'flex h-11 w-full items-center justify-between px-4 py-2',\n            'bg-brutal-bg text-brutal-fg border-3 border-brutal rounded-brutal',\n            'font-bold placeholder:text-gray-400',\n            'shadow-brutal',\n            'transition-all duration-150',\n            'focus:outline-none focus:shadow-brutal-lg focus:-translate-x-0.5 focus:-translate-y-0.5',\n            'disabled:cursor-not-allowed disabled:opacity-50',\n            '[&>span]:line-clamp-1',\n            className\n        )}\n        {...props}\n    >\n        {children}\n        <SelectPrimitive.Icon asChild>\n            <ChevronDown className=\"h-5 w-5 stroke-[3]\" />\n        </SelectPrimitive.Icon>\n    </SelectPrimitive.Trigger>\n));\nSelectTrigger.displayName = SelectPrimitive.Trigger.displayName;\n\nconst SelectScrollUpButton = React.forwardRef<\n    React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,\n    React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>\n>(({ className, ...props }, ref) => (\n    <SelectPrimitive.ScrollUpButton\n        ref={ref}\n        className={cn(\n            'flex cursor-default items-center justify-center py-1 bg-brutal-bg text-brutal-fg',\n            className\n        )}\n        {...props}\n    >\n        <ChevronUp className=\"h-4 w-4 stroke-[3]\" />\n    </SelectPrimitive.ScrollUpButton>\n));\nSelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;\n\nconst SelectScrollDownButton = React.forwardRef<\n    React.ElementRef<typeof SelectPrimitive.ScrollDownButton>,\n    React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>\n>(({ className, ...props }, ref) => (\n    <SelectPrimitive.ScrollDownButton\n        ref={ref}\n        className={cn(\n            'flex cursor-default items-center justify-center py-1 bg-brutal-bg text-brutal-fg',\n            className\n        )}\n        {...props}\n    >\n        <ChevronDown className=\"h-4 w-4 stroke-[3]\" />\n    </SelectPrimitive.ScrollDownButton>\n));\nSelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName;\n\nconst SelectContent = React.forwardRef<\n    React.ElementRef<typeof SelectPrimitive.Content>,\n    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>\n>(({ className, children, position = 'popper', ...props }, ref) => (\n    <SelectPrimitive.Portal>\n        <SelectPrimitive.Content\n            ref={ref}\n            className={cn(\n                'relative z-50 max-h-96 min-w-[8rem] overflow-hidden',\n                'bg-brutal-bg text-brutal-fg border-3 border-brutal rounded-brutal shadow-brutal',\n                'data-[state=open]:animate-in data-[state=closed]:animate-out',\n                'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n                'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n                'data-[side=bottom]:slide-in-from-top-2',\n                'data-[side=left]:slide-in-from-right-2',\n                'data-[side=right]:slide-in-from-left-2',\n                'data-[side=top]:slide-in-from-bottom-2',\n                position === 'popper' &&\n                    'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',\n                className\n            )}\n            position={position}\n            {...props}\n        >\n            <SelectScrollUpButton />\n            <SelectPrimitive.Viewport\n                className={cn(\n                    'p-1',\n                    position === 'popper' &&\n                        'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]'\n                )}\n            >\n                {children}\n            </SelectPrimitive.Viewport>\n            <SelectScrollDownButton />\n        </SelectPrimitive.Content>\n    </SelectPrimitive.Portal>\n));\nSelectContent.displayName = SelectPrimitive.Content.displayName;\n\nconst SelectLabel = React.forwardRef<\n    React.ElementRef<typeof SelectPrimitive.Label>,\n    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>\n>(({ className, ...props }, ref) => (\n    <SelectPrimitive.Label\n        ref={ref}\n        className={cn('px-3 py-2 text-sm font-black tracking-wide', className)}\n        {...props}\n    />\n));\nSelectLabel.displayName = SelectPrimitive.Label.displayName;\n\nconst SelectItem = React.forwardRef<\n    React.ElementRef<typeof SelectPrimitive.Item>,\n    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>\n>(({ className, children, ...props }, ref) => (\n    <SelectPrimitive.Item\n        ref={ref}\n        className={cn(\n            'relative flex w-full cursor-pointer select-none items-center py-2 pl-8 pr-3',\n            'font-bold outline-none',\n            'focus:bg-brutal-accent focus:text-brutal-fg',\n            'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n            'hover:bg-brutal-muted',\n            className\n        )}\n        {...props}\n    >\n        <span className=\"absolute left-2 flex h-4 w-4 items-center justify-center\">\n            <SelectPrimitive.ItemIndicator>\n                <Check className=\"h-4 w-4 stroke-[3]\" />\n            </SelectPrimitive.ItemIndicator>\n        </span>\n        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>\n    </SelectPrimitive.Item>\n));\nSelectItem.displayName = SelectPrimitive.Item.displayName;\n\nconst SelectSeparator = React.forwardRef<\n    React.ElementRef<typeof SelectPrimitive.Separator>,\n    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>\n>(({ className, ...props }, ref) => (\n    <SelectPrimitive.Separator\n        ref={ref}\n        className={cn('-mx-1 my-1 h-[3px] bg-[var(--brutal-border-color,#000)]', className)}\n        {...props}\n    />\n));\nSelectSeparator.displayName = SelectPrimitive.Separator.displayName;\n\nexport {\n    Select,\n    SelectGroup,\n    SelectValue,\n    SelectTrigger,\n    SelectContent,\n    SelectLabel,\n    SelectItem,\n    SelectSeparator,\n    SelectScrollUpButton,\n    SelectScrollDownButton,\n};\n",
+      "path": "components/ui/select/SelectContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    SelectPortal as SelectPortalPrimitive,\n    SelectContent as SelectContentPrimitive,\n    SelectViewport as SelectViewportPrimitive,\n} from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport SelectScrollUpButton from '@/components/ui/select/SelectScrollUpButton.vue'\nimport SelectScrollDownButton from '@/components/ui/select/SelectScrollDownButton.vue'\n\ninterface SelectContentProps {\n    position?: 'popper' | 'item-aligned'\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SelectContentProps>(), {\n    position: 'popper',\n    class: '',\n})\n\nconst contentClasses = computed(() =>\n    cn(\n        'relative z-50 max-h-96 min-w-[8rem] overflow-hidden',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal shadow-brutal',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n        'data-[side=bottom]:slide-in-from-top-2',\n        'data-[side=left]:slide-in-from-right-2',\n        'data-[side=right]:slide-in-from-left-2',\n        'data-[side=top]:slide-in-from-bottom-2',\n        props.position === 'popper' &&\n            'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',\n        props.class\n    )\n)\n\nconst viewportClasses = computed(() =>\n    cn(\n        'p-1',\n        props.position === 'popper' &&\n            'h-[var(--reka-select-trigger-height)] w-full min-w-[var(--reka-select-trigger-width)]'\n    )\n)\n</script>\n\n<template>\n    <SelectPortalPrimitive>\n        <SelectContentPrimitive :class=\"contentClasses\" :position=\"position\">\n            <SelectScrollUpButton />\n            <SelectViewportPrimitive :class=\"viewportClasses\">\n                <slot />\n            </SelectViewportPrimitive>\n            <SelectScrollDownButton />\n        </SelectContentPrimitive>\n    </SelectPortalPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/select/SelectItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { SelectItem as SelectItemPrimitive, SelectItemIndicator as SelectItemIndicatorPrimitive, SelectItemText as SelectItemTextPrimitive } from 'reka-ui'\nimport { Check } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface SelectItemProps {\n    value: string\n    disabled?: boolean\n    class?: string\n}\n\nconst props = defineProps<SelectItemProps>()\n\nconst classes = computed(() =>\n    cn(\n        'relative flex w-full cursor-pointer select-none items-center py-2 pl-8 pr-3',\n        'font-bold outline-none',\n        'focus:bg-brutal-accent focus:text-brutal-fg',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <SelectItemPrimitive :value=\"value\" :disabled=\"disabled\" :class=\"classes\">\n        <span class=\"absolute left-2 flex h-4 w-4 items-center justify-center\">\n            <SelectItemIndicatorPrimitive>\n                <Check class=\"h-4 w-4 stroke-[3]\" />\n            </SelectItemIndicatorPrimitive>\n        </span>\n        <SelectItemTextPrimitive>\n            <slot />\n        </SelectItemTextPrimitive>\n    </SelectItemPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/select/SelectLabel.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { SelectLabel as SelectLabelPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface SelectLabelProps {\n    class?: string\n}\n\nconst props = defineProps<SelectLabelProps>()\n\nconst classes = computed(() =>\n    cn('px-3 py-2 text-sm font-black tracking-wide', props.class)\n)\n</script>\n\n<template>\n    <SelectLabelPrimitive :class=\"classes\">\n        <slot />\n    </SelectLabelPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/select/SelectScrollDownButton.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { SelectScrollDownButton as SelectScrollDownButtonPrimitive } from 'reka-ui'\nimport { ChevronDown } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface SelectScrollDownButtonProps {\n    class?: string\n}\n\nconst props = defineProps<SelectScrollDownButtonProps>()\n\nconst classes = computed(() =>\n    cn('flex cursor-default items-center justify-center py-1 bg-brutal-bg', props.class)\n)\n</script>\n\n<template>\n    <SelectScrollDownButtonPrimitive :class=\"classes\">\n        <ChevronDown class=\"h-4 w-4 stroke-[3]\" />\n    </SelectScrollDownButtonPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/select/SelectScrollUpButton.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { SelectScrollUpButton as SelectScrollUpButtonPrimitive } from 'reka-ui'\nimport { ChevronUp } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface SelectScrollUpButtonProps {\n    class?: string\n}\n\nconst props = defineProps<SelectScrollUpButtonProps>()\n\nconst classes = computed(() =>\n    cn('flex cursor-default items-center justify-center py-1 bg-brutal-bg', props.class)\n)\n</script>\n\n<template>\n    <SelectScrollUpButtonPrimitive :class=\"classes\">\n        <ChevronUp class=\"h-4 w-4 stroke-[3]\" />\n    </SelectScrollUpButtonPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/select/SelectSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { SelectSeparator as SelectSeparatorPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface SelectSeparatorProps {\n    class?: string\n}\n\nconst props = defineProps<SelectSeparatorProps>()\n\nconst classes = computed(() =>\n    cn('-mx-1 my-1 h-[3px] bg-brutal-fg', props.class)\n)\n</script>\n\n<template>\n    <SelectSeparatorPrimitive :class=\"classes\" />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/select/SelectTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { SelectTrigger as SelectTriggerPrimitive, SelectIcon as SelectIconPrimitive } from 'reka-ui'\nimport { ChevronDown } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface SelectTriggerProps {\n    class?: string\n}\n\nconst props = defineProps<SelectTriggerProps>()\n\nconst classes = computed(() =>\n    cn(\n        'flex h-11 w-full items-center justify-between px-4 py-2',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal',\n        'font-bold placeholder:text-brutal-placeholder',\n        'shadow-brutal',\n        'transition-all duration-150',\n        'focus:outline-none focus:shadow-brutal-lg focus:-translate-x-0.5 focus:-translate-y-0.5',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:translate-x-0 active:shadow-none',\n        'disabled:cursor-not-allowed disabled:opacity-50',\n        '[&>span]:line-clamp-1',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <SelectTriggerPrimitive :class=\"classes\" aria-haspopup=\"listbox\">\n        <slot />\n        <SelectIconPrimitive as-child>\n            <ChevronDown class=\"h-5 w-5 stroke-[3]\" />\n        </SelectIconPrimitive>\n    </SelectTriggerPrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -38,7 +68,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -68,7 +102,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -78,16 +115,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search-widget",
+  "type": "registry:ui",
+  "title": "Search Widget",
+  "description": "A highly customizable neo-brutalist Search Widget component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "card",
+    "command"
+  ],
+  "files": [
+    {
+      "path": "components/ui/search-widget/SearchWidget.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { Search } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport Command from '@/components/ui/command/Command.vue'\nimport CommandInput from '@/components/ui/command/CommandInput.vue'\nimport CommandList from '@/components/ui/command/CommandList.vue'\nimport CommandGroup from '@/components/ui/command/CommandGroup.vue'\nimport CommandItem from '@/components/ui/command/CommandItem.vue'\nimport CommandEmpty from '@/components/ui/command/CommandEmpty.vue'\n\nexport interface SearchSuggestion {\n    label: string\n    value: string\n    group?: string\n}\n\ninterface SearchWidgetProps {\n    placeholder?: string\n    suggestions?: SearchSuggestion[]\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SearchWidgetProps>(), {\n    placeholder: undefined,\n    suggestions: () => [],\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst emit = defineEmits<{\n    search: [value: string]\n    select: [suggestion: SearchSuggestion]\n}>()\n\nconst rootClasses = computed(() => cn('w-full max-w-lg', props.class))\n\nconst resolvedPlaceholder = computed(() => props.placeholder ?? t('searchWidget.defaultPlaceholder'))\n\nconst query = ref('')\n\nconst filteredSuggestions = computed(() => {\n    if (!query.value) return []\n    const q = query.value.toLowerCase()\n    return props.suggestions.filter(s => s.label.toLowerCase().includes(q))\n})\n\nconst groupedSuggestions = computed(() => {\n    const groups: Record<string, SearchSuggestion[]> = {}\n    for (const suggestion of filteredSuggestions.value) {\n        const group = suggestion.group ?? ''\n        if (!groups[group]) groups[group] = []\n        groups[group].push(suggestion)\n    }\n    return groups\n})\n\nfunction handleSearch(value: string) {\n    query.value = value\n    emit('search', value)\n}\n\nfunction handleSelect(value: string) {\n    const suggestion = props.suggestions.find(s => s.value === value)\n    if (suggestion) {\n        emit('select', suggestion)\n    }\n}\n</script>\n\n<template>\n    <Card :class=\"rootClasses\" variant=\"default\">\n        <CardContent class=\"p-0\">\n            <Command>\n                <CommandInput\n                    :placeholder=\"resolvedPlaceholder\"\n                    :model-value=\"query\"\n                    @update:model-value=\"handleSearch\"\n                />\n                <CommandList v-if=\"query\">\n                    <CommandEmpty />\n                    <CommandGroup\n                        v-for=\"(groupSuggestions, groupKey) in groupedSuggestions\"\n                        :key=\"groupKey\"\n                        :heading=\"groupKey || undefined\"\n                    >\n                        <CommandItem\n                            v-for=\"suggestion in groupSuggestions\"\n                            :key=\"suggestion.value\"\n                            :value=\"suggestion.value\"\n                            @select=\"handleSelect\"\n                        >\n                            <Search class=\"h-4 w-4 stroke-[3]\" />\n                            {{ suggestion.label }}\n                        </CommandItem>\n                    </CommandGroup>\n                </CommandList>\n            </Command>\n            <slot name=\"actions\" />\n        </CardContent>\n    </Card>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

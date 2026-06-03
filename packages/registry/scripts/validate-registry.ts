@@ -19,6 +19,7 @@ function validate() {
     console.log(`📋 Found ${files.length} registry items to validate.`);
 
     let errorCount = 0;
+    let totalFiles = 0;
 
     for (const file of files) {
         const filePath = path.join(REGISTRY_DIR, file);
@@ -56,9 +57,15 @@ function validate() {
                 console.error(`✗ [${file}] files array is missing or empty.`);
                 errorCount++;
             } else {
+                totalFiles += data.files.length;
                 for (const fileObj of data.files) {
                     if (!fileObj.path || !fileObj.content) {
-                        console.error(`✗ [${file}] Invalid file object in files array.`);
+                        console.error(`✗ [${file}] Invalid file object in files array (missing path or content).`);
+                        errorCount++;
+                    }
+
+                    if (!fileObj.path.startsWith(`components/ui/${data.name}/`) && !fileObj.path.startsWith('composables/')) {
+                        console.error(`✗ [${file}] File path "${fileObj.path}" does not match expected pattern "components/ui/${data.name}/" or "composables/".`);
                         errorCount++;
                     }
                 }
@@ -67,6 +74,13 @@ function validate() {
             if (!Array.isArray(data.dependencies)) {
                 console.error(`✗ [${file}] dependencies must be an array.`);
                 errorCount++;
+            } else {
+                for (const dep of data.dependencies) {
+                    if (dep.includes('@radix-ui') || dep.includes('lucide-react') || dep.includes('react-hook-form') || dep.includes('cmdk') || dep.includes('react-day-picker')) {
+                        console.error(`✗ [${file}] Found React dependency "${dep}" — should be Vue equivalent.`);
+                        errorCount++;
+                    }
+                }
             }
             if (!Array.isArray(data.registryDependencies)) {
                 console.error(`✗ [${file}] registryDependencies must be an array.`);
@@ -87,6 +101,8 @@ function validate() {
             errorCount++;
         }
     }
+
+    console.log(`\n📊 Total files across all registry items: ${totalFiles}`);
 
     if (errorCount > 0) {
         console.error(`\n❌ Validation failed with ${errorCount} errors.`);

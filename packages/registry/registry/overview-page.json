@@ -1,0 +1,105 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "overview-page",
+  "type": "registry:ui",
+  "title": "Overview Page",
+  "description": "A highly customizable neo-brutalist Overview Page component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "dashboard-stats",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "components/ui/overview-page/OverviewPage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, type Component } from 'vue'\nimport { Activity } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport DashboardStats from '@/components/ui/dashboard-stats/DashboardStats.vue'\nimport type { StatItem } from '@/components/ui/dashboard-stats/DashboardStats.vue'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardHeader from '@/components/ui/card/CardHeader.vue'\nimport CardTitle from '@/components/ui/card/CardTitle.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\n\nexport interface OverviewStat {\n    title: string\n    value: string\n    change: string\n    trend: 'up' | 'down' | 'neutral'\n}\n\ninterface OverviewPageProps {\n    title?: string\n    stats?: OverviewStat[]\n    class?: string\n}\n\nconst props = withDefaults(defineProps<OverviewPageProps>(), {\n    title: undefined,\n    stats: () => [],\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst emit = defineEmits<{\n    'stat-click': [index: number]\n}>()\n\nconst rootClasses = computed(() => cn('w-full max-w-6xl mx-auto p-6', props.class))\n\nconst resolvedTitle = computed(() => props.title ?? t('overviewPage.defaultTitle'))\nconst resolvedRecentActivity = computed(() => t('overviewPage.recentActivity'))\nconst resolvedQuickStats = computed(() => t('overviewPage.quickStats'))\n\nconst dashboardStats = computed<StatItem[]>(() =>\n    props.stats.map((stat) => ({\n        title: stat.title,\n        value: stat.value,\n        description: '',\n        change: stat.change,\n        trend: stat.trend,\n        icon: Activity as Component,\n    }))\n)\n\nfunction handleStatsClick(event: MouseEvent) {\n    const target = event.target as HTMLElement\n    const grid = (event.currentTarget as HTMLElement).querySelector('.grid')\n    if (!grid) return\n    const cards = Array.from(grid.children)\n    for (let i = 0; i < cards.length; i++) {\n        if (cards[i].contains(target)) {\n            emit('stat-click', i)\n            return\n        }\n    }\n}\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <slot name=\"header\">\n            <h1 class=\"text-3xl font-black tracking-tight mb-8\">\n{{ resolvedTitle }}\n</h1>\n        </slot>\n\n        <div @click=\"handleStatsClick\">\n            <DashboardStats :stats=\"dashboardStats\" />\n        </div>\n\n        <div class=\"grid grid-cols-1 md:grid-cols-2 gap-6 mt-8\">\n            <Card variant=\"default\">\n                <CardHeader>\n                    <CardTitle>{{ resolvedRecentActivity }}</CardTitle>\n                </CardHeader>\n                <CardContent>\n                    <slot />\n                </CardContent>\n            </Card>\n            <Card variant=\"default\">\n                <CardHeader>\n                    <CardTitle>{{ resolvedQuickStats }}</CardTitle>\n                </CardHeader>\n                <CardContent>\n                    <div class=\"space-y-3\">\n                        <div\n                            v-for=\"(stat, index) in stats\"\n                            :key=\"stat.title\"\n                            class=\"flex items-center justify-between p-3 bg-brutal-muted border-3 border-brutal shadow-brutal-sm cursor-pointer hover:shadow-brutal-lg hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none transition-all\"\n                            @click=\"emit('stat-click', index)\"\n                        >\n                            <span class=\"font-bold text-sm\">{{ stat.title }}</span>\n                            <span class=\"font-black\">{{ stat.value }}</span>\n                        </div>\n                    </div>\n                </CardContent>\n            </Card>\n        </div>\n\n        <slot name=\"footer\" />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scratch-card",
+  "type": "registry:ui",
+  "title": "Scratch Card",
+  "description": "A highly customizable neo-brutalist Scratch Card component built with Brutx design tokens for Vue 3.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/scratch-card/ScratchCard.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed, toRef } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { useReducedMotion } from '@/composables/useReducedMotion'\nimport { useCanvasInteraction } from '@/composables/useCanvasInteraction'\nimport { useLocale } from '@/composables/useLocale'\nimport { scratchCardVariants } from '@/components/ui/scratch-card/scratch-card-variants'\n\ninterface ScratchCardProps {\n    percentage?: number\n    brushRadius?: number\n    overlayColor?: string\n    fadeDuration?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ScratchCardProps>(), {\n    percentage: 50,\n    brushRadius: 20,\n    overlayColor: undefined,\n    fadeDuration: 300,\n    class: '',\n})\n\nconst emit = defineEmits<{\n    progress: [percent: number]\n    completed: []\n}>()\n\nconst containerRef = ref<HTMLDivElement | null>(null)\nconst canvasRef = ref<HTMLCanvasElement | null>(null)\nconst prefersReducedMotion = useReducedMotion()\nconst { t } = useLocale()\n\nconst drawOverlay = (ctxVal: CanvasRenderingContext2D, w: number, h: number) => {\n    ctxVal.clearRect(0, 0, w, h)\n\n    if (props.overlayColor) {\n        ctxVal.fillStyle = props.overlayColor\n        ctxVal.fillRect(0, 0, w, h)\n    } else {\n        let primary = '#FF6B6B'\n        let secondary = '#4ECDC4'\n        let fg = '#000000'\n        if (typeof document !== 'undefined') {\n            const rootStyle = getComputedStyle(document.documentElement)\n            primary = rootStyle.getPropertyValue('--brutal-primary').trim() || primary\n            secondary = rootStyle.getPropertyValue('--brutal-secondary').trim() || secondary\n            fg = rootStyle.getPropertyValue('--brutal-fg').trim() || fg\n        }\n\n        ctxVal.fillStyle = secondary\n        ctxVal.fillRect(0, 0, w, h)\n\n        ctxVal.strokeStyle = primary\n        ctxVal.lineWidth = 10\n        const spacing = 20\n        for (let i = -h; i < w + h; i += spacing) {\n            ctxVal.beginPath()\n            ctxVal.moveTo(i, 0)\n            ctxVal.lineTo(i + h, h)\n            ctxVal.stroke()\n        }\n\n        ctxVal.strokeStyle = fg\n        ctxVal.lineWidth = 2\n        for (let i = -h; i < w + h; i += spacing) {\n            ctxVal.beginPath()\n            ctxVal.moveTo(i + 5, 0)\n            ctxVal.lineTo(i + 5 + h, h)\n            ctxVal.stroke()\n        }\n    }\n}\n\nconst {\n    isRevealed,\n    revealAll,\n    handlePointerDown,\n    handlePointerMove,\n    handlePointerUp,\n    handleTouchStart,\n    handleTouchMove,\n    handleTouchEnd,\n} = useCanvasInteraction({\n    containerRef,\n    canvasRef,\n    brushRadius: toRef(props, 'brushRadius'),\n    percentage: toRef(props, 'percentage'),\n    fadeDuration: toRef(props, 'fadeDuration'),\n    prefersReducedMotion,\n    onProgress: (percent) => emit('progress', percent),\n    onCompleted: () => emit('completed'),\n    drawOverlay,\n})\n\ndefineExpose({\n    isRevealed,\n    revealAll,\n})\n\nconst containerClasses = computed(() =>\n    cn(scratchCardVariants(), props.class)\n)\n\nconst canvasStyle = computed(() => ({\n    transition: `opacity ${props.fadeDuration}ms ease-out`,\n    opacity: isRevealed.value ? 0 : 1,\n}))\n</script>\n\n<template>\n    <div\n        ref=\"containerRef\"\n        :class=\"containerClasses\"\n        role=\"region\"\n        :aria-label=\"t('scratchCard.ariaLabel')\"\n        tabindex=\"0\"\n        @keydown.enter=\"revealAll\"\n        @keydown.space.prevent=\"revealAll\"\n    >\n        <div class=\"scratch-card-content w-full h-full\">\n            <slot />\n        </div>\n        <canvas\n            v-if=\"!isRevealed || !prefersReducedMotion\"\n            ref=\"canvasRef\"\n            class=\"absolute inset-0 cursor-crosshair touch-none select-none z-10\"\n            :style=\"canvasStyle\"\n            @pointerdown=\"handlePointerDown\"\n            @pointermove=\"handlePointerMove\"\n            @pointerup=\"handlePointerUp\"\n            @pointercancel=\"handlePointerUp\"\n            @touchstart=\"handleTouchStart\"\n            @touchmove=\"handleTouchMove\"\n            @touchend=\"handleTouchEnd\"\n        />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/scratch-card/scratch-card-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const scratchCardVariants = cva(\n    [\n        'relative',\n        'border-3 border-brutal',\n        'rounded-brutal',\n        'overflow-hidden',\n        'bg-brutal-bg',\n    ]\n)\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "composables/useReducedMotion.ts",
+      "content": "import { onMounted, onUnmounted, ref } from 'vue'\n\nexport function useReducedMotion() {\n    const prefersReduced = ref(false)\n    let mediaQuery: MediaQueryList | null = null\n\n    const onChange = (e: MediaQueryListEvent) => {\n        prefersReduced.value = e.matches\n    }\n\n    onMounted(() => {\n        if (typeof window !== 'undefined') {\n            mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')\n            prefersReduced.value = mediaQuery.matches\n            mediaQuery.addEventListener('change', onChange)\n        }\n    })\n\n    onUnmounted(() => {\n        mediaQuery?.removeEventListener('change', onChange)\n    })\n\n    return prefersReduced\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

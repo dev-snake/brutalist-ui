@@ -1,12 +1,11 @@
 import type { ProjectType } from './types.js';
 
-export { COMPONENTS, AVAILABLE_COMPONENTS } from 'brutx-shared';
-export type { ComponentMeta as ComponentInfo } from 'brutx-shared';
+export { COMPONENTS, AVAILABLE_COMPONENTS } from 'brutx-shared-vue';
+export type { ComponentMeta as ComponentInfo } from 'brutx-shared-vue';
 
 export const CONFIG_FILES = {
-    next: ['next.config.js', 'next.config.mjs', 'next.config.ts'],
     vite: ['vite.config.js', 'vite.config.ts', 'vite.config.mjs'],
-    remix: ['remix.config.js'],
+    nuxt: ['nuxt.config.js', 'nuxt.config.ts', 'nuxt.config.mjs'],
     tailwind: [
         'tailwind.config.ts',
         'tailwind.config.js',
@@ -22,18 +21,14 @@ export const CONFIG_FILES = {
 } as const;
 
 export const CSS_LOCATIONS: Record<ProjectType, readonly string[]> = {
-    nextjs: ['app/globals.css', 'styles/globals.css', 'app/global.css'],
-    'nextjs-src': ['src/app/globals.css', 'src/styles/globals.css', 'src/app/global.css'],
-    vite: ['src/index.css', 'src/App.css', 'index.css'],
-    'vite-src': ['src/index.css', 'src/App.css', 'src/styles/index.css'],
-    cra: ['src/index.css', 'src/App.css'],
-    remix: ['app/styles/global.css', 'app/root.css', 'app/tailwind.css'],
+    'vite-vue': ['src/index.css', 'src/App.css', 'src/assets/main.css', 'index.css'],
+    'vite-vue-src': ['src/index.css', 'src/App.css', 'src/assets/main.css', 'src/styles/index.css'],
+    nuxt: ['assets/css/main.css', 'assets/css/tailwind.css', 'assets/css/global.css'],
     unknown: [
         'src/index.css',
-        'src/app/globals.css',
-        'app/globals.css',
-        'src/styles/globals.css',
-        'styles/globals.css',
+        'src/assets/main.css',
+        'src/styles/index.css',
+        'assets/css/main.css',
         'index.css',
     ],
 } as const;
@@ -42,7 +37,8 @@ export const BASE_DEPENDENCIES = [
     'clsx',
     'tailwind-merge',
     'class-variance-authority',
-    'lucide-react',
+    'lucide-vue-next',
+    'reka-ui',
 ] as const;
 
 export const DEFAULT_ALIASES = {
@@ -52,9 +48,9 @@ export const DEFAULT_ALIASES = {
 
 export const DEFAULT_TAILWIND_CONFIG = 'tailwind.config.js';
 
-export const SCHEMA_URL = 'https://brutxui.site/schema.json';
+export const SCHEMA_URL = 'https://lidaixingchen.github.io/brutxui-vue3/schema.json';
 
-export const DEFAULT_REGISTRY_URL = 'https://raw.githubusercontent.com/dev-snake/brutxui/main/packages/registry/registry';
+export const DEFAULT_REGISTRY_URL = 'https://raw.githubusercontent.com/lidaixingchen/brutxui-vue3/main/packages/registry/registry';
 
 export const BRUTALIST_CSS_STYLES = `
 :root {

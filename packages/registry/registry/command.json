@@ -3,18 +3,55 @@
   "name": "command",
   "type": "registry:ui",
   "title": "Command",
-  "description": "A highly customizable neo-brutalist Command component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Command component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "cmdk",
-    "lucide-react"
+    "reka-ui"
   ],
-  "registryDependencies": [
-    "dialog"
-  ],
+  "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/command.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport { Command as CommandPrimitive } from 'cmdk';\nimport { SearchIcon } from 'lucide-react';\n\nimport { cn } from '@/lib/utils';\nimport { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';\n\nfunction Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {\n    return (\n        <CommandPrimitive\n            data-slot=\"command\"\n            className={cn(\n                'flex h-full w-full flex-col overflow-hidden',\n                'bg-white dark:bg-gray-900',\n                'text-black dark:text-white',\n                className\n            )}\n            {...props}\n        />\n    );\n}\n\nfunction CommandDialog({\n    title = 'Command Palette',\n    description = 'Search for a command to run...',\n    children,\n    className,\n    showCloseButton = true,\n    ...props\n}: React.ComponentProps<typeof Dialog> & {\n    title?: string;\n    description?: string;\n    className?: string;\n    showCloseButton?: boolean;\n}) {\n    return (\n        <Dialog {...props}>\n            <DialogContent\n                className={cn('overflow-hidden p-0', className)}\n                showCloseButton={showCloseButton}\n            >\n                <DialogHeader className=\"sr-only\">\n                    <DialogTitle>{title}</DialogTitle>\n                    <DialogDescription>{description}</DialogDescription>\n                </DialogHeader>\n                <Command className=\"[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-black [&_[cmdk-group-heading]]:text-gray-600 dark:[&_[cmdk-group-heading]]:text-gray-400 [&_[cmdk-group]]:px-2 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-3 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5\">\n                    {children}\n                </Command>\n            </DialogContent>\n        </Dialog>\n    );\n}\n\nfunction CommandInput({\n    className,\n    ...props\n}: React.ComponentProps<typeof CommandPrimitive.Input>) {\n    return (\n        <div\n            data-slot=\"command-input-wrapper\"\n            className={cn(\n                'flex h-12 items-center gap-3 px-4',\n                'border-b-3 border-brutal',\n                'bg-[#FFE66D]'\n            )}\n        >\n            <SearchIcon className=\"size-5 shrink-0 stroke-[3] text-black\" />\n            <CommandPrimitive.Input\n                data-slot=\"command-input\"\n                className={cn(\n                    'flex h-full w-full bg-transparent py-3',\n                    'text-sm font-bold text-black placeholder:text-black/60',\n                    'outline-none',\n                    'disabled:cursor-not-allowed disabled:opacity-50',\n                    className\n                )}\n                {...props}\n            />\n        </div>\n    );\n}\n\nfunction CommandList({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.List>) {\n    return (\n        <CommandPrimitive.List\n            data-slot=\"command-list\"\n            className={cn(\n                'max-h-[300px] overflow-x-hidden overflow-y-auto scroll-py-1',\n                'p-2',\n                className\n            )}\n            {...props}\n        />\n    );\n}\n\nfunction CommandEmpty({\n    className,\n    ...props\n}: React.ComponentProps<typeof CommandPrimitive.Empty>) {\n    return (\n        <CommandPrimitive.Empty\n            data-slot=\"command-empty\"\n            className={cn(\n                'py-8 text-center text-sm font-bold',\n                'text-gray-500 dark:text-gray-400',\n                className\n            )}\n            {...props}\n        />\n    );\n}\n\nfunction CommandGroup({\n    className,\n    ...props\n}: React.ComponentProps<typeof CommandPrimitive.Group>) {\n    return (\n        <CommandPrimitive.Group\n            data-slot=\"command-group\"\n            className={cn(\n                'overflow-hidden p-1',\n                '[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2',\n                '[&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-black [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider',\n                '[&_[cmdk-group-heading]]:text-gray-500 dark:[&_[cmdk-group-heading]]:text-gray-400',\n                className\n            )}\n            {...props}\n        />\n    );\n}\n\nfunction CommandSeparator({\n    className,\n    ...props\n}: React.ComponentProps<typeof CommandPrimitive.Separator>) {\n    return (\n        <CommandPrimitive.Separator\n            data-slot=\"command-separator\"\n            className={cn('-mx-1 my-2 h-[3px]', 'bg-[var(--brutal-border-color,#000)]', className)}\n            {...props}\n        />\n    );\n}\n\nfunction CommandItem({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Item>) {\n    return (\n        <CommandPrimitive.Item\n            data-slot=\"command-item\"\n            className={cn(\n                'relative flex cursor-pointer items-center gap-3 px-3 py-2',\n                'text-sm font-semibold',\n                'select-none outline-none',\n                'border-2 border-transparent',\n                'data-[selected=true]:bg-[#4ECDC4] data-[selected=true]:text-black',\n                'data-[selected=true]:border-brutal data-[selected=true]:font-black',\n                'data-[selected=true]:shadow-brutal-sm',\n                'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',\n                '[&_svg]:pointer-events-none [&_svg]:shrink-0',\n                \"[&_svg:not([class*='size-'])]:size-5\",\n                \"[&_svg:not([class*='text-'])]:text-current\",\n                className\n            )}\n            {...props}\n        />\n    );\n}\n\nfunction CommandShortcut({ className, ...props }: React.ComponentProps<'span'>) {\n    return (\n        <span\n            data-slot=\"command-shortcut\"\n            className={cn(\n                'ml-auto text-xs font-black tracking-wider',\n                'px-2 py-1',\n                'bg-gray-100 dark:bg-gray-800',\n                'border-2 border-brutal',\n                'text-gray-600 dark:text-gray-300',\n                className\n            )}\n            {...props}\n        />\n    );\n}\n\nexport {\n    Command,\n    CommandDialog,\n    CommandInput,\n    CommandList,\n    CommandEmpty,\n    CommandGroup,\n    CommandItem,\n    CommandShortcut,\n    CommandSeparator,\n};\n",
+      "path": "components/ui/command/Command.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CommandProps {\n    class?: string\n}\n\nconst props = defineProps<CommandProps>()\n\nconst classes = computed(() =>\n    cn(\n        'flex h-full w-full flex-col overflow-hidden',\n        'bg-brutal-bg text-brutal-fg',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <div :class=\"classes\" role=\"combobox\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandDialog.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DialogRoot, DialogPortal, DialogOverlay, DialogContent, DialogTitle, DialogDescription } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Command from '@/components/ui/command/Command.vue'\n\ninterface CommandDialogProps {\n    open?: boolean\n    title?: string\n    description?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<CommandDialogProps>(), {\n    open: false,\n    title: undefined,\n    description: undefined,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('command.dialogTitle'))\nconst resolvedDescription = computed(() => props.description ?? t('command.dialogDescription'))\n\nconst emit = defineEmits<{ 'update:open': [value: boolean] }>()\n\nconst overlayClasses = computed(() =>\n    cn(\n        'fixed inset-0 z-50 bg-brutal-overlay',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'\n    )\n)\n\nconst contentClasses = computed(() =>\n    cn(\n        'fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]',\n        'w-full max-w-lg overflow-hidden p-0',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal shadow-brutal-xl rounded-brutal',\n        'duration-200',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DialogRoot :open=\"props.open\" @update:open=\"emit('update:open', $event)\">\n        <DialogPortal>\n            <DialogOverlay :class=\"overlayClasses\" />\n            <DialogContent :class=\"contentClasses\">\n                <div class=\"sr-only\">\n                    <DialogTitle>{{ resolvedTitle }}</DialogTitle>\n                    <DialogDescription>{{ resolvedDescription }}</DialogDescription>\n                </div>\n                <Command class=\"[&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:font-black [&_[data-slot=command-group-heading]]:text-brutal-muted-foreground [&_[data-slot=command-group]]:px-2 [&_[data-slot=command-input]]:h-12 [&_[data-slot=command-item]]:px-3 [&_[data-slot=command-item]]:py-3\">\n                    <slot />\n                </Command>\n            </DialogContent>\n        </DialogPortal>\n    </DialogRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandEmpty.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\n\ninterface CommandEmptyProps {\n    class?: string\n}\n\nconst props = defineProps<CommandEmptyProps>()\n\nconst { t } = useLocale()\n\nconst classes = computed(() =>\n    cn(\n        'py-8 text-center text-sm font-bold',\n        'text-brutal-muted-foreground',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <p :class=\"classes\" data-slot=\"command-empty\">\n        <slot>{{ t('command.emptyText') }}</slot>\n    </p>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CommandGroupProps {\n    heading?: string\n    class?: string\n}\n\nconst props = defineProps<CommandGroupProps>()\n\nconst classes = computed(() =>\n    cn(\n        'overflow-hidden p-1',\n        props.class\n    )\n)\n\nconst headingClasses = computed(() =>\n    cn(\n        'px-3 py-2 text-xs font-black uppercase tracking-wider',\n        'text-brutal-muted-foreground'\n    )\n)\n</script>\n\n<template>\n    <div :class=\"classes\" data-slot=\"command-group\" role=\"group\">\n        <div v-if=\"heading\" :class=\"headingClasses\" data-slot=\"command-group-heading\">\n            {{ heading }}\n        </div>\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandInput.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\n\ninterface CommandInputProps {\n    modelValue?: string\n    placeholder?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<CommandInputProps>(), {\n    modelValue: undefined,\n    placeholder: undefined,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst resolvedPlaceholder = computed(() => props.placeholder ?? t('command.placeholder'))\n\nconst emit = defineEmits<{ 'update:modelValue': [value: string] }>()\n\nconst wrapperClasses = computed(() =>\n    cn(\n        'flex h-12 items-center gap-3 px-4',\n        'border-b-3 border-brutal',\n        'bg-brutal-accent'\n    )\n)\n\nconst inputClasses = computed(() =>\n    cn(\n        'flex h-full w-full bg-transparent py-3',\n        'text-sm font-bold text-brutal-fg placeholder:text-brutal-placeholder',\n        'outline-none',\n        'disabled:cursor-not-allowed disabled:opacity-50',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <div :class=\"wrapperClasses\" data-slot=\"command-input\">\n        <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"size-5 shrink-0 stroke-[3] text-brutal-fg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <circle cx=\"11\" cy=\"11\" r=\"8\" />\n            <path d=\"m21 21-4.3-4.3\" />\n        </svg>\n        <input\n            type=\"text\"\n            :value=\"modelValue\"\n            :placeholder=\"resolvedPlaceholder\"\n            :class=\"inputClasses\"\n            @input=\"emit('update:modelValue', ($event.target as HTMLInputElement).value)\"\n        >\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CommandItemProps {\n    value: string\n    disabled?: boolean\n    class?: string\n}\n\nconst props = defineProps<CommandItemProps>()\n\nconst emit = defineEmits<{ select: [value: string] }>()\n\nconst isSelected = ref(false)\n\nconst classes = computed(() =>\n    cn(\n        'relative flex cursor-pointer items-center gap-3 px-3 py-2',\n        'text-sm font-semibold',\n        'select-none outline-none',\n        'border-3 border-transparent',\n        'data-[selected=true]:bg-brutal-secondary data-[selected=true]:text-brutal-fg',\n        'data-[selected=true]:border-brutal data-[selected=true]:font-black',\n        'data-[selected=true]:shadow-brutal-sm',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',\n        '[&_svg]:pointer-events-none [&_svg]:shrink-0',\n        props.class\n    )\n)\n\nfunction handleMouseEnter() {\n    isSelected.value = true\n}\n\nfunction handleMouseLeave() {\n    isSelected.value = false\n}\n\nfunction handleClick() {\n    if (!props.disabled) {\n        emit('select', props.value)\n    }\n}\n</script>\n\n<template>\n    <div\n        :class=\"classes\"\n        role=\"option\"\n        :aria-selected=\"isSelected\"\n        :aria-disabled=\"disabled || undefined\"\n        data-slot=\"command-item\"\n        :data-selected=\"isSelected\"\n        :data-disabled=\"disabled\"\n        tabindex=\"-1\"\n        @mouseenter=\"handleMouseEnter\"\n        @mouseleave=\"handleMouseLeave\"\n        @click=\"handleClick\"\n        @keydown.enter=\"handleClick\"\n    >\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandList.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CommandListProps {\n    class?: string\n}\n\nconst props = defineProps<CommandListProps>()\n\nconst classes = computed(() =>\n    cn(\n        'max-h-80 overflow-x-hidden overflow-y-auto scroll-py-1',\n        'p-2',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <div :class=\"classes\" role=\"listbox\" data-slot=\"command-list\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CommandSeparatorProps {\n    class?: string\n}\n\nconst props = defineProps<CommandSeparatorProps>()\n\nconst classes = computed(() =>\n    cn('-mx-1 my-2 h-[3px] bg-brutal-fg', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\" role=\"separator\" />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/command/CommandShortcut.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface CommandShortcutProps {\n    class?: string\n}\n\nconst props = defineProps<CommandShortcutProps>()\n\nconst classes = computed(() =>\n    cn(\n        'ml-auto text-xs font-black tracking-wider',\n        'px-2 py-1',\n        'bg-brutal-muted',\n        'border-3 border-brutal',\n        'text-brutal-muted-foreground',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <span :class=\"classes\" data-slot=\"command-shortcut\">\n        <slot />\n    </span>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -40,7 +77,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -70,7 +111,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -80,16 +124,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

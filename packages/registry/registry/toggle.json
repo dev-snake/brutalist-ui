@@ -3,15 +3,20 @@
   "name": "toggle",
   "type": "registry:ui",
   "title": "Toggle",
-  "description": "A highly customizable neo-brutalist Toggle component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Toggle component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-toggle"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/toggle.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as TogglePrimitive from '@radix-ui/react-toggle';\nimport { cva, type VariantProps } from 'class-variance-authority';\n\nimport { cn } from '@/lib/utils';\n\nconst toggleVariants = cva(\n    [\n        'inline-flex items-center justify-center gap-2 text-sm font-black tracking-wide',\n        'border-3 border-brutal rounded-brutal transition-all duration-150',\n        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'disabled:pointer-events-none disabled:opacity-50',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n    ],\n    {\n        variants: {\n            variant: {\n                default: [\n                    'bg-white dark:bg-gray-800 text-brutal-fg shadow-brutal-sm',\n                    'hover:bg-brutal-muted hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal',\n                    'data-[state=on]:bg-brutal-primary data-[state=on]:text-brutal-fg data-[state=on]:shadow-none data-[state=on]:translate-y-[var(--brutal-pressed-offset,2px)]',\n                ],\n                outline: [\n                    'bg-transparent text-brutal-fg border-3 border-brutal shadow-brutal-sm',\n                    'hover:bg-brutal-muted hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal',\n                    'data-[state=on]:bg-brutal-secondary data-[state=on]:shadow-none data-[state=on]:translate-y-[var(--brutal-pressed-offset,2px)]',\n                ],\n            },\n            size: {\n                default: 'h-10 px-3 min-w-10',\n                sm: 'h-8 px-2 min-w-8 text-xs',\n                lg: 'h-12 px-4 min-w-12',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            size: 'default',\n        },\n    }\n);\n\nconst Toggle = React.forwardRef<\n    React.ElementRef<typeof TogglePrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &\n        VariantProps<typeof toggleVariants>\n>(({ className, variant, size, ...props }, ref) => (\n    <TogglePrimitive.Root\n        ref={ref}\n        className={cn(toggleVariants({ variant, size }), className)}\n        {...props}\n    />\n));\n\nToggle.displayName = TogglePrimitive.Root.displayName;\n\nexport { Toggle, toggleVariants };\n",
+      "path": "components/ui/toggle/Toggle.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { Toggle } from 'reka-ui'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { toggleVariants } from '@/components/ui/toggle/toggle-variants'\n\ntype ToggleVariantProps = VariantProps<typeof toggleVariants>\n\ninterface ToggleProps {\n    defaultValue?: boolean\n    pressed?: boolean\n    variant?: NonNullable<ToggleVariantProps['variant']>\n    size?: NonNullable<ToggleVariantProps['size']>\n    disabled?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ToggleProps>(), {\n    variant: 'default',\n    size: 'default',\n    disabled: false,\n    class: '',\n})\n\nconst emit = defineEmits<{ 'update:pressed': [value: boolean] }>()\n\nconst classes = computed(() =>\n    cn(toggleVariants({ variant: props.variant, size: props.size }), props.class)\n)\n</script>\n\n<template>\n    <Toggle\n        :default-value=\"defaultValue\"\n        :pressed=\"pressed\"\n        :disabled=\"disabled\"\n        :class=\"classes\"\n        @update:pressed=\"emit('update:pressed', $event)\"\n    >\n        <slot />\n    </Toggle>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/toggle/toggle-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const toggleVariants = cva(\n    [\n        'inline-flex items-center justify-center gap-2 text-sm font-black tracking-wide',\n        'border-3 border-brutal rounded-brutal transition-all duration-150',\n        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'disabled:pointer-events-none disabled:opacity-50',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n    ],\n    {\n        variants: {\n            variant: {\n                default: [\n                    'bg-brutal-bg text-brutal-fg shadow-brutal-sm',\n                    'hover:bg-brutal-muted hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal',\n                    'data-[state=on]:bg-brutal-primary data-[state=on]:text-brutal-fg data-[state=on]:shadow-none data-[state=on]:translate-y-[var(--brutal-pressed-offset,2px)]',\n                ],\n                outline: [\n                    'bg-transparent text-brutal-fg border-3 border-brutal shadow-brutal-sm',\n                    'hover:bg-brutal-muted hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal',\n                    'data-[state=on]:bg-brutal-secondary data-[state=on]:shadow-none data-[state=on]:translate-y-[var(--brutal-pressed-offset,2px)]',\n                ],\n            },\n            size: {\n                default: 'h-10 px-3 min-w-10',\n                sm: 'h-8 px-2 min-w-8 text-xs',\n                lg: 'h-12 px-4 min-w-12',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            size: 'default',\n        },\n    }\n)\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +42,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +76,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +89,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

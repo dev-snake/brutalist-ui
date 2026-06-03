@@ -1,0 +1,106 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "file-card",
+  "type": "registry:ui",
+  "title": "File Card",
+  "description": "A highly customizable neo-brutalist File Card component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "card",
+    "badge",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "components/ui/file-card/FileCard.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { FileIcon, Download } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport Badge from '@/components/ui/badge/Badge.vue'\nimport Button from '@/components/ui/button/Button.vue'\n\ninterface FileCardProps {\n    fileName?: string\n    fileSize?: string\n    fileType?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<FileCardProps>(), {\n    fileName: undefined,\n    fileSize: '',\n    fileType: '',\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst emit = defineEmits<{\n    download: []\n}>()\n\nconst rootClasses = computed(() => cn('w-full max-w-sm', props.class))\n\nconst resolvedFileName = computed(() => props.fileName ?? t('fileCard.defaultFileName'))\nconst resolvedDownload = computed(() => t('fileCard.download'))\n</script>\n\n<template>\n    <Card :class=\"rootClasses\" variant=\"default\">\n        <CardContent>\n            <div class=\"flex items-start gap-4\">\n                <div class=\"shrink-0 h-12 w-12 flex items-center justify-center bg-brutal-accent border-3 border-brutal shadow-brutal-sm\">\n                    <FileIcon class=\"h-6 w-6 stroke-[2.5]\" />\n                </div>\n                <div class=\"flex-1 min-w-0\">\n                    <p class=\"font-black text-sm truncate\">\n{{ resolvedFileName }}\n</p>\n                    <div class=\"mt-1 flex items-center gap-2\">\n                        <Badge v-if=\"fileType\" variant=\"secondary\" size=\"sm\">\n                            {{ fileType }}\n                        </Badge>\n                        <span v-if=\"fileSize\" class=\"text-xs text-brutal-muted-foreground font-medium\">\n                            {{ fileSize }}\n                        </span>\n                    </div>\n                </div>\n            </div>\n            <Button variant=\"primary\" size=\"sm\" class=\"mt-4 w-full\" @click=\"emit('download')\">\n                <Download class=\"mr-2 h-4 w-4 stroke-[3]\" />\n                {{ resolvedDownload }}\n            </Button>\n            <slot name=\"actions\" />\n        </CardContent>\n    </Card>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

@@ -3,9 +3,9 @@
   "name": "brutalist-hero",
   "type": "registry:ui",
   "title": "Brutalist Hero",
-  "description": "A highly customizable neo-brutalist Brutalist Hero component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Brutalist Hero component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "lucide-react"
+    "lucide-vue-next"
   ],
   "registryDependencies": [
     "button",
@@ -13,8 +13,8 @@
   ],
   "files": [
     {
-      "path": "components/ui/brutalist-hero.tsx",
-      "content": "import * as React from 'react';\nimport { ArrowRight, Sparkles } from 'lucide-react';\nimport { Button } from '@/components/ui/button';\nimport { Card, CardContent } from '@/components/ui/card';\n\nexport interface BrutalistHeroProps extends React.HTMLAttributes<HTMLDivElement> {\n    title?: string;\n    subtitle?: string;\n    primaryCtaText?: string;\n    secondaryCtaText?: string;\n    onPrimaryCtaClick?: () => void;\n    onSecondaryCtaClick?: () => void;\n}\n\nexport function BrutalistHero({\n    title = 'Build Bold Interfaces Faster with BrutxUI',\n    subtitle = 'A hyper-responsive, neo-brutalist component registry built with Radix UI and Tailwind CSS. Designed for devs who dare to be different.',\n    primaryCtaText = 'Get Started Now',\n    secondaryCtaText = 'View Component Registry',\n    onPrimaryCtaClick,\n    onSecondaryCtaClick,\n    className,\n    ...props\n}: BrutalistHeroProps) {\n    return (\n        <section\n            className={`w-full py-12 md:py-24 lg:py-32 bg-brutal-bg text-brutal-fg border-3 border-brutal rounded-none transition-colors duration-200 ${className || ''}`}\n            {...props}\n        >\n            <div className=\"container px-4 md:px-6 mx-auto\">\n                <div className=\"grid gap-12 lg:grid-cols-2 lg:gap-16 items-center\">\n                    <div className=\"flex flex-col justify-center space-y-6 text-left\">\n                        <div className=\"inline-flex items-center space-x-2 bg-brutal-accent text-black px-3 py-1 border-3 border-brutal w-fit font-black text-sm uppercase tracking-wider rotate-[-1deg]\">\n                            <Sparkles className=\"h-4 w-4 stroke-[3]\" />\n                            <span>V0.2.1 Release</span>\n                        </div>\n\n                        <h1 className=\"text-4xl font-black tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]\">\n                            {title}\n                        </h1>\n\n                        <p className=\"max-w-[600px] text-lg md:text-xl font-bold text-gray-700 dark:text-gray-300 leading-relaxed\">\n                            {subtitle}\n                        </p>\n\n                        <div className=\"flex flex-col sm:flex-row gap-4 pt-4\">\n                            <Button\n                                size=\"lg\"\n                                variant=\"primary\"\n                                className=\"font-black text-lg gap-2\"\n                                onClick={onPrimaryCtaClick}\n                            >\n                                <span>{primaryCtaText}</span>\n                                <ArrowRight className=\"h-5 w-5 stroke-[3]\" />\n                            </Button>\n                            <Button\n                                size=\"lg\"\n                                variant=\"outline\"\n                                className=\"font-black text-lg\"\n                                onClick={onSecondaryCtaClick}\n                            >\n                                {secondaryCtaText}\n                            </Button>\n                        </div>\n                    </div>\n\n                    <div className=\"relative mx-auto w-full max-w-[500px] lg:max-w-none\">\n                        <div className=\"absolute inset-0 bg-brutal-secondary translate-x-3 translate-y-3 border-3 border-brutal rounded-none\" />\n                        <Card className=\"relative z-10 border-3 border-brutal bg-white dark:bg-gray-800 rounded-none shadow-none p-2\">\n                            <div className=\"flex items-center justify-between border-b-3 border-brutal pb-2 mb-4 bg-gray-100 dark:bg-gray-700 p-2\">\n                                <div className=\"flex space-x-2\">\n                                    <div className=\"w-3.5 h-3.5 rounded-full bg-brutal-destructive border-2 border-brutal\" />\n                                    <div className=\"w-3.5 h-3.5 rounded-full bg-brutal-accent border-2 border-brutal\" />\n                                    <div className=\"w-3.5 h-3.5 rounded-full bg-brutal-success border-2 border-brutal\" />\n                                </div>\n                                <span className=\"text-xs font-black uppercase tracking-wider opacity-60\">brutx-terminal</span>\n                            </div>\n                            <CardContent className=\"font-mono text-sm space-y-3 text-black dark:text-white pt-2\">\n                                <p className=\"text-brutal-destructive font-black\">~/projects/my-bold-saas</p>\n                                <p className=\"flex items-center gap-2\">\n                                    <span className=\"text-brutal-secondary font-black\">$</span>\n                                    <span>npx brutx init</span>\n                                </p>\n                                <p className=\"text-gray-500 font-medium\">✓ Custom Tailwind design tokens configured</p>\n                                <p className=\"text-gray-500 font-medium\">✓ Global CSS token layer synchronized</p>\n                                <p className=\"flex items-center gap-2\">\n                                    <span className=\"text-brutal-secondary font-black\">$</span>\n                                    <span>npx brutx add hero pricing auth-card</span>\n                                </p>\n                                <p className=\"text-brutal-success font-black\">✓ Successfully added 3 blocks into /components/ui!</p>\n                            </CardContent>\n                        </Card>\n                    </div>\n                </div>\n            </div>\n        </section>\n    );\n}\n",
+      "path": "components/ui/brutalist-hero/BrutalistHero.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { ArrowRight, Sparkles } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Button from '@/components/ui/button/Button.vue'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\n\ninterface BrutalistHeroProps {\n    title?: string\n    subtitle?: string\n    primaryCtaText?: string\n    secondaryCtaText?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BrutalistHeroProps>(), {\n    title: undefined,\n    subtitle: '',\n    primaryCtaText: undefined,\n    secondaryCtaText: undefined,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('brutalistHero.title'))\nconst resolvedPrimaryCtaText = computed(() => props.primaryCtaText ?? t('brutalistHero.primaryCtaText'))\nconst resolvedSecondaryCtaText = computed(() => props.secondaryCtaText ?? t('brutalistHero.secondaryCtaText'))\n\nconst emit = defineEmits<{\n    primaryCta: []\n    secondaryCta: []\n}>()\n\nconst rootClasses = computed(() => cn('w-full', props.class))\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <div class=\"grid grid-cols-1 lg:grid-cols-2 gap-12 items-center\">\n            <div>\n                <div class=\"inline-flex items-center gap-2 mb-6 bg-brutal-accent px-3 py-1 border-3 border-brutal rotate-[-1deg]\">\n                    <Sparkles class=\"h-4 w-4 stroke-[3]\" />\n                    <span class=\"font-black text-sm\">{{ t('brutalistHero.neoBrutalismUI') }}</span>\n                </div>\n                <h1 class=\"text-4xl lg:text-5xl font-black tracking-tight leading-tight\">\n{{ resolvedTitle }}\n</h1>\n                <p v-if=\"subtitle\" class=\"mt-4 text-lg text-brutal-muted-foreground font-medium\">\n{{ subtitle }}\n</p>\n                <div class=\"mt-8 flex flex-wrap gap-4\">\n                    <Button variant=\"primary\" size=\"lg\" @click=\"emit('primaryCta')\">\n                        {{ resolvedPrimaryCtaText }}\n                        <ArrowRight class=\"ml-2 h-5 w-5 stroke-[3]\" />\n                    </Button>\n                    <Button variant=\"outline\" size=\"lg\" @click=\"emit('secondaryCta')\">\n{{ resolvedSecondaryCtaText }}\n</Button>\n                </div>\n            </div>\n\n            <div class=\"relative\">\n                <div class=\"absolute inset-0 bg-brutal-primary border-3 border-brutal translate-x-3 translate-y-3\" />\n                <Card variant=\"default\" padding=\"default\" class=\"relative bg-brutal-bg font-mono text-sm\">\n                    <CardContent>\n                        <div class=\"space-y-1\">\n                            <p class=\"text-brutal-muted-foreground\">\n$ npx brutxui init\n</p>\n                            <p class=\"text-brutal-success font-bold\">\n✓ Project initialized\n</p>\n                            <p class=\"text-brutal-muted-foreground\">\n$ npx brutxui add button\n</p>\n                            <p class=\"text-brutal-success font-bold\">\n✓ Button component added\n</p>\n                            <p class=\"text-brutal-muted-foreground\">\n$ npx brutxui add card dialog\n</p>\n                            <p class=\"text-brutal-success font-bold\">\n✓ 2 components added\n</p>\n                            <p class=\"text-brutal-accent font-bold animate-pulse\">\n█\n</p>\n                        </div>\n                    </CardContent>\n                </Card>\n            </div>\n        </div>\n    </div>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -40,7 +40,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -70,7 +74,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -80,16 +87,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

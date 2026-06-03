@@ -3,13 +3,48 @@
   "name": "table",
   "type": "registry:ui",
   "title": "Table",
-  "description": "A highly customizable neo-brutalist Table component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Table component built with Brutx design tokens for Vue 3.",
   "dependencies": [],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/table.tsx",
-      "content": "import * as React from 'react';\nimport { cn } from '@/lib/utils';\n\nconst Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(\n    ({ className, ...props }, ref) => (\n        <div className=\"relative w-full overflow-auto\">\n            <table\n                ref={ref}\n                className={cn(\n                    'w-full caption-bottom text-sm',\n                    'border-3 border-brutal',\n                    className\n                )}\n                {...props}\n            />\n        </div>\n    )\n);\nTable.displayName = 'Table';\n\nconst TableHeader = React.forwardRef<\n    HTMLTableSectionElement,\n    React.HTMLAttributes<HTMLTableSectionElement>\n>(({ className, ...props }, ref) => (\n    <thead\n        ref={ref}\n        className={cn(\n            'bg-[#FFE66D] dark:bg-gray-800 text-black dark:text-white',\n            '[&_tr]:border-b-3 [&_tr]:border-brutal',\n            className\n        )}\n        {...props}\n    />\n));\nTableHeader.displayName = 'TableHeader';\n\nconst TableBody = React.forwardRef<\n    HTMLTableSectionElement,\n    React.HTMLAttributes<HTMLTableSectionElement>\n>(({ className, ...props }, ref) => (\n    <tbody\n        ref={ref}\n        className={cn(\n            '[&_tr:last-child]:border-0',\n            '[&_tr:nth-child(even)]:bg-gray-50 dark:[&_tr:nth-child(even)]:bg-gray-800',\n            'dark:text-white',\n            className\n        )}\n        {...props}\n    />\n));\nTableBody.displayName = 'TableBody';\n\nconst TableFooter = React.forwardRef<\n    HTMLTableSectionElement,\n    React.HTMLAttributes<HTMLTableSectionElement>\n>(({ className, ...props }, ref) => (\n    <tfoot\n        ref={ref}\n        className={cn(\n            'border-t-3 border-brutal',\n            'bg-[#4ECDC4] dark:bg-gray-700',\n            'font-bold dark:text-white',\n            '[&>tr]:last:border-b-0',\n            className\n        )}\n        {...props}\n    />\n));\nTableFooter.displayName = 'TableFooter';\n\nconst TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(\n    ({ className, ...props }, ref) => (\n        <tr\n            ref={ref}\n            className={cn(\n                'border-b-3 border-brutal transition-colors',\n                'hover:bg-[#FFE66D]/30',\n                'data-[state=selected]:bg-[#FFE66D]',\n                className\n            )}\n            {...props}\n        />\n    )\n);\nTableRow.displayName = 'TableRow';\n\nconst TableHead = React.forwardRef<\n    HTMLTableCellElement,\n    React.ThHTMLAttributes<HTMLTableCellElement>\n>(({ className, ...props }, ref) => (\n    <th\n        ref={ref}\n        className={cn(\n            'h-12 px-4 text-left align-middle font-black tracking-wide text-black',\n            '[&:_has([role=checkbox])]:pr-0',\n            'border-r-3 border-[var(--brutal-border-color,#000)] last:border-r-0',\n            className\n        )}\n        {...props}\n    />\n));\nTableHead.displayName = 'TableHead';\n\nconst TableCell = React.forwardRef<\n    HTMLTableCellElement,\n    React.TdHTMLAttributes<HTMLTableCellElement>\n>(({ className, ...props }, ref) => (\n    <td\n        ref={ref}\n        className={cn(\n            'p-4 align-middle font-medium',\n            '[&:_has([role=checkbox])]:pr-0',\n            'border-r-3 border-brutal last:border-r-0',\n            className\n        )}\n        {...props}\n    />\n));\nTableCell.displayName = 'TableCell';\n\nconst TableCaption = React.forwardRef<\n    HTMLTableCaptionElement,\n    React.HTMLAttributes<HTMLTableCaptionElement>\n>(({ className, ...props }, ref) => (\n    <caption\n        ref={ref}\n        className={cn('mt-4 text-sm font-bold text-gray-600 dark:text-gray-400', className)}\n        {...props}\n    />\n));\nTableCaption.displayName = 'TableCaption';\n\nexport { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };\n",
+      "path": "components/ui/table/Table.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableProps {\n    class?: string\n}\n\nconst props = defineProps<TableProps>()\n\nconst classes = computed(() =>\n    cn('w-full caption-bottom text-sm', 'border-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div class=\"relative w-full overflow-x-auto\">\n        <table :class=\"classes\">\n            <slot />\n        </table>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/table/TableBody.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableBodyProps {\n    class?: string\n}\n\nconst props = defineProps<TableBodyProps>()\n\nconst classes = computed(() =>\n    cn(\n        '[&_tr:last-child]:border-0',\n        '[&_tr:nth-child(even)]:bg-brutal-muted',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <tbody :class=\"classes\">\n        <slot />\n    </tbody>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/table/TableCaption.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableCaptionProps {\n    class?: string\n}\n\nconst props = defineProps<TableCaptionProps>()\n\nconst classes = computed(() =>\n    cn('mt-4 text-sm font-bold text-brutal-muted-foreground', props.class)\n)\n</script>\n\n<template>\n    <caption :class=\"classes\">\n        <slot />\n    </caption>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/table/TableCell.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableCellProps {\n    class?: string\n}\n\nconst props = defineProps<TableCellProps>()\n\nconst classes = computed(() =>\n    cn(\n        'p-4 align-middle font-medium',\n        '[&:has([role=checkbox])]:pr-0',\n        'border-r-3 border-brutal last:border-r-0',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <td :class=\"classes\">\n        <slot />\n    </td>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/table/TableFooter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableFooterProps {\n    class?: string\n}\n\nconst props = defineProps<TableFooterProps>()\n\nconst classes = computed(() =>\n    cn('border-t-3 border-brutal bg-brutal-secondary font-bold [&>tr]:last:border-b-0', props.class)\n)\n</script>\n\n<template>\n    <tfoot :class=\"classes\">\n        <slot />\n    </tfoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/table/TableHead.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableHeadProps {\n    class?: string\n}\n\nconst props = defineProps<TableHeadProps>()\n\nconst classes = computed(() =>\n    cn(\n        'h-12 px-4 text-left align-middle font-black tracking-wide text-brutal-fg bg-brutal-accent',\n        '[&:has([role=checkbox])]:pr-0',\n        'border-r-3 border-brutal last:border-r-0',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <th :class=\"classes\">\n        <slot />\n    </th>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/table/TableHeader.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableHeaderProps {\n    class?: string\n}\n\nconst props = defineProps<TableHeaderProps>()\n\nconst classes = computed(() =>\n    cn('bg-brutal-accent text-brutal-fg [&_tr]:border-b-3 [&_tr]:border-brutal', props.class)\n)\n</script>\n\n<template>\n    <thead :class=\"classes\">\n        <slot />\n    </thead>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/table/TableRow.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface TableRowProps {\n    class?: string\n}\n\nconst props = defineProps<TableRowProps>()\n\nconst classes = computed(() =>\n    cn(\n        'border-b-3 border-brutal transition-colors',\n        'hover:bg-brutal-accent/30',\n        'data-[state=selected]:bg-brutal-accent',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <tr :class=\"classes\">\n        <slot />\n    </tr>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -35,7 +70,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -65,7 +104,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -75,16 +117,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

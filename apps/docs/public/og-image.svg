@@ -31,13 +31,13 @@
   
   <!-- Subtitle -->
   <text x="600" y="380" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#333">
-    Neo-Brutalism React Component Library
+    Neo-Brutalism Vue 3 Component Library
   </text>
-  
+
   <!-- Features -->
   <g transform="translate(300, 440)">
     <rect x="0" y="0" width="140" height="40" fill="#FF6B6B" stroke="#000" stroke-width="3"/>
-    <text x="70" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#000">27 Components</text>
+    <text x="70" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#000">43 Components</text>
   </g>
   <g transform="translate(460, 440)">
     <rect x="0" y="0" width="120" height="40" fill="#4ECDC4" stroke="#000" stroke-width="3"/>
@@ -51,9 +51,9 @@
     <rect x="0" y="0" width="120" height="40" fill="#FF6B6B" stroke="#000" stroke-width="3"/>
     <text x="60" y="27" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#000">Dark Mode</text>
   </g>
-  
+
   <!-- URL -->
   <text x="600" y="560" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#666">
-    brutxui.site
+    lidaixingchen.github.io/brutxui-vue3
   </text>
 </svg>

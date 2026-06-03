@@ -3,9 +3,9 @@
   "name": "waitlist-page",
   "type": "registry:ui",
   "title": "Waitlist Page",
-  "description": "A highly customizable neo-brutalist Waitlist Page component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Waitlist Page component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "lucide-react"
+    "lucide-vue-next"
   ],
   "registryDependencies": [
     "button",
@@ -13,8 +13,8 @@
   ],
   "files": [
     {
-      "path": "components/ui/waitlist-page.tsx",
-      "content": "import * as React from 'react';\nimport { Sparkles, Users, Star } from 'lucide-react';\nimport { Button } from '@/components/ui/button';\nimport { Input } from '@/components/ui/input';\n\nexport interface WaitlistPageProps extends React.HTMLAttributes<HTMLDivElement> {\n    title?: string;\n    description?: string;\n    ctaText?: string;\n    onWaitlistSubmit?: (e: React.FormEvent<HTMLFormElement>, email: string) => void;\n}\n\nexport function WaitlistPage({\n    title = 'Join the BrutxUI Waitlist Club',\n    description = 'Get early developer keys to copy premium blocks, customized theme presets, and unlock deep registry CLI integrations before everyone else.',\n    ctaText = 'Secure Priority Access',\n    onWaitlistSubmit,\n    className,\n    ...props\n}: WaitlistPageProps) {\n    const [email, setEmail] = React.useState('');\n\n    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {\n        e.preventDefault();\n        if (onWaitlistSubmit) onWaitlistSubmit(e, email);\n    };\n\n    return (\n        <section\n            className={`w-full py-16 md:py-24 bg-brutal-bg text-brutal-fg border-3 border-brutal transition-colors duration-200 ${className || ''}`}\n            {...props}\n        >\n            <div className=\"container px-4 md:px-6 mx-auto max-w-4xl\">\n                <div className=\"flex flex-col items-center justify-center text-center space-y-8\">\n                    <div className=\"inline-flex items-center space-x-2 bg-brutal-accent text-black px-4 py-1.5 border-3 border-brutal font-black text-xs uppercase tracking-wider rotate-[-1.5deg]\">\n                        <Sparkles className=\"h-4 w-4 stroke-[3] animate-spin\" />\n                        <span>Private Beta Access Open</span>\n                    </div>\n\n                    <div className=\"space-y-4\">\n                        <h1 className=\"text-4xl font-black tracking-tight sm:text-5xl md:text-6xl leading-[1.05]\">\n                            {title}\n                        </h1>\n                        <p className=\"max-w-[640px] text-lg font-bold text-gray-700 dark:text-gray-300 mx-auto leading-relaxed\">\n                            {description}\n                        </p>\n                    </div>\n\n                    <form\n                        onSubmit={handleSubmit}\n                        className=\"w-full max-w-md flex flex-col sm:flex-row gap-3 pt-2\"\n                    >\n                        <Input\n                            type=\"email\"\n                            placeholder=\"Enter your personal email...\"\n                            required\n                            value={email}\n                            onChange={(e) => setEmail(e.target.value)}\n                            className=\"flex-grow text-base py-6 bg-white dark:bg-gray-800\"\n                        />\n                        <Button\n                            type=\"submit\"\n                            variant=\"primary\"\n                            className=\"font-black text-sm py-6 px-6 shrink-0\"\n                        >\n                            {ctaText}\n                        </Button>\n                    </form>\n\n                    <div className=\"w-full border-t-3 border-brutal pt-8 mt-6\">\n                        <div className=\"grid gap-6 sm:grid-cols-2 md:grid-cols-3 items-center justify-center max-w-2xl mx-auto\">\n                            <div className=\"flex items-center justify-center space-x-2 font-black text-sm\">\n                                <Users className=\"h-5 w-5 text-brutal-secondary stroke-[2.5]\" />\n                                <span>1,840+ Developers on waitlist</span>\n                            </div>\n                            <div className=\"flex items-center justify-center space-x-1 font-black text-sm\">\n                                {[...Array(5)].map((_, i) => (\n                                    <Star key={i} className=\"h-4 w-4 fill-brutal-accent text-black stroke-[2.5]\" />\n                                ))}\n                                <span className=\"pl-1\">4.9/5 stars rating</span>\n                            </div>\n                            <div className=\"flex items-center justify-center space-x-2 font-black text-sm sm:col-span-2 md:col-span-1\">\n                                <span className=\"h-2 w-2 rounded-full bg-brutal-success animate-ping\" />\n                                <span>Beta Invites sent daily</span>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </section>\n    );\n}\n",
+      "path": "components/ui/waitlist-page/WaitlistPage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { Sparkles, Users, Star } from 'lucide-vue-next'\nimport { useLocale } from '@/composables/useLocale'\nimport { cn } from '@/lib/utils'\nimport Button from '@/components/ui/button/Button.vue'\nimport Input from '@/components/ui/input/Input.vue'\n\ninterface WaitlistPageProps {\n    title?: string\n    description?: string\n    ctaText?: string\n    waitlistCount?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<WaitlistPageProps>(), {\n    title: undefined,\n    description: '',\n    ctaText: undefined,\n    waitlistCount: 0,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('waitlistPage.title'))\nconst resolvedCtaText = computed(() => props.ctaText ?? t('waitlistPage.ctaText'))\n\nconst emit = defineEmits<{\n    submit: [email: string]\n}>()\n\nconst email = ref('')\n\nconst EMAIL_REGEX = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/\n\nconst rootClasses = computed(() => cn('w-full max-w-lg mx-auto text-center', props.class))\n\nfunction handleSubmit() {\n    if (email.value && EMAIL_REGEX.test(email.value)) {\n        emit('submit', email.value)\n    }\n}\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <div class=\"inline-flex items-center gap-2 mb-6 bg-brutal-accent px-3 py-1 border-3 border-brutal rotate-[-1deg]\">\n            <Sparkles class=\"h-4 w-4 stroke-[3] animate-spin\" />\n            <span class=\"font-black text-sm\">{{ t('waitlistPage.earlyAccess') }}</span>\n        </div>\n\n        <h1 class=\"text-3xl font-black tracking-tight\">\n{{ resolvedTitle }}\n</h1>\n        <p v-if=\"description\" class=\"mt-3 text-brutal-muted-foreground font-medium\">\n{{ description }}\n</p>\n\n        <form class=\"mt-8 flex flex-col sm:flex-row gap-3\" @submit.prevent=\"handleSubmit\">\n            <Input v-model=\"email\" type=\"email\" placeholder=\"you@example.com\" class=\"flex-1\" />\n            <Button type=\"submit\" variant=\"primary\">\n{{ resolvedCtaText }}\n</Button>\n        </form>\n\n        <div class=\"mt-8 flex items-center justify-center gap-6 text-sm font-bold text-brutal-muted-foreground\">\n            <div v-if=\"waitlistCount > 0\" class=\"flex items-center gap-1\">\n                <Users class=\"h-4 w-4 stroke-[3]\" />\n                <span>{{ t('waitlistPage.onWaitlist', { count: waitlistCount.toLocaleString() }) }}</span>\n            </div>\n            <div class=\"flex items-center gap-1\">\n                <Star v-for=\"i in 5\" :key=\"i\" class=\"h-3 w-3 fill-brutal-accent text-brutal-accent\" />\n            </div>\n            <div class=\"flex items-center gap-1\">\n                <div class=\"h-2 w-2 rounded-full bg-brutal-success animate-pulse\" />\n                <span>{{ t('waitlistPage.live') }}</span>\n            </div>\n        </div>\n    </div>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -40,7 +40,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -70,7 +74,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -80,16 +87,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

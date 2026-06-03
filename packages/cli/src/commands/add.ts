@@ -25,12 +25,18 @@ async function ensureInitialized(cwd: string): Promise<BrutalistConfig> {
     const configPath = path.join(cwd, 'components.json');
 
     if (!(await fs.pathExists(configPath))) {
-        logger.error('Error: Brutx is not initialized.');
-        logger.warn('Run: npx brutx@latest init');
+        logger.error('Error: Brutx-Vue is not initialized.');
+        logger.warn('Run: npx brutx-vue@latest init');
         process.exit(1);
     }
 
-    return fs.readJson(configPath);
+    const config = await fs.readJson(configPath);
+    if (!config?.aliases?.components || !config?.aliases?.utils) {
+        logger.error('Error: Invalid components.json. Missing required "aliases.components" or "aliases.utils".');
+        logger.warn('Run: npx brutx-vue@latest init --force to regenerate.');
+        process.exit(1);
+    }
+    return config;
 }
 
 async function validateComponents(components: string[]): Promise<void> {
@@ -40,7 +46,7 @@ async function validateComponents(components: string[]): Promise<void> {
     if (invalid.length > 0) {
         logger.newLine();
         logger.error(`Unknown components: ${invalid.join(', ')}`);
-        logger.warn('Please choose from the available list or run npx brutx add interactively without arguments.');
+        logger.warn('Please choose from the available list or run npx brutx-vue add interactively without arguments.');
         logger.warn(`Available: ${AVAILABLE_COMPONENTS.join(', ')}`);
         process.exit(1);
     }
@@ -57,7 +63,7 @@ async function selectComponents(inputComponents: string[], options: AddOptions):
 
     if (options.yes) {
         logger.error('Error: No components specified.');
-        logger.warn('Use: npx brutx@latest add [component] or --all');
+        logger.warn('Use: npx brutx-vue@latest add [component] or --all');
         process.exit(1);
     }
 
@@ -86,7 +92,7 @@ function resolveComponentFilePath(registryPath: string, config: BrutalistConfig,
     }
 
     if (registryPath.startsWith('lib/')) {
-        const relative = registryPath.replace('lib/', '');
+        const relative = registryPath.slice(4);
         const aliasPath = resolveAliasPath(config.aliases.utils, cwd);
         return path.join(path.dirname(aliasPath), relative);
     }
@@ -112,19 +118,19 @@ async function writeRegistryFiles(
     spinner: Ora | null
 ): Promise<{ added: string[]; skipped: string[]; filesWritten: string[] }> {
     const added: string[] = [];
-    const skipped: string[] = [];
+    const skippedSet = new Set<string>();
     const filesWritten: string[] = [];
 
     for (const item of items) {
         let itemAdded = false;
 
         for (const file of item.files) {
-            const targetPath = resolveComponentFilePath(file.path, config, cwd);
-
             const normalizedPath = path.normalize(file.path);
             if (normalizedPath.startsWith('..') || path.isAbsolute(normalizedPath)) {
                 throw new Error(`Security Error: Malicious component file path detected: "${file.path}".`);
             }
+
+            const targetPath = resolveComponentFilePath(file.path, config, cwd);
 
             if (!isSafePath(targetPath, cwd)) {
                 throw new Error(`Security Error: Path traversal detected. Access denied to path "${targetPath}".`);
@@ -133,7 +139,7 @@ async function writeRegistryFiles(
             if (await fs.pathExists(targetPath)) {
                 if (!options.overwrite) {
                     spinner?.info(`Skipping file "${file.path}" for "${item.name}" (already exists). Use --overwrite to overwrite.`);
-                    skipped.push(item.name);
+                    skippedSet.add(item.name);
                     continue;
                 }
             }
@@ -152,12 +158,12 @@ async function writeRegistryFiles(
             filesWritten.push(targetPath);
         }
 
-        if (itemAdded && !skipped.includes(item.name)) {
+        if (itemAdded && !skippedSet.has(item.name)) {
             added.push(item.name);
         }
     }
 
-    return { added, skipped, filesWritten };
+    return { added, skipped: Array.from(skippedSet), filesWritten };
 }
 
 function installComponentDeps(deps: string[], cwd: string, dryRun: boolean): void {
@@ -192,15 +198,22 @@ function toPascalCase(str: string): string {
 
 function printUsageExample(component: string, componentsAlias: string): void {
     const componentName = toPascalCase(component);
-    logger.info(`  import { ${componentName} } from "${componentsAlias}/ui/${component}";`);
+    logger.info(`  import ${componentName} from "${componentsAlias}/ui/${component}/${componentName}.vue"`);
 }
 
 export async function add(components: string[], options: AddOptions): Promise<void> {
     const cwd = options.cwd ?? process.cwd();
+    const targetCwd = options.path ? path.resolve(cwd, options.path) : cwd;
+
+    if (options.path && !isSafePath(targetCwd, cwd)) {
+        throw new Error(`Security Error: Path traversal detected. Access denied to path "${targetCwd}".`);
+    }
 
     logger.setSilent(options.silent ?? false);
 
     const config = await ensureInitialized(cwd);
+
+    await validateComponents(components);
 
     const selectedComponents = await selectComponents(components, options);
 
@@ -209,9 +222,7 @@ export async function add(components: string[], options: AddOptions): Promise<vo
         return;
     }
 
-    await validateComponents(selectedComponents);
-
-    const utilsPath = resolveAliasPath(config.aliases.utils, cwd) + '.ts';
+    const utilsPath = resolveAliasPath(config.aliases.utils, targetCwd) + '.ts';
 
     const spinner = options.silent ? null : ora('Resolving components and checking dependencies...').start();
 
@@ -222,8 +233,8 @@ export async function add(components: string[], options: AddOptions): Promise<vo
             spinner.stop();
         }
 
-        logger.bold('\n📦 Brutx CLI - Installation Plan:');
-        logger.info(`   Registry source: ${options.registry || 'Default Brutx hosted registry'}`);
+        logger.bold('\n📦 Brutx-Vue CLI - Installation Plan:');
+        logger.info(`   Registry source: ${options.registry || 'Default Brutx-Vue hosted registry'}`);
         logger.newLine();
 
         logger.bold('🧩 Components to install/update:');
@@ -262,7 +273,7 @@ export async function add(components: string[], options: AddOptions): Promise<vo
         const { added, skipped, filesWritten } = await writeRegistryFiles(
             registryItems,
             config,
-            cwd,
+            targetCwd,
             options,
             spinner
         );
@@ -281,7 +292,7 @@ export async function add(components: string[], options: AddOptions): Promise<vo
             logger.newLine();
             logger.bold('💾 Files written to disk:');
             for (const filePath of filesWritten) {
-                const relativePath = path.relative(cwd, filePath);
+                const relativePath = path.relative(targetCwd, filePath);
                 logger.success(`   ✓ ${relativePath}`);
             }
         }

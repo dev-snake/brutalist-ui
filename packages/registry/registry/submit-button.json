@@ -3,15 +3,17 @@
   "name": "submit-button",
   "type": "registry:ui",
   "title": "Submit Button",
-  "description": "A highly customizable neo-brutalist Submit Button component built with Brutx design tokens.",
-  "dependencies": [],
+  "description": "A highly customizable neo-brutalist Submit Button component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
   "registryDependencies": [
     "button"
   ],
   "files": [
     {
-      "path": "components/ui/submit-button.tsx",
-      "content": "'use client';\n\nimport { useFormStatus } from 'react-dom';\nimport { Button, type ButtonProps } from '@/components/ui/button';\n\nexport interface SubmitButtonProps extends ButtonProps {\n    pendingText?: string;\n}\n\n/**\n * Renders a submit button that follows React form pending state.\n *\n * @param props - Submit button props.\n * @returns Submit button with pending state.\n */\nfunction SubmitButton({ children, pendingText, disabled, ...props }: SubmitButtonProps) {\n    const { pending } = useFormStatus();\n\n    return (\n        <Button type=\"submit\" disabled={disabled || pending} loading={pending} {...props}>\n            {pending && pendingText ? pendingText : children}\n        </Button>\n    );\n}\n\nSubmitButton.displayName = 'SubmitButton';\n\nexport { SubmitButton };\n",
+      "path": "components/ui/submit-button/SubmitButton.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { Loader2 } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport { buttonVariants } from '@/components/ui/button/button-variants'\nimport { type VariantProps } from 'class-variance-authority'\n\ntype ButtonVariantProps = VariantProps<typeof buttonVariants>\n\ninterface SubmitButtonProps {\n    variant?: NonNullable<ButtonVariantProps['variant']>\n    size?: NonNullable<ButtonVariantProps['size']>\n    pendingText?: string\n    loading?: boolean\n    disabled?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SubmitButtonProps>(), {\n    variant: 'default',\n    size: 'default',\n    pendingText: undefined,\n    loading: false,\n    disabled: false,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst resolvedPendingText = computed(() => props.pendingText ?? t('submitButton.submitting'))\n\nconst isDisabled = computed(() => props.disabled || props.loading)\n\nconst classes = computed(() =>\n    cn(buttonVariants({ variant: props.variant, size: props.size }), props.class)\n)\n</script>\n\n<template>\n    <button type=\"submit\" :class=\"classes\" :disabled=\"isDisabled\">\n        <Loader2 v-if=\"loading\" class=\"h-4 w-4 animate-spin\" />\n        <template v-if=\"loading && resolvedPendingText\">\n{{ resolvedPendingText }}\n</template>\n        <slot v-else />\n    </button>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +39,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +73,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +86,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

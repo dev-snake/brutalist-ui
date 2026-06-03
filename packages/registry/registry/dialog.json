@@ -3,16 +3,41 @@
   "name": "dialog",
   "type": "registry:ui",
   "title": "Dialog",
-  "description": "A highly customizable neo-brutalist Dialog component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Dialog component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-dialog",
-    "lucide-react"
+    "reka-ui",
+    "lucide-vue-next"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/dialog.tsx",
-      "content": "import * as React from 'react';\nimport * as DialogPrimitive from '@radix-ui/react-dialog';\nimport { X } from 'lucide-react';\nimport { cn } from '@/lib/utils';\n\nconst Dialog = DialogPrimitive.Root;\nconst DialogTrigger = DialogPrimitive.Trigger;\nconst DialogPortal = DialogPrimitive.Portal;\nconst DialogClose = DialogPrimitive.Close;\n\nconst DialogOverlay = React.forwardRef<\n    React.ElementRef<typeof DialogPrimitive.Overlay>,\n    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>\n>(({ className, ...props }, ref) => (\n    <DialogPrimitive.Overlay\n        ref={ref}\n        className={cn(\n            'fixed inset-0 z-50 bg-black/50',\n            'data-[state=open]:animate-in data-[state=closed]:animate-out',\n            'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n            className\n        )}\n        {...props}\n    />\n));\nDialogOverlay.displayName = DialogPrimitive.Overlay.displayName;\n\nconst DialogContent = React.forwardRef<\n    React.ElementRef<typeof DialogPrimitive.Content>,\n    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {\n        showCloseButton?: boolean;\n    }\n>(({ className, children, showCloseButton = true, ...props }, ref) => (\n    <DialogPortal>\n        <DialogOverlay />\n        <DialogPrimitive.Content\n            ref={ref}\n            className={cn(\n                'fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]',\n                'w-full max-w-lg p-6',\n                'bg-brutal-bg text-brutal-fg border-3 border-brutal rounded-brutal shadow-brutal-xl',\n                'duration-200',\n                'data-[state=open]:animate-in data-[state=closed]:animate-out',\n                'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n                'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n                'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',\n                'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',\n                className\n            )}\n            {...props}\n        >\n            {children}\n            {showCloseButton && (\n                <DialogPrimitive.Close\n                    className={cn(\n                        'absolute right-4 top-4',\n                        'h-8 w-8 flex items-center justify-center',\n                        'border-3 border-brutal rounded-brutal bg-brutal-bg text-brutal-fg',\n                        'shadow-brutal-sm',\n                        'transition-all duration-150',\n                        'hover:bg-brutal-destructive hover:text-brutal-fg',\n                        'hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5',\n                        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n                        'focus:outline-none focus:ring-2 focus:ring-brutal-ring focus:ring-offset-2'\n                    )}\n                >\n                     <X className=\"h-4 w-4 stroke-[3]\" />\n                     <span className=\"sr-only\">Close</span>\n                </DialogPrimitive.Close>\n            )}\n        </DialogPrimitive.Content>\n    </DialogPortal>\n));\nDialogContent.displayName = DialogPrimitive.Content.displayName;\n\nconst DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n    <div\n        className={cn(\n            'flex flex-col space-y-2 pb-4 border-b-3 border-brutal',\n            className\n        )}\n        {...props}\n    />\n);\nDialogHeader.displayName = 'DialogHeader';\n\nconst DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (\n    <div\n        className={cn(\n            'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 pt-4 border-t-3 border-brutal',\n            className\n        )}\n        {...props}\n    />\n);\nDialogFooter.displayName = 'DialogFooter';\n\nconst DialogTitle = React.forwardRef<\n    React.ElementRef<typeof DialogPrimitive.Title>,\n    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>\n>(({ className, ...props }, ref) => (\n    <DialogPrimitive.Title\n        ref={ref}\n        className={cn('text-xl font-black tracking-tight', className)}\n        {...props}\n    />\n));\nDialogTitle.displayName = DialogPrimitive.Title.displayName;\n\nconst DialogDescription = React.forwardRef<\n    React.ElementRef<typeof DialogPrimitive.Description>,\n    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>\n>(({ className, ...props }, ref) => (\n    <DialogPrimitive.Description\n        ref={ref}\n        className={cn('text-sm text-gray-600 dark:text-gray-400 font-medium', className)}\n        {...props}\n    />\n));\nDialogDescription.displayName = DialogPrimitive.Description.displayName;\n\nexport {\n    Dialog,\n    DialogPortal,\n    DialogOverlay,\n    DialogTrigger,\n    DialogClose,\n    DialogContent,\n    DialogHeader,\n    DialogFooter,\n    DialogTitle,\n    DialogDescription,\n};\n",
+      "path": "components/ui/dialog/DialogContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    DialogPortal as DialogPortalPrimitive,\n    DialogContent as DialogContentPrimitive,\n    DialogClose as DialogClosePrimitive,\n} from 'reka-ui'\nimport { X } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport DialogOverlay from '@/components/ui/dialog/DialogOverlay.vue'\nimport { useLocale } from '@/composables/useLocale'\n\ninterface DialogContentProps {\n    showCloseButton?: boolean\n    forceMount?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<DialogContentProps>(), {\n    showCloseButton: true,\n    forceMount: undefined,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst contentClasses = computed(() =>\n    cn(\n        'fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%]',\n        'w-full max-w-lg p-6',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal shadow-brutal-xl rounded-brutal',\n        'duration-200',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n        'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',\n        'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',\n        props.class\n    )\n)\n\nconst closeClasses = computed(() =>\n    cn(\n        'absolute right-4 top-4',\n        'h-8 w-8 flex items-center justify-center',\n        'border-3 border-brutal bg-brutal-bg text-brutal-fg',\n        'shadow-brutal-sm',\n        'transition-all duration-150',\n        'hover:bg-brutal-destructive hover:text-brutal-fg',\n        'hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'focus:outline-none focus:ring-2 focus:ring-brutal-ring focus:ring-offset-2'\n    )\n)\n</script>\n\n<template>\n    <DialogPortalPrimitive>\n        <DialogOverlay />\n        <DialogContentPrimitive :class=\"contentClasses\" :force-mount=\"props.forceMount\">\n            <slot />\n            <DialogClosePrimitive v-if=\"showCloseButton\" :class=\"closeClasses\">\n                <X class=\"h-4 w-4 stroke-[3]\" />\n                <span class=\"sr-only\">{{ t('dialog.close') }}</span>\n            </DialogClosePrimitive>\n        </DialogContentPrimitive>\n    </DialogPortalPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dialog/DialogDescription.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DialogDescription as DialogDescriptionPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DialogDescriptionProps {\n    class?: string\n}\n\nconst props = defineProps<DialogDescriptionProps>()\n\nconst classes = computed(() =>\n    cn('text-sm text-brutal-muted-foreground font-medium', props.class)\n)\n</script>\n\n<template>\n    <DialogDescriptionPrimitive :class=\"classes\">\n        <slot />\n    </DialogDescriptionPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dialog/DialogFooter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface DialogFooterProps {\n    class?: string\n}\n\nconst props = defineProps<DialogFooterProps>()\n\nconst classes = computed(() =>\n    cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 pt-4 border-t-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dialog/DialogHeader.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface DialogHeaderProps {\n    class?: string\n}\n\nconst props = defineProps<DialogHeaderProps>()\n\nconst classes = computed(() =>\n    cn('flex flex-col space-y-2 pb-4 border-b-3 border-brutal', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dialog/DialogOverlay.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DialogOverlay as DialogOverlayPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DialogOverlayProps {\n    class?: string\n}\n\nconst props = defineProps<DialogOverlayProps>()\n\nconst classes = computed(() =>\n    cn(\n        'fixed inset-0 z-50 bg-brutal-overlay',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DialogOverlayPrimitive :class=\"classes\" />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dialog/DialogTitle.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DialogTitle as DialogTitlePrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DialogTitleProps {\n    class?: string\n}\n\nconst props = defineProps<DialogTitleProps>()\n\nconst classes = computed(() =>\n    cn('text-xl font-black tracking-tight', props.class)\n)\n</script>\n\n<template>\n    <DialogTitlePrimitive :class=\"classes\">\n        <slot />\n    </DialogTitlePrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -38,7 +63,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -68,7 +97,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -78,16 +110,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

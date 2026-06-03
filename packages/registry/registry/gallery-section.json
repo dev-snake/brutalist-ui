@@ -1,0 +1,106 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "gallery-section",
+  "type": "registry:ui",
+  "title": "Gallery Section",
+  "description": "A highly customizable neo-brutalist Gallery Section component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "embla-carousel-vue",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "carousel",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "components/ui/gallery-section/GallerySection.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { Image as ImageIcon } from 'lucide-vue-next'\nimport { useLocale } from '@/composables/useLocale'\nimport { cn } from '@/lib/utils'\nimport Carousel from '@/components/ui/carousel/Carousel.vue'\nimport CarouselItem from '@/components/ui/carousel/CarouselItem.vue'\nimport Card from '@/components/ui/card/Card.vue'\n\nexport interface GalleryItem {\n    src: string\n    alt: string\n    caption?: string\n}\n\ninterface GallerySectionProps {\n    title?: string\n    items?: GalleryItem[]\n    class?: string\n}\n\nconst props = withDefaults(defineProps<GallerySectionProps>(), {\n    title: undefined,\n    items: () => [],\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'item-click': [index: number]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('gallerySection.defaultTitle'))\nconst resolvedNoItems = computed(() => t('gallerySection.noItems'))\n\nfunction handleItemClick(index: number) {\n    emit('item-click', index)\n}\n\nconst rootClasses = computed(() => cn('w-full max-w-4xl mx-auto', props.class))\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <slot name=\"header\">\n            <div class=\"mb-6\">\n                <h2 class=\"text-3xl font-black tracking-tight\">\n                    {{ resolvedTitle }}\n                </h2>\n            </div>\n        </slot>\n\n        <slot>\n            <Card variant=\"flat\" class=\"p-4\">\n                <Carousel\n                    :show-arrows=\"true\"\n                    :show-dots=\"true\"\n                    size=\"full\"\n                >\n                    <CarouselItem\n                        v-for=\"(item, index) in items\"\n                        :key=\"index\"\n                    >\n                        <div\n                            class=\"flex flex-col items-center justify-center p-4 cursor-pointer active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none transition-all\"\n                            @click=\"handleItemClick(index)\"\n                        >\n                            <div class=\"w-full border-3 border-brutal shadow-brutal overflow-hidden bg-brutal-bg\">\n                                <img\n                                    :src=\"item.src\"\n                                    :alt=\"item.alt\"\n                                    class=\"w-full h-auto object-cover\"\n                                    loading=\"lazy\"\n                                >\n                            </div>\n                            <p v-if=\"item.caption\" class=\"mt-3 text-sm font-bold text-brutal-fg text-center\">\n                                {{ item.caption }}\n                            </p>\n                        </div>\n                    </CarouselItem>\n                </Carousel>\n\n                <div v-if=\"items.length === 0\" class=\"flex flex-col items-center justify-center py-12 text-brutal-muted-foreground\">\n                    <ImageIcon class=\"w-12 h-12 mb-3 stroke-[2]\" />\n                    <p class=\"font-bold\">\n                        {{ resolvedNoItems }}\n                    </p>\n                </div>\n            </Card>\n        </slot>\n\n        <slot name=\"footer\" />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

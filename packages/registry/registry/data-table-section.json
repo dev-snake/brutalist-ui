@@ -1,0 +1,106 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-table-section",
+  "type": "registry:ui",
+  "title": "Data Table Section",
+  "description": "A highly customizable neo-brutalist Data Table Section component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "table",
+    "pagination",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "components/ui/data-table-section/DataTableSection.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-vue-next'\nimport { useLocale } from '@/composables/useLocale'\nimport { cn } from '@/lib/utils'\nimport Table from '@/components/ui/table/Table.vue'\nimport TableHeader from '@/components/ui/table/TableHeader.vue'\nimport TableBody from '@/components/ui/table/TableBody.vue'\nimport TableRow from '@/components/ui/table/TableRow.vue'\nimport TableHead from '@/components/ui/table/TableHead.vue'\nimport TableCell from '@/components/ui/table/TableCell.vue'\nimport Pagination from '@/components/ui/pagination/Pagination.vue'\nimport Input from '@/components/ui/input/Input.vue'\n\nexport interface ColumnDef {\n    key: string\n    label: string\n    sortable?: boolean\n}\n\ninterface DataTableSectionProps {\n    title?: string\n    columns?: ColumnDef[]\n    rows?: Record<string, unknown>[]\n    searchable?: boolean\n    pageSize?: number\n    class?: string\n}\n\nconst DEFAULT_PAGE_SIZE = 10\n\nconst props = withDefaults(defineProps<DataTableSectionProps>(), {\n    title: undefined,\n    columns: () => [],\n    rows: () => [],\n    searchable: true,\n    pageSize: DEFAULT_PAGE_SIZE,\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'row-click': [row: Record<string, unknown>]\n    'sort': [payload: { key: string; direction: 'asc' | 'desc' }]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('dataTableSection.defaultTitle'))\nconst resolvedSearchPlaceholder = computed(() => t('dataTableSection.searchPlaceholder'))\nconst resolvedNoResults = computed(() => t('dataTableSection.noResults'))\n\nconst searchQuery = ref('')\nconst sortKey = ref('')\nconst sortDirection = ref<'asc' | 'desc'>('asc')\nconst currentPage = ref(1)\n\nconst filteredRows = computed(() => {\n    if (!searchQuery.value) return props.rows\n    const query = searchQuery.value.toLowerCase()\n    return props.rows.filter(row =>\n        Object.values(row).some(val =>\n            String(val).toLowerCase().includes(query)\n        )\n    )\n})\n\nconst sortedRows = computed(() => {\n    if (!sortKey.value) return filteredRows.value\n    const key = sortKey.value\n    const dir = sortDirection.value\n    return [...filteredRows.value].sort((a, b) => {\n        const aVal = a[key]\n        const bVal = b[key]\n        if (aVal == null && bVal == null) return 0\n        if (aVal == null) return dir === 'asc' ? -1 : 1\n        if (bVal == null) return dir === 'asc' ? 1 : -1\n        const cmp = String(aVal).localeCompare(String(bVal), undefined, { numeric: true })\n        return dir === 'asc' ? cmp : -cmp\n    })\n})\n\nconst totalPages = computed(() => Math.max(1, Math.ceil(sortedRows.value.length / props.pageSize)))\n\nconst paginatedRows = computed(() => {\n    const start = (currentPage.value - 1) * props.pageSize\n    return sortedRows.value.slice(start, start + props.pageSize)\n})\n\nfunction handleSort(key: string) {\n    if (sortKey.value === key) {\n        sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'\n    } else {\n        sortKey.value = key\n        sortDirection.value = 'asc'\n    }\n    currentPage.value = 1\n    emit('sort', { key, direction: sortDirection.value })\n}\n\nfunction handleRowClick(row: Record<string, unknown>) {\n    emit('row-click', row)\n}\n\nfunction handleSearch() {\n    currentPage.value = 1\n}\n\nconst rootClasses = computed(() => cn('w-full max-w-5xl mx-auto', props.class))\n\nconst columnClasses = computed(() =>\n    props.columns.map(col =>\n        cn(col.sortable && 'cursor-pointer select-none active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none transition-all')\n    )\n)\n\nfunction sortIcon(key: string) {\n    if (sortKey.value !== key) return ArrowUpDown\n    return sortDirection.value === 'asc' ? ArrowUp : ArrowDown\n}\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <slot name=\"header\">\n            <div class=\"mb-6\">\n                <h2 class=\"text-3xl font-black tracking-tight\">\n                    {{ resolvedTitle }}\n                </h2>\n            </div>\n        </slot>\n\n        <slot>\n            <div v-if=\"searchable\" class=\"mb-4\">\n                <Input\n                    v-model=\"searchQuery\"\n                    :placeholder=\"resolvedSearchPlaceholder\"\n                    @update:model-value=\"handleSearch\"\n                />\n            </div>\n\n            <Table>\n                <TableHeader>\n                    <TableRow>\n                        <TableHead\n                            v-for=\"(col, index) in columns\"\n                            :key=\"col.key\"\n                            :class=\"columnClasses[index]\"\n                            @click=\"col.sortable && handleSort(col.key)\"\n                        >\n                            <span class=\"inline-flex items-center gap-1\">\n                                {{ col.label }}\n                                <component\n                                    :is=\"sortIcon(col.key)\"\n                                    v-if=\"col.sortable\"\n                                    class=\"h-4 w-4 stroke-[3]\"\n                                />\n                            </span>\n                        </TableHead>\n                    </TableRow>\n                </TableHeader>\n                <TableBody>\n                    <template v-if=\"paginatedRows.length > 0\">\n                        <TableRow\n                            v-for=\"(row, rowIndex) in paginatedRows\"\n                            :key=\"rowIndex\"\n                            class=\"cursor-pointer active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none transition-all\"\n                            @click=\"handleRowClick(row)\"\n                        >\n                            <TableCell v-for=\"col in columns\" :key=\"col.key\">\n                                {{ row[col.key] }}\n                            </TableCell>\n                        </TableRow>\n                    </template>\n                    <TableRow v-else>\n                        <TableCell :colspan=\"columns.length || 1\" class=\"text-center text-brutal-muted-foreground font-bold py-8\">\n                            {{ resolvedNoResults }}\n                        </TableCell>\n                    </TableRow>\n                </TableBody>\n            </Table>\n\n            <div v-if=\"totalPages > 1\" class=\"mt-4 flex justify-center\">\n                <Pagination\n                    :current-page=\"currentPage\"\n                    :total-pages=\"totalPages\"\n                    @update:current-page=\"currentPage = $event\"\n                />\n            </div>\n        </slot>\n\n        <slot name=\"footer\" />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

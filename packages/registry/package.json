@@ -1,5 +1,5 @@
 {
-    "name": "brutx-registry",
+    "name": "brutx-registry-vue",
     "version": "0.1.0",
     "private": true,
     "type": "module",
@@ -8,7 +8,7 @@
         "validate": "tsx scripts/validate-registry.ts"
     },
     "dependencies": {
-        "brutx-shared": "workspace:*"
+        "brutx-shared-vue": "workspace:*"
     },
     "devDependencies": {
         "tsx": "^4.7.1",

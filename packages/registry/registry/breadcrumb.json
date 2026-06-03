@@ -1,0 +1,133 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breadcrumb",
+  "type": "registry:ui",
+  "title": "Breadcrumb",
+  "description": "A highly customizable neo-brutalist Breadcrumb component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "reka-ui",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/breadcrumb/Breadcrumb.vue",
+      "content": "<script setup lang=\"ts\">\nimport { useLocale } from '@/composables/useLocale'\n\ninterface BreadcrumbProps {\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BreadcrumbProps>(), {\n    class: '',\n})\n\nconst { t } = useLocale()\n</script>\n\n<template>\n    <nav :aria-label=\"t('breadcrumb.label')\" :class=\"props.class\">\n        <slot />\n    </nav>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/breadcrumb/BreadcrumbList.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { breadcrumbListVariants } from './breadcrumb-variants'\n\ninterface BreadcrumbListProps {\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BreadcrumbListProps>(), {\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(breadcrumbListVariants(), props.class)\n)\n</script>\n\n<template>\n    <ol :class=\"classes\">\n        <slot />\n    </ol>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/breadcrumb/BreadcrumbItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { breadcrumbItemVariants } from './breadcrumb-variants'\n\ninterface BreadcrumbItemProps {\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BreadcrumbItemProps>(), {\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(breadcrumbItemVariants(), props.class)\n)\n</script>\n\n<template>\n    <li :class=\"classes\">\n        <slot />\n    </li>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/breadcrumb/BreadcrumbLink.vue",
+      "content": "<script setup lang=\"ts\">\nimport { Primitive, type PrimitiveProps } from 'reka-ui'\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { breadcrumbLinkVariants } from './breadcrumb-variants'\n\ninterface BreadcrumbLinkProps extends PrimitiveProps {\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BreadcrumbLinkProps>(), {\n    as: 'a',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(breadcrumbLinkVariants(), props.class)\n)\n</script>\n\n<template>\n    <Primitive\n        :as=\"props.as\"\n        :as-child=\"props.asChild\"\n        :class=\"classes\"\n    >\n        <slot />\n    </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/breadcrumb/BreadcrumbPage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { breadcrumbPageVariants } from './breadcrumb-variants'\n\ninterface BreadcrumbPageProps {\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BreadcrumbPageProps>(), {\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(breadcrumbPageVariants(), props.class)\n)\n</script>\n\n<template>\n    <span\n        role=\"link\"\n        aria-disabled=\"true\"\n        aria-current=\"page\"\n        :class=\"classes\"\n    >\n        <slot />\n    </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/breadcrumb/BreadcrumbSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { breadcrumbSeparatorVariants } from './breadcrumb-variants'\n\ninterface BreadcrumbSeparatorProps {\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BreadcrumbSeparatorProps>(), {\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(breadcrumbSeparatorVariants(), props.class)\n)\n</script>\n\n<template>\n    <li\n        role=\"presentation\"\n        aria-hidden=\"true\"\n        :class=\"classes\"\n    >\n        <slot>\n            <span>/</span>\n        </slot>\n    </li>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/breadcrumb/BreadcrumbEllipsis.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { MoreHorizontal } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { breadcrumbEllipsisVariants } from './breadcrumb-variants'\nimport { useLocale } from '@/composables/useLocale'\n\ninterface BreadcrumbEllipsisProps {\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BreadcrumbEllipsisProps>(), {\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst classes = computed(() =>\n    cn(breadcrumbEllipsisVariants(), props.class)\n)\n</script>\n\n<template>\n    <span\n        role=\"presentation\"\n        aria-hidden=\"true\"\n        :class=\"classes\"\n    >\n        <slot>\n            <MoreHorizontal class=\"h-4 w-4 stroke-[3]\" />\n        </slot>\n        <span class=\"sr-only\">{{ t('breadcrumb.more') }}</span>\n    </span>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

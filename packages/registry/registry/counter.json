@@ -1,0 +1,105 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "counter",
+  "type": "registry:ui",
+  "title": "Counter",
+  "description": "A highly customizable neo-brutalist Counter component built with Brutx design tokens for Vue 3.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/counter/Counter.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';\nimport { type VariantProps } from 'class-variance-authority';\nimport { cn } from '@/lib/utils';\nimport { counterVariants } from '@/components/ui/counter/counter-variants';\n\nconst DEFAULT_COUNTER_DURATION = 2000\n\ntype CounterVariantProps = VariantProps<typeof counterVariants>;\n\ninterface CounterProps {\n    to: number;\n    from?: number;\n    duration?: number;\n    decimals?: number;\n    prefix?: string;\n    suffix?: string;\n    separator?: string;\n    easing?: 'linear' | 'ease-out' | 'ease-in-out';\n    autoStart?: boolean;\n    size?: NonNullable<CounterVariantProps['size']>;\n    class?: string;\n}\n\nconst props = withDefaults(defineProps<CounterProps>(), {\n    from: 0,\n    duration: DEFAULT_COUNTER_DURATION,\n    decimals: 0,\n    prefix: '',\n    suffix: '',\n    separator: ',',\n    easing: 'ease-out',\n    autoStart: true,\n    size: 'md',\n});\n\nconst emit = defineEmits<{\n    complete: [];\n}>();\n\nconst current = ref(props.from);\nconst rootRef = ref<HTMLElement | null>(null);\nconst measureRef = ref<HTMLElement | null>(null);\nconst scaleFactor = ref(1);\nlet resizeObserver: ResizeObserver | null = null;\nlet rafId: number | null = null;\nlet startTime: number | null = null;\nlet scaleRafId: number | null = null;\n\nfunction easingFn(t: number): number {\n    if (props.easing === 'linear') return t;\n    if (props.easing === 'ease-out') return 1 - Math.pow(1 - t, 3);\n    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;\n}\n\nfunction formatNumber(val: number): string {\n    const fixed = val.toFixed(props.decimals);\n    if (!props.separator) return fixed;\n    const [int, dec] = fixed.split('.');\n    const formatted = int.replace(/\\B(?=(\\d{3})+(?!\\d))/g, props.separator);\n    return dec !== undefined ? `${formatted}.${dec}` : formatted;\n}\n\nfunction animate(ts: number) {\n    if (startTime === null) startTime = ts;\n    const elapsed = ts - startTime;\n    const progress = Math.min(elapsed / props.duration, 1);\n    const eased = easingFn(progress);\n    current.value = props.from + (props.to - props.from) * eased;\n\n    if (progress < 1) {\n        rafId = requestAnimationFrame(animate);\n    } else {\n        current.value = props.to;\n        emit('complete');\n    }\n}\n\nfunction start() {\n    if (rafId !== null) cancelAnimationFrame(rafId);\n    startTime = null;\n    current.value = props.from;\n    rafId = requestAnimationFrame(animate);\n}\n\nfunction stop() {\n    if (rafId !== null) {\n        cancelAnimationFrame(rafId);\n        rafId = null;\n    }\n}\n\ndefineExpose({ start, stop });\n\nfunction scheduleUpdateScale() {\n    if (scaleRafId !== null) return;\n    scaleRafId = requestAnimationFrame(() => {\n        scaleRafId = null;\n        updateScale();\n    });\n}\n\nfunction updateScale() {\n    const measure = measureRef.value;\n    const root = rootRef.value;\n    if (!measure || !root) return;\n    const naturalWidth = measure.scrollWidth;\n    const constrainedWidth = root.clientWidth;\n    if (naturalWidth > constrainedWidth) {\n        scaleFactor.value = constrainedWidth / naturalWidth;\n    } else {\n        scaleFactor.value = 1;\n    }\n}\n\nonMounted(() => {\n    if (props.autoStart) start();\n    nextTick(() => {\n        const root = rootRef.value;\n        if (!root) return;\n        updateScale();\n        resizeObserver = new ResizeObserver(updateScale);\n        resizeObserver.observe(root);\n    });\n});\n\nonUnmounted(() => {\n    stop();\n    if (scaleRafId !== null) {\n        cancelAnimationFrame(scaleRafId);\n        scaleRafId = null;\n    }\n    if (resizeObserver) {\n        resizeObserver.disconnect();\n        resizeObserver = null;\n    }\n});\n\nwatch(() => [props.to, props.from] as const, () => {\n    if (props.autoStart) start();\n});\n\nwatch(() => [props.to, props.prefix, props.suffix, props.separator, props.decimals, props.size] as const, () => {\n    scheduleUpdateScale();\n});\n\nconst displayValue = computed(() =>\n    `${props.prefix}${formatNumber(current.value)}${props.suffix}`\n);\n\nconst finalDisplayValue = computed(() =>\n    `${props.prefix}${formatNumber(props.to)}${props.suffix}`\n);\n\nconst scaleStyle = computed(() => {\n    if (scaleFactor.value >= 1) return undefined;\n    return {\n        transform: `scale(${scaleFactor.value})`,\n        transformOrigin: 'left center' as const,\n    };\n});\n\nconst classes = computed(() =>\n    cn(counterVariants({ size: props.size }), props.class)\n);\n\nconst measureClasses = computed(() =>\n    cn(counterVariants({ size: props.size }), props.class, 'absolute invisible whitespace-nowrap !max-w-none')\n);\n</script>\n\n<template>\n    <span class=\"relative inline-flex max-w-full min-w-0\">\n        <span ref=\"measureRef\" :class=\"measureClasses\" aria-hidden=\"true\">\n            {{ finalDisplayValue }}\n        </span>\n        <span ref=\"rootRef\" :class=\"classes\" :style=\"scaleStyle\" aria-live=\"polite\" :aria-label=\"displayValue\">\n            {{ displayValue }}\n        </span>\n    </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/counter/counter-variants.ts",
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const counterVariants = cva(\n    [\n        'inline-flex items-baseline tabular-nums whitespace-nowrap',\n        'font-black text-brutal-fg',\n        'max-w-full min-w-0',\n    ].join(' '),\n    {\n        variants: {\n            size: {\n                sm: 'text-2xl',\n                md: 'text-4xl',\n                lg: 'text-6xl',\n                xl: 'text-8xl',\n            },\n        },\n        defaultVariants: {\n            size: 'md',\n        },\n    }\n);\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

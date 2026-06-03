@@ -1,9 +1,9 @@
 {
-    "name": "brutx",
-    "version": "0.3.0",
-    "description": "CLI for adding Brutalist UI components to your project",
+    "name": "brutx-vue",
+    "version": "0.3.1",
+    "description": "CLI for adding Neo-Brutalist Vue 3 UI components to your project",
     "bin": {
-        "brutx": "dist/index.js"
+        "brutx-vue": "dist/index.js"
     },
     "main": "./dist/index.js",
     "type": "module",
@@ -17,7 +17,7 @@
         "test": "vitest run"
     },
     "dependencies": {
-        "brutx-shared": "workspace:*",
+        "brutx-shared-vue": "workspace:*",
         "chalk": "^5.3.0",
         "commander": "^12.0.0",
         "fs-extra": "^11.2.0",
@@ -32,17 +32,19 @@
         "vitest": "^1.3.1"
     },
     "keywords": [
-        "brutx",
+        "brutx-vue",
         "cli",
         "neo-brutalism",
-        "react",
-        "components"
+        "vue",
+        "vue3",
+        "components",
+        "tailwindcss"
     ],
-    "author": "dev-snake",
+    "author": "lidaixingchen",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/dev-snake/brutxui"
+        "url": "https://github.com/lidaixingchen/brutxui-vue3"
     },
-    "homepage": "https://brutxui.site"
+    "homepage": "https://lidaixingchen.github.io/brutxui-vue3/"
 }

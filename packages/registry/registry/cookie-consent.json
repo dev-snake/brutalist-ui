@@ -1,0 +1,105 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cookie-consent",
+  "type": "registry:ui",
+  "title": "Cookie Consent",
+  "description": "A highly customizable neo-brutalist Cookie Consent component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "card",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "components/ui/cookie-consent/CookieConsent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { Cookie } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport { useLocale } from '@/composables/useLocale'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport Button from '@/components/ui/button/Button.vue'\n\ninterface CookieConsentProps {\n    title?: string\n    description?: string\n    acceptText?: string\n    declineText?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<CookieConsentProps>(), {\n    title: undefined,\n    description: undefined,\n    acceptText: undefined,\n    declineText: undefined,\n    class: '',\n})\n\nconst { t } = useLocale()\n\nconst emit = defineEmits<{\n    accept: []\n    decline: []\n}>()\n\nconst rootClasses = computed(() =>\n    cn(\n        'fixed bottom-0 left-0 right-0 z-50 p-4',\n        props.class\n    )\n)\n\nconst cardClasses = computed(() =>\n    cn(\n        'mx-auto w-full max-w-4xl',\n        'border-3 border-brutal shadow-brutal-lg',\n    )\n)\n\nconst resolvedTitle = computed(() => props.title ?? t('cookieConsent.defaultTitle'))\nconst resolvedDescription = computed(() => props.description ?? t('cookieConsent.defaultDescription'))\nconst resolvedAcceptText = computed(() => props.acceptText ?? t('cookieConsent.defaultAcceptText'))\nconst resolvedDeclineText = computed(() => props.declineText ?? t('cookieConsent.defaultDeclineText'))\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <Card :class=\"cardClasses\" variant=\"default\">\n            <CardContent class=\"flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between\">\n                <div class=\"flex items-start gap-3\">\n                    <Cookie class=\"h-6 w-6 shrink-0 stroke-[2.5] mt-0.5\" />\n                    <div>\n                        <h3 class=\"text-base font-black tracking-tight\">\n{{ resolvedTitle }}\n</h3>\n                        <p class=\"mt-1 text-sm text-brutal-muted-foreground font-medium\">\n{{ resolvedDescription }}\n</p>\n                    </div>\n                </div>\n                <div class=\"flex flex-col gap-2 sm:flex-row sm:shrink-0\">\n                    <Button variant=\"outline\" size=\"sm\" @click=\"emit('decline')\">\n                        {{ resolvedDeclineText }}\n                    </Button>\n                    <Button variant=\"primary\" size=\"sm\" @click=\"emit('accept')\">\n                        {{ resolvedAcceptText }}\n                    </Button>\n                </div>\n                <slot name=\"actions\" />\n            </CardContent>\n        </Card>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

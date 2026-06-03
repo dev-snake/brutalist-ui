@@ -1,0 +1,110 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-3d",
+  "type": "registry:ui",
+  "title": "Card 3d",
+  "description": "A highly customizable neo-brutalist Card 3d component built with Brutx design tokens for Vue 3.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/ui/card-3d/Card3D.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { useReducedMotion } from '@/composables/useReducedMotion'\nimport { useLocale } from '@/composables/useLocale'\nimport { card3dVariants, card3dShadowVariants } from '@/components/ui/card-3d/card-3d-variants'\n\ntype Card3DVariantProps = VariantProps<typeof card3dVariants>\n\ninterface Card3DProps {\n    maxRotation?: number\n    perspective?: number\n    scale?: number\n    shadowOffset?: number\n    shadow?: NonNullable<Card3DVariantProps['shadow']>\n    disabled?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<Card3DProps>(), {\n    maxRotation: 15,\n    perspective: 1000,\n    scale: 1.02,\n    shadowOffset: 10,\n    shadow: 'default',\n    disabled: false,\n    class: '',\n})\n\nconst cardRef = ref<HTMLDivElement | null>(null)\nconst rx = ref(0)\nconst ry = ref(0)\nconst isHovered = ref(false)\n\nconst prefersReducedMotion = useReducedMotion()\nconst { t } = useLocale()\n\n// 静态/初始阴影偏移量\nconst initialOffset = computed(() => {\n    switch (props.shadow) {\n        case 'lg':\n            return 6\n        case 'xl':\n            return 8\n        default:\n            return 4\n    }\n})\n\n// 动态阴影偏移量\nconst sx = ref(0)\nconst sy = ref(0)\n\nconst CENTER_OFFSET = 0.5\n\nconst handlePointerMove = (e: PointerEvent) => {\n    if (props.disabled || prefersReducedMotion.value) return\n    const rect = cardRef.value?.getBoundingClientRect()\n    if (!rect) return\n\n    isHovered.value = true\n    const x = (e.clientX - rect.left) / rect.width - CENTER_OFFSET // [-0.5, 0.5]\n    const y = (e.clientY - rect.top) / rect.height - CENTER_OFFSET // [-0.5, 0.5]\n\n    rx.value = -y * props.maxRotation\n    ry.value = x * props.maxRotation\n\n    // 阴影向反方向位移，加上初始阴影值作为偏移基数\n    sx.value = -x * props.shadowOffset + initialOffset.value\n    sy.value = -y * props.shadowOffset + initialOffset.value\n}\n\nconst handlePointerLeave = () => {\n    isHovered.value = false\n    rx.value = 0\n    ry.value = 0\n    sx.value = initialOffset.value\n    sy.value = initialOffset.value\n}\n\n// 初始化时设定阴影位置\nsx.value = initialOffset.value\nsy.value = initialOffset.value\n\nconst cardStyles = computed(() => {\n    if (props.disabled || prefersReducedMotion.value) {\n        return {}\n    }\n    return {\n        transform: isHovered.value\n            ? `perspective(${props.perspective}px) rotateX(${rx.value}deg) rotateY(${ry.value}deg) scale(${props.scale})`\n            : `perspective(${props.perspective}px) rotateX(0deg) rotateY(0deg) scale(1)`,\n    }\n})\n\nconst shadowStyles = computed(() => {\n    if (props.disabled || prefersReducedMotion.value) {\n        return {\n            transform: `translate(${initialOffset.value}px, ${initialOffset.value}px)`,\n        }\n    }\n    return {\n        transform: `translate(${sx.value}px, ${sy.value}px)`,\n    }\n})\n\nconst containerClasses = computed(() =>\n    cn('relative inline-block w-full', props.class)\n)\n\nconst cardClasses = computed(() =>\n    cn(card3dVariants({ shadow: props.shadow }))\n)\n\nconst shadowClasses = computed(() =>\n    cn(card3dShadowVariants())\n)\n</script>\n\n<template>\n    <div :class=\"containerClasses\" role=\"region\" :aria-label=\"t('card3d.ariaLabel')\">\n        <div\n            ref=\"cardRef\"\n            :class=\"cardClasses\"\n            :style=\"cardStyles\"\n            @pointermove=\"handlePointerMove\"\n            @pointerleave=\"handlePointerLeave\"\n        >\n            <slot />\n        </div>\n        <!-- 绝对定位的底色 div 模拟物理阴影 -->\n        <div :class=\"shadowClasses\" :style=\"shadowStyles\" aria-hidden=\"true\" />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/card-3d/card-3d-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const card3dVariants = cva(\n    [\n        'relative',\n        'border-3 border-brutal',\n        'rounded-brutal',\n        'bg-brutal-bg text-brutal-fg',\n        'transition-transform duration-200 ease-out',\n    ],\n    {\n        variants: {\n            shadow: {\n                default: 'shadow-brutal',\n                lg: 'shadow-brutal-lg',\n                xl: 'shadow-brutal-xl',\n            },\n        },\n        defaultVariants: {\n            shadow: 'default',\n        },\n    }\n)\n\nexport const card3dShadowVariants = cva(\n    [\n        'absolute inset-0',\n        'border-3 border-brutal',\n        'rounded-brutal',\n        'bg-brutal-fg',\n        'transition-transform duration-200 ease-out',\n        '-z-10',\n    ]\n)\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "composables/useReducedMotion.ts",
+      "content": "import { onMounted, onUnmounted, ref } from 'vue'\n\nexport function useReducedMotion() {\n    const prefersReduced = ref(false)\n    let mediaQuery: MediaQueryList | null = null\n\n    const onChange = (e: MediaQueryListEvent) => {\n        prefersReduced.value = e.matches\n    }\n\n    onMounted(() => {\n        if (typeof window !== 'undefined') {\n            mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')\n            prefersReduced.value = mediaQuery.matches\n            mediaQuery.addEventListener('change', onChange)\n        }\n    })\n\n    onUnmounted(() => {\n        mediaQuery?.removeEventListener('change', onChange)\n    })\n\n    return prefersReduced\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

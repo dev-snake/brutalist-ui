@@ -3,15 +3,15 @@
   "name": "switch",
   "type": "registry:ui",
   "title": "Switch",
-  "description": "A highly customizable neo-brutalist Switch component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Switch component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-switch"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/switch.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as SwitchPrimitive from '@radix-ui/react-switch';\nimport { cn } from '@/lib/utils';\n\nconst Switch = React.forwardRef<\n    React.ElementRef<typeof SwitchPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>\n>(({ className, ...props }, ref) => (\n    <SwitchPrimitive.Root\n        className={cn(\n            'peer inline-flex h-7 w-12 shrink-0 cursor-pointer items-center',\n            'border-3 border-brutal',\n            'transition-colors duration-150',\n            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2',\n            'disabled:cursor-not-allowed disabled:opacity-50',\n            'data-[state=checked]:bg-[#7FB069] data-[state=unchecked]:bg-white dark:data-[state=unchecked]:bg-gray-900',\n            className\n        )}\n        {...props}\n        ref={ref}\n    >\n        <SwitchPrimitive.Thumb\n            className={cn(\n                'pointer-events-none block h-5 w-5',\n                'bg-black dark:bg-white',\n                'shadow-brutal-sm',\n                'transition-transform duration-150',\n                'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0.5'\n            )}\n        />\n    </SwitchPrimitive.Root>\n));\nSwitch.displayName = SwitchPrimitive.Root.displayName;\n\nexport { Switch };\n",
+      "path": "components/ui/switch/Switch.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { SwitchRoot, SwitchThumb } from 'reka-ui'\n\ninterface SwitchProps {\n    class?: string\n    modelValue?: boolean\n    defaultValue?: boolean\n    disabled?: boolean\n}\n\nconst props = defineProps<SwitchProps>()\n\nconst emit = defineEmits<{\n    'update:modelValue': [value: boolean]\n}>()\n\nconst classes = computed(() =>\n    cn(\n        'peer inline-flex h-7 w-12 shrink-0 cursor-pointer items-center',\n        'border-3 border-brutal',\n        'transition-colors duration-150',\n        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'disabled:cursor-not-allowed disabled:opacity-50',\n        'data-[state=checked]:bg-brutal-success data-[state=unchecked]:bg-brutal-bg',\n        props.class\n    )\n)\n\nconst thumbClasses = computed(() =>\n    cn(\n        'pointer-events-none block h-5 w-5 bg-brutal-fg shadow-brutal-sm transition-transform duration-150',\n        'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0.5'\n    )\n)\n</script>\n\n<template>\n    <SwitchRoot\n        :class=\"classes\"\n        :checked=\"modelValue\"\n        :default-checked=\"defaultValue\"\n        :disabled=\"disabled\"\n        @update:checked=\"emit('update:modelValue', $event)\"\n    >\n        <SwitchThumb :class=\"thumbClasses\" />\n    </SwitchRoot>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +37,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +71,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +84,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

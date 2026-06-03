@@ -3,13 +3,18 @@
   "name": "badge",
   "type": "registry:ui",
   "title": "Badge",
-  "description": "A highly customizable neo-brutalist Badge component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Badge component built with Brutx design tokens for Vue 3.",
   "dependencies": [],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/badge.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport { cva, type VariantProps } from 'class-variance-authority';\nimport { cn } from '@/lib/utils';\n\nconst badgeVariants = cva(\n    [\n        'inline-flex items-center',\n        'border-2 border-brutal rounded-brutal',\n        'font-bold tracking-wide',\n        'transition-colors',\n    ],\n    {\n        variants: {\n            variant: {\n                default: [\n                    'bg-brutal-bg text-brutal-fg',\n                    'shadow-brutal-sm',\n                ],\n                primary: [\n                    'bg-brutal-primary text-brutal-fg',\n                    'shadow-brutal-sm',\n                ],\n                secondary: [\n                    'bg-brutal-secondary text-brutal-fg',\n                    'shadow-brutal-sm',\n                ],\n                accent: [\n                    'bg-brutal-accent text-brutal-fg',\n                    'shadow-brutal-sm',\n                ],\n                danger: [\n                    'bg-brutal-destructive text-brutal-fg',\n                    'shadow-brutal-sm',\n                ],\n                success: [\n                    'bg-brutal-success text-brutal-fg',\n                    'shadow-brutal-sm',\n                ],\n                outline: 'bg-transparent text-brutal-fg',\n            },\n            size: {\n                sm: 'px-2 py-0.5 text-xs',\n                default: 'px-3 py-1 text-sm',\n                lg: 'px-4 py-1.5 text-base',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            size: 'default',\n        },\n    }\n);\n\nexport interface BadgeProps\n    extends React.HTMLAttributes<HTMLDivElement>,\n        VariantProps<typeof badgeVariants> {}\n\nconst Badge = React.forwardRef<HTMLDivElement, BadgeProps>(\n    ({ className, variant, size, ...props }, ref) => (\n        <div ref={ref} className={cn(badgeVariants({ variant, size, className }))} {...props} />\n    )\n);\nBadge.displayName = 'Badge';\n\nexport { Badge, badgeVariants };\n",
+      "path": "components/ui/badge/Badge.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { badgeVariants } from '@/components/ui/badge/badge-variants'\n\ntype BadgeVariantProps = VariantProps<typeof badgeVariants>\n\ninterface BadgeProps {\n    variant?: NonNullable<BadgeVariantProps['variant']>\n    size?: NonNullable<BadgeVariantProps['size']>\n    class?: string\n}\n\nconst props = withDefaults(defineProps<BadgeProps>(), {\n    variant: 'default',\n    size: 'default',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(badgeVariants({ variant: props.variant, size: props.size }), props.class)\n)\n</script>\n\n<template>\n    <div :class=\"classes\">\n        <slot />\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/badge/badge-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const badgeVariants = cva(\n    [\n        'inline-flex items-center',\n        'border-3 border-brutal',\n        'font-bold tracking-wide',\n        'transition-colors',\n    ],\n    {\n        variants: {\n            variant: {\n                default: 'bg-brutal-bg text-brutal-fg shadow-brutal-sm',\n                primary: 'bg-brutal-primary text-brutal-fg shadow-brutal-sm',\n                secondary: 'bg-brutal-secondary text-brutal-fg shadow-brutal-sm',\n                accent: 'bg-brutal-accent text-brutal-fg shadow-brutal-sm',\n                danger: 'bg-brutal-destructive text-brutal-fg shadow-brutal-sm',\n                success: 'bg-brutal-success text-brutal-fg shadow-brutal-sm',\n                outline: 'bg-transparent text-brutal-fg',\n            },\n            size: {\n                sm: 'px-2 py-0.5 text-xs',\n                default: 'px-3 py-1 text-sm',\n                lg: 'px-4 py-1.5 text-base',\n            },\n        },\n        defaultVariants: {\n            variant: 'default',\n            size: 'default',\n        },\n    }\n)\n",
       "type": "registry:ui"
     }
   ],
@@ -35,7 +40,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -65,7 +74,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -75,16 +87,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

@@ -3,16 +3,16 @@
   "name": "checkbox",
   "type": "registry:ui",
   "title": "Checkbox",
-  "description": "A highly customizable neo-brutalist Checkbox component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Checkbox component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-checkbox",
-    "lucide-react"
+    "reka-ui",
+    "lucide-vue-next"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/checkbox.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as CheckboxPrimitive from '@radix-ui/react-checkbox';\nimport { Check } from 'lucide-react';\nimport { cn } from '@/lib/utils';\n\nconst Checkbox = React.forwardRef<\n    React.ElementRef<typeof CheckboxPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>\n>(({ className, ...props }, ref) => (\n    <CheckboxPrimitive.Root\n        ref={ref}\n        className={cn(\n            'peer h-6 w-6 shrink-0',\n            'border-3 border-brutal',\n            'bg-white dark:bg-gray-800',\n            'flex items-center justify-center',\n            'transition-all duration-150',\n            'shadow-brutal-sm',\n            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2',\n            'disabled:cursor-not-allowed disabled:opacity-50',\n            'data-[state=checked]:bg-[#7FB069]',\n            className\n        )}\n        {...props}\n    >\n        <CheckboxPrimitive.Indicator\n            className={cn('flex items-center justify-center text-current')}\n        >\n            <Check className=\"h-4 w-4 stroke-[3] text-black dark:text-white\" />\n        </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n));\nCheckbox.displayName = CheckboxPrimitive.Root.displayName;\n\nexport { Checkbox };\n",
+      "path": "components/ui/checkbox/Checkbox.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { CheckboxRoot, CheckboxIndicator } from 'reka-ui'\nimport { Check } from 'lucide-vue-next'\n\ninterface CheckboxProps {\n    class?: string\n    checked?: boolean\n    defaultChecked?: boolean\n    disabled?: boolean\n}\n\nconst props = defineProps<CheckboxProps>()\n\nconst emit = defineEmits<{\n    'update:checked': [value: boolean]\n}>()\n\nconst classes = computed(() =>\n    cn(\n        'peer h-6 w-6 shrink-0',\n        'border-3 border-brutal',\n        'bg-brutal-bg',\n        'flex items-center justify-center',\n        'transition-all duration-150',\n        'shadow-brutal-sm',\n        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'disabled:cursor-not-allowed disabled:opacity-50',\n        'data-[state=checked]:bg-brutal-success',\n        props.class\n    )\n)\n\nconst checkClasses = computed(() =>\n    cn('h-4 w-4 stroke-[3] text-brutal-fg')\n)\n</script>\n\n<template>\n    <CheckboxRoot\n        :class=\"classes\"\n        :checked=\"checked\"\n        :default-checked=\"defaultChecked\"\n        :disabled=\"disabled\"\n        @update:checked=\"emit('update:checked', $event)\"\n    >\n        <CheckboxIndicator class=\"flex items-center justify-center text-current\">\n            <Check :class=\"checkClasses\" />\n        </CheckboxIndicator>\n    </CheckboxRoot>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -38,7 +38,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -68,7 +72,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -78,16 +85,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

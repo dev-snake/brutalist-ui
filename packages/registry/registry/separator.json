@@ -3,15 +3,20 @@
   "name": "separator",
   "type": "registry:ui",
   "title": "Separator",
-  "description": "A highly customizable neo-brutalist Separator component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Separator component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-separator"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/separator.tsx",
-      "content": "import * as React from 'react';\nimport * as SeparatorPrimitive from '@radix-ui/react-separator';\nimport { cn } from '@/lib/utils';\n\nconst Separator = React.forwardRef<\n    React.ElementRef<typeof SeparatorPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>\n>(\n    ({ className, orientation = 'horizontal', decorative = true, ...props }, ref) => (\n        <SeparatorPrimitive.Root\n            ref={ref}\n            decorative={decorative}\n            orientation={orientation}\n            className={cn(\n                'shrink-0 bg-black dark:bg-white',\n                orientation === 'horizontal' ? 'h-[3px] w-full' : 'h-full w-[3px]',\n                className\n            )}\n            {...props}\n        />\n    )\n);\nSeparator.displayName = SeparatorPrimitive.Root.displayName;\n\nexport { Separator };\n",
+      "path": "components/ui/separator/Separator.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\nimport { Separator as SeparatorPrimitive } from 'reka-ui'\nimport { separatorVariants } from '@/components/ui/separator/separator-variants'\n\ntype SeparatorVariantProps = VariantProps<typeof separatorVariants>\n\ninterface SeparatorProps {\n    orientation?: NonNullable<SeparatorVariantProps['orientation']>\n    decorative?: boolean\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SeparatorProps>(), {\n    orientation: 'horizontal',\n    decorative: true,\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(separatorVariants({ orientation: props.orientation }), props.class)\n)\n</script>\n\n<template>\n    <SeparatorPrimitive\n        :orientation=\"orientation\"\n        :decorative=\"decorative\"\n        :class=\"classes\"\n    >\n        <slot />\n    </SeparatorPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/separator/separator-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const separatorVariants = cva('shrink-0 bg-brutal-fg', {\n    variants: {\n        orientation: {\n            horizontal: 'h-[3px] w-full',\n            vertical: 'h-full w-[3px]',\n        },\n    },\n    defaultVariants: {\n        orientation: 'horizontal',\n    },\n})\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +42,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +76,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +89,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

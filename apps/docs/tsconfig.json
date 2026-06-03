@@ -1,29 +1,19 @@
 {
     "compilerOptions": {
-        "target": "ES2017",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "strict": true,
-        "noEmit": true,
-        "esModuleInterop": true,
-        "module": "esnext",
+        "target": "ES2020",
+        "module": "ESNext",
         "moduleResolution": "bundler",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
+        "strict": true,
         "jsx": "preserve",
-        "incremental": true,
-        "plugins": [
-            {
-                "name": "next"
-            }
-        ],
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "skipLibCheck": true,
+        "noEmit": true,
         "paths": {
-            "@/*": ["./*"],
-            "@ui/*": ["../../packages/ui/src/*"],
-            "@components/ui/*": ["../../packages/ui/src/components/ui/*"]
+            "@/*": ["./.vitepress/*"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "**/*.mdx"],
+    "include": [".vitepress/**/*.ts", ".vitepress/**/*.vue"],
     "exclude": ["node_modules"]
 }

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "settings-page",
+  "type": "registry:ui",
+  "title": "Settings Page",
+  "description": "A highly customizable neo-brutalist Settings Page component built with Brutx design tokens for Vue 3.",
+  "dependencies": [
+    "reka-ui",
+    "lucide-vue-next"
+  ],
+  "registryDependencies": [
+    "tabs",
+    "card",
+    "input",
+    "switch",
+    "button",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "components/ui/settings-page/SettingsPage.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed, ref } from 'vue'\nimport { TabsRoot } from 'reka-ui'\nimport { useLocale } from '@/composables/useLocale'\nimport { cn } from '@/lib/utils'\nimport TabsList from '@/components/ui/tabs/TabsList.vue'\nimport TabsTrigger from '@/components/ui/tabs/TabsTrigger.vue'\nimport TabsContent from '@/components/ui/tabs/TabsContent.vue'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardHeader from '@/components/ui/card/CardHeader.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport CardTitle from '@/components/ui/card/CardTitle.vue'\nimport Input from '@/components/ui/input/Input.vue'\nimport Switch from '@/components/ui/switch/Switch.vue'\nimport Button from '@/components/ui/button/Button.vue'\nimport Separator from '@/components/ui/separator/Separator.vue'\n\nexport interface SettingsTab {\n    label: string\n    value: string\n}\n\ninterface SettingsPageProps {\n    title?: string\n    tabs?: SettingsTab[]\n    defaultTab?: string\n    class?: string\n}\n\nconst props = withDefaults(defineProps<SettingsPageProps>(), {\n    title: undefined,\n    tabs: () => [],\n    defaultTab: undefined,\n    class: '',\n})\n\nconst emit = defineEmits<{\n    save: [payload: { tab: string; values: Record<string, unknown> }]\n}>()\n\nconst { t } = useLocale()\n\nconst resolvedTitle = computed(() => props.title ?? t('settingsPage.defaultTitle'))\nconst resolvedSaveText = computed(() => t('settingsPage.saveText'))\nconst resolvedNameLabel = computed(() => t('settingsPage.nameLabel'))\nconst resolvedNamePlaceholder = computed(() => t('settingsPage.namePlaceholder'))\nconst resolvedNotificationsLabel = computed(() => t('settingsPage.notificationsLabel'))\n\nconst activeTab = ref(props.defaultTab ?? (props.tabs.length > 0 ? props.tabs[0].value : ''))\n\nconst formValues = ref<Record<string, Record<string, unknown>>>({})\n\nfunction getTabValues(tabValue: string): Record<string, unknown> {\n    return formValues.value[tabValue] ?? {}\n}\n\nfunction setTabValue(tabValue: string, key: string, value: unknown) {\n    if (!formValues.value[tabValue]) {\n        formValues.value[tabValue] = {}\n    }\n    formValues.value[tabValue][key] = value\n}\n\nfunction handleSave() {\n    emit('save', {\n        tab: activeTab.value,\n        values: getTabValues(activeTab.value),\n    })\n}\n\nconst rootClasses = computed(() =>\n    cn('min-h-screen bg-brutal-bg p-4 sm:p-8', props.class)\n)\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <div class=\"w-full max-w-3xl mx-auto\">\n            <slot name=\"header\">\n                <div class=\"mb-8\">\n                    <h1 class=\"text-3xl font-black tracking-tight\">\n                        {{ resolvedTitle }}\n                    </h1>\n                </div>\n            </slot>\n\n            <slot>\n                <TabsRoot v-model=\"activeTab\" :default-value=\"props.defaultTab\">\n                    <TabsList class=\"w-full\">\n                        <TabsTrigger\n                            v-for=\"tab in props.tabs\"\n                            :key=\"tab.value\"\n                            :value=\"tab.value\"\n                        >\n                            {{ tab.label }}\n                        </TabsTrigger>\n                    </TabsList>\n\n                    <TabsContent\n                        v-for=\"tab in tabs\"\n                        :key=\"tab.value\"\n                        :value=\"tab.value\"\n                    >\n                        <Card variant=\"flat\">\n                            <CardHeader>\n                                <CardTitle>{{ tab.label }}</CardTitle>\n                            </CardHeader>\n                            <CardContent>\n                                <div class=\"space-y-6\">\n                                    <slot :name=\"`tab-${tab.value}`\" :values=\"getTabValues(tab.value)\" :set-value=\"(key: string, val: unknown) => setTabValue(tab.value, key, val)\">\n                                        <div class=\"space-y-4\">\n                                            <div class=\"flex items-center justify-between\">\n                                                <label class=\"font-bold text-sm\" :for=\"`setting-${tab.value}-name`\">{{ resolvedNameLabel }}</label>\n                                                <Input\n                                                    :id=\"`setting-${tab.value}-name`\"\n                                                    :model-value=\"String(getTabValues(tab.value).name ?? '')\"\n                                                    :placeholder=\"resolvedNamePlaceholder\"\n                                                    class=\"max-w-xs\"\n                                                    @update:model-value=\"setTabValue(tab.value, 'name', $event)\"\n                                                />\n                                            </div>\n                                            <Separator />\n                                            <div class=\"flex items-center justify-between\">\n                                                <label class=\"font-bold text-sm\" :for=\"`setting-${tab.value}-notifications`\">{{ resolvedNotificationsLabel }}</label>\n                                                <Switch\n                                                    :model-value=\"Boolean(getTabValues(tab.value).notifications ?? false)\"\n                                                    @update:model-value=\"setTabValue(tab.value, 'notifications', $event)\"\n                                                />\n                                            </div>\n                                        </div>\n                                    </slot>\n                                </div>\n                            </CardContent>\n                        </Card>\n                    </TabsContent>\n                </TabsRoot>\n\n                <div class=\"mt-6 flex justify-end\">\n                    <Button variant=\"primary\" @click=\"handleSave\">\n                        {{ resolvedSaveText }}\n                    </Button>\n                </div>\n            </slot>\n\n            <slot name=\"footer\" />\n        </div>\n    </div>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

@@ -7,7 +7,7 @@ export default defineConfig({
     clean: true,
     sourcemap: true,
     target: 'node18',
-    noExternal: ['brutx-shared'],
+    noExternal: ['brutx-shared-vue'],
     banner: {
         js: '#!/usr/bin/env node',
     },

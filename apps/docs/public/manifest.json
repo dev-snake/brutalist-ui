@@ -1,14 +1,14 @@
 {
-    "name": "Brutx",
-    "short_name": "Brutx",
-    "description": "Brutx - Neo-Brutalism React Component Library - 27+ accessible components with bold borders, offset shadows, and vibrant colors.",
-    "start_url": "/",
+    "name": "BrutxUI",
+    "short_name": "BrutxUI",
+    "description": "BrutxUI - Neo-Brutalism 风格 Vue 3 组件库 - 35+ 无障碍组件，粗边框、硬阴影、鲜艳色彩。",
+    "start_url": "/brutxui-vue3/",
     "display": "standalone",
-    "background_color": "#FFFBF5",
+    "background_color": "#ffffff",
     "theme_color": "#FF6B6B",
     "icons": [
         {
-            "src": "/favicon.svg",
+            "src": "/brutxui-vue3/favicon.svg",
             "sizes": "any",
             "type": "image/svg+xml"
         }

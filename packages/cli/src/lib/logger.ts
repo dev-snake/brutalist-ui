@@ -26,7 +26,7 @@ class Logger {
     }
 
     error(message: string): void {
-        console.log(chalk.red(message));
+        this.log(chalk.red(message));
     }
 
     bold(message: string): void {

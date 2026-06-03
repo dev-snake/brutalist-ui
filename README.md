@@ -1,163 +1,173 @@
 <div align="center">
   <img src="apps/docs/public/favicon.svg" alt="Brutx Logo" width="120" height="120" />
-  
-  # BrutxUI
-  
-  **A copy-paste Neo-Brutalist component registry for React and Tailwind CSS.**
-  
-  Use it when you want visible borders, strong shadows, accessible primitives, and component code you can edit directly.
-  
-  ### Component Registry (`brutx-ui`)
-  [![npm version](https://img.shields.io/npm/v/brutx-ui.svg?style=flat-square&color=FF6B6B)](https://www.npmjs.com/package/brutx-ui)
-  [![npm downloads](https://img.shields.io/npm/dm/brutx-ui.svg?style=flat-square&color=4ECDC4)](https://www.npmjs.com/package/brutx-ui)
-  
-  ### CLI Tool (`brutx`)
-  [![npm version](https://img.shields.io/npm/v/brutx.svg?style=flat-square&color=FFE66D)](https://www.npmjs.com/package/brutx)
-  [![npm downloads](https://img.shields.io/npm/dm/brutx.svg?style=flat-square&color=4ECDC4)](https://www.npmjs.com/package/brutx)
 
-  ### Project Health & Sponsors
+  # BrutxUI
+
+  **面向 Vue 3 + Tailwind CSS 的复制粘贴式新粗野主义组件注册表。**
+
+  当你需要可见边框、强烈阴影、无障碍原语以及可直接编辑的组件代码时，就用它。
+
+  ### 组件注册表 (`brutx-ui-vue`)
+  [![npm version](https://img.shields.io/npm/v/brutx-ui-vue.svg?style=flat-square&color=FF6B6B)](https://www.npmjs.com/package/brutx-ui-vue)
+  [![npm downloads](https://img.shields.io/npm/dm/brutx-ui-vue.svg?style=flat-square&color=4ECDC4)](https://www.npmjs.com/package/brutx-ui-vue)
+
+  ### CLI 工具 (`brutx-vue`)
+  [![npm version](https://img.shields.io/npm/v/brutx-vue.svg?style=flat-square&color=FFE66D)](https://www.npmjs.com/package/brutx-vue)
+  [![npm downloads](https://img.shields.io/npm/dm/brutx-vue.svg?style=flat-square&color=4ECDC4)](https://www.npmjs.com/package/brutx-vue)
+
+  ### 项目健康度
   [![License: MIT](https://img.shields.io/badge/License-MIT-4ECDC4.svg?style=flat-square)](https://opensource.org/licenses/MIT)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-FFE66D.svg?style=flat-square)](https://www.typescriptlang.org/)
-  [![React](https://img.shields.io/badge/React-19+-61DAFB.svg?style=flat-square)](https://reactjs.org/)
-  [![Next.js](https://img.shields.io/badge/Next.js-15+-000000.svg?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
-  [![Sponsor](https://img.shields.io/badge/Sponsor-FF6B6B?style=flat-square&logo=github&logoColor=white)](https://github.com/sponsors/dev-snake)
+  [![Vue 3](https://img.shields.io/badge/Vue_3-3.5+-4FC08D.svg?style=flat-square&logo=vuedotjs&logoColor=white)](https://vuejs.org/)
+  [![Vite](https://img.shields.io/badge/Vite-6+-646CFF.svg?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+
 
   <br />
 
-  [Documentation & Previews](https://brutxui.site) · [NPM Library](https://www.npmjs.com/package/brutx-ui) · [NPM CLI](https://www.npmjs.com/package/brutx) · [Report Bug](https://github.com/dev-snake/brutxui/issues)
+  [文档与预览](https://lidaixingchen.github.io/brutxui-vue3/) · [NPM 组件库](https://www.npmjs.com/package/brutx-ui-vue) · [NPM CLI](https://www.npmjs.com/package/brutx-vue) · [报告问题](https://github.com/lidaixingchen/brutxui-vue3/issues)
 </div>
 
 ---
 
-## What is BrutxUI?
+## BrutxUI 是什么？
 
-BrutxUI is a Neo-Brutalist design registry for SaaS apps, indie tools, dashboards, developer portfolios, landing pages, and product interfaces that need a stronger visual tone.
+BrutxUI 是一个面向 SaaS 应用、独立工具、仪表盘、开发者作品集、落地页和产品界面的新粗野主义设计注册表，适用于需要更强视觉冲击力的场景。
 
-Instead of shipping as a single npm dependency that hides the implementation, **BrutxUI is copy-paste-first**. It follows the workflow popularized by `shadcn/ui`: components are generated into your project, built on **Radix UI** primitives and **Tailwind CSS**, so you can own the code and change it freely.
-
----
-
-## When to Use BrutxUI
-
-- **Good fit:** SaaS products, analytics dashboards, developer utilities, landing pages, web3 portals, and creative portfolios that can support a bold interface style.
-- **Use with care:** Conservative enterprise dashboards, patient-facing healthcare records, and traditional banking apps. The **Pastel** and **Monochrome** presets can soften the contrast when the default style feels too loud.
+与作为单一 npm 依赖隐藏实现细节的方式不同，**BrutxUI 以复制粘贴为首要原则**。它遵循 `shadcn/ui` 推广的工作流：组件生成到你的项目中，基于 **reka-ui** 无障碍原语和 **Tailwind CSS** 构建，让你拥有代码并自由修改。
 
 ---
 
-## Relationship with `shadcn/ui`
+## 何时使用 BrutxUI
 
-BrutxUI is meant to work alongside `shadcn/ui`, not replace it:
-* **Shared workflow:** BrutxUI uses the same `components.json` layout schema.
-* **Co-existence:** You can use `shadcn/ui` components for quieter UI surfaces and BrutxUI components for buttons, headers, pricing sections, or other high-contrast areas in the same project.
-* **Tailwind styling:** The generated files merge into standard Tailwind CSS layers.
+- **适合：** SaaS 产品、分析仪表盘、开发者工具、落地页、Web3 门户，以及能承载大胆界面风格的创意作品集。
+- **谨慎使用：** 保守的企业仪表盘、面向患者的医疗记录、传统银行应用。当默认风格过于张扬时，**Pastel（柔和）** 和 **Monochrome（单色）** 预设可以柔化对比度。
 
 ---
 
-## Installation and Registry Workflows
+## 与 `shadcn/ui` 的关系
 
-There are two common ways to install BrutxUI components:
+BrutxUI 旨在与 `shadcn/ui` 协同工作，而非替代它：
+* **共享工作流：** BrutxUI 使用相同的 `components.json` 布局模式。
+* **共存：** 你可以在同一项目中，对安静的 UI 表面使用 `shadcn/ui` 组件，对按钮、页头、定价区域或其他高对比度区域使用 BrutxUI 组件。
+* **Tailwind 样式：** 生成的文件合并到标准 Tailwind CSS 层中。
 
-### Option A: Brutx CLI (Recommended)
-The Brutx CLI handles Tailwind detection, CSS token injection, and package manager detection.
+---
+
+## 安装与注册表工作流
+
+安装 BrutxUI 组件有两种常见方式：
+
+### 方式 A：Brutx-Vue CLI（推荐）
+
+Brutx-Vue CLI 负责 Tailwind 检测、CSS 令牌注入和包管理器检测。
 
 ```bash
-# Initialize BrutxUI configs in your project
-npx brutx@latest init
+# 在项目中初始化 BrutxUI 配置
+npx brutx-vue@latest init
 
-# Add specific components
-npx brutx@latest add button card badge
+# 添加指定组件
+npx brutx-vue@latest add button card badge
 
-# Install all 29 components at once
-npx brutx@latest add --all
+# 一次性安装全部组件
+npx brutx-vue@latest add --all
 ```
 
-### Option B: Official `shadcn` CLI
-Because BrutxUI follows the shadcn/ui JSON registry schema, you can install BrutxUI components with the official shadcn CLI:
+### 方式 B：官方 `shadcn` CLI
+
+由于 BrutxUI 遵循 shadcn/ui JSON 注册表模式，你可以使用官方 shadcn CLI 安装 BrutxUI 组件：
 
 ```bash
-# Install Brutx Button
-npx shadcn@latest add https://brutxui.site/registry/button.json
+# 安装 Brutx Button
+npx shadcn@latest add https://lidaixingchen.github.io/brutxui-vue3/registry/button.json
 
-# Install Brutx SaaS Pricing Block
-npx shadcn@latest add https://brutxui.site/registry/saas-pricing.json
+# 安装 Brutx SaaS 定价区块
+npx shadcn@latest add https://lidaixingchen.github.io/brutxui-vue3/registry/saas-pricing.json
 ```
 
 ---
 
-## Sizing System and Theme Presets
+## 尺寸系统与主题预设
 
-BrutxUI exposes CSS custom properties in your stylesheet, so you can soften or strengthen the brutalist style globally:
+BrutxUI 在样式表中暴露 CSS 自定义属性，你可以全局柔化或强化粗野主义风格：
 
 ```css
 :root {
-  --brutal-border-width: 3px;     /* Thickness of layouts */
-  --brutal-radius: 0px;           /* Sharp rectangular corners */
-  --brutal-shadow-offset: 4px;    /* Normal card/button offset */
+  --brutal-border-width: 3px;     /* 布局边框粗细 */
+  --brutal-radius: 0px;           /* 锐利直角 */
+  --brutal-shadow-offset: 4px;    /* 常规卡片/按钮偏移 */
 }
 ```
 
-There are three built-in visual presets:
-1. **Classic Brutalism (`.theme-classic`):** Deep black shadows, neon accents, and sharp corners.
-2. **Pastel Neo-Brut (`.theme-pastel`):** Softer colors, lighter contrast, and `8px` corners.
-3. **Stark Monochrome (`.theme-mono`):** Grayscale colors and heavier black lines for minimal interfaces.
+内置三种视觉预设：
+1. **经典粗野主义 (`.theme-classic`)：** 深黑阴影、霓虹强调色、锐利直角。
+2. **柔和新粗野 (`.theme-pastel`)：** 柔和色彩、较轻对比度、`8px` 圆角。
+3. **纯粹单色 (`.theme-mono`)：** 灰度色彩和更粗的黑色线条，适用于极简界面。
 
 ---
 
-## Supported Components and Blocks
+## 多语言支持
 
-BrutxUI includes components and layout blocks for common product UI work:
+BrutxUI 内置中文（`zh-CN`，默认）和英文（`en`）语言包，支持运行时切换、局部覆盖和自定义翻译，无需 `vue-i18n` 依赖：
 
-### Layout Blocks and Templates
-* **`saas-pricing`:** A responsive SaaS pricing section with monthly/yearly billing switches, checklist icons, highlighted plans, and CTA buttons. [Registry URL](https://brutxui.site/registry/saas-pricing.json)
-* **`dashboard-stats`:** A responsive analytics panel for metrics such as revenue and conversion, with positive/negative trend badges. [Registry URL](https://brutxui.site/registry/dashboard-stats.json)
+```ts
+import { BrutxUIPlugin, en } from 'brutx-ui-vue'
 
-### Atomic Components
-* **Forms:** `Button`, `SubmitButton` (Server Component safe), `Input`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Label`
-* **Overlays:** `Dialog` (Modal), `Popover`, `Tooltip`, `DropdownMenu`
-* **Data & Lists:** `Table`, `Tabs`, `Command` (spotlight search), `Combobox` (multi-picker), `Pagination`, `ScrollArea`
-* **Feedback:** `Alert`, `Badge`, `Toast` (notifiers), `Spinner` (loaders), `Skeleton`
-* **Display:** `Avatar`, `Calendar`, `Separator`
-
----
-
-## Contribution and Development
-
-To run, test, and package BrutxUI locally:
-
-### 1. Repository Setup
-```bash
-# Clone the repository
-git clone https://github.com/dev-snake/brutxui.git
-cd brutxui
-
-# Install workspace dependencies
-pnpm install
-
-# Build UI modules and CLI binaries
-pnpm --filter brutx-ui build && pnpm --filter brutx build
+app.use(BrutxUIPlugin, { locale: en })
 ```
 
-### 2. Run Test Suites
+---
+
+## 支持的组件与区块
+
+BrutxUI 包含常见产品 UI 所需的组件和布局区块：
+
+### 布局区块与模板
+* **`saas-pricing`：** 响应式 SaaS 定价区域，支持月付/年付切换、清单图标、高亮方案和 CTA 按钮。[注册表 URL](https://lidaixingchen.github.io/brutxui-vue3/registry/saas-pricing.json)
+* **`dashboard-stats`：** 响应式分析面板，用于收入和转化等指标，带正/负趋势徽章。[注册表 URL](https://lidaixingchen.github.io/brutxui-vue3/registry/dashboard-stats.json)
+
+### 原子组件
+* **表单：** `Button`、`Input`、`Textarea`、`Checkbox`、`Switch`、`Select`、`Label`
+* **浮层：** `Dialog`（模态框）、`Popover`、`Tooltip`、`DropdownMenu`
+* **数据与列表：** `Table`、`Tabs`、`Command`（快速搜索）、`Combobox`（多选器）、`Pagination`、`ScrollArea`
+* **反馈：** `Alert`、`Badge`、`Toast`（通知）、`Spinner`（加载）、`Skeleton`
+* **展示：** `Avatar`、`Calendar`、`Separator`
+
+---
+
+## 贡献与开发
+
+在本地运行、测试和打包 BrutxUI：
+
+### 1. 仓库设置
+```bash
+# 克隆仓库
+git clone https://github.com/lidaixingchen/brutxui-vue3.git
+cd brutxui-vue3
+
+# 安装工作区依赖
+pnpm install
+
+# 构建 UI 模块和 CLI 二进制文件
+pnpm --filter brutx-ui-vue build && pnpm --filter brutx-vue build
+```
+
+### 2. 运行测试套件
 ```bash
 pnpm test
 ```
 
-### 3. Recompile Component JSON Registry
-If you make changes to core components in `packages/ui/src/components/*.tsx`, compile and validate the schemas:
+### 3. 重新编译组件 JSON 注册表
+如果你修改了 `packages/ui/src/components/*.vue` 中的核心组件，请编译并验证模式：
 ```bash
-# Compile TS to registry JSON files
-pnpm --filter brutx-registry build
+# 编译为注册表 JSON 文件
+pnpm --filter brutx-registry-vue build
 
-# Validate JSON files against shadcn CLI schema
-pnpm --filter brutx-registry validate
+# 根据 shadcn CLI 模式验证 JSON 文件
+pnpm --filter brutx-registry-vue validate
 ```
 
 ---
 
-## License
+## 许可证
 
-BrutxUI is open-source software licensed under the [MIT License](LICENSE).
-
-<div align="center">
-  <p>Built by dev-snake and contributors.</p>
-</div>
+BrutxUI 是基于 [MIT 许可证](LICENSE) 的开源软件。

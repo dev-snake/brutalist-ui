@@ -3,15 +3,20 @@
   "name": "scroll-area",
   "type": "registry:ui",
   "title": "Scroll Area",
-  "description": "A highly customizable neo-brutalist Scroll Area component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Scroll Area component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-scroll-area"
+    "reka-ui"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/scroll-area.tsx",
-      "content": "'use client';\n\nimport * as React from 'react';\nimport * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';\nimport { cn } from '@/lib/utils';\n\nconst ScrollArea = React.forwardRef<\n    React.ElementRef<typeof ScrollAreaPrimitive.Root>,\n    React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>\n>(({ className, children, ...props }, ref) => (\n    <ScrollAreaPrimitive.Root\n        ref={ref}\n        className={cn('relative overflow-hidden', className)}\n        {...props}\n    >\n        <ScrollAreaPrimitive.Viewport className=\"h-full w-full rounded-[inherit]\">\n            {children}\n        </ScrollAreaPrimitive.Viewport>\n        <ScrollBar />\n        <ScrollAreaPrimitive.Corner />\n    </ScrollAreaPrimitive.Root>\n));\nScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;\n\nconst ScrollBar = React.forwardRef<\n    React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,\n    React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>\n>(({ className, orientation = 'vertical', ...props }, ref) => (\n    <ScrollAreaPrimitive.ScrollAreaScrollbar\n        ref={ref}\n        orientation={orientation}\n        className={cn(\n            'flex touch-none select-none transition-colors',\n            orientation === 'vertical' &&\n                'h-full w-3 border-l-2 border-black dark:border-white p-[1px]',\n            orientation === 'horizontal' &&\n                'h-3 flex-col border-t-2 border-black dark:border-white p-[1px]',\n            className\n        )}\n        {...props}\n    >\n        <ScrollAreaPrimitive.ScrollAreaThumb className=\"relative flex-1 bg-black dark:bg-white\" />\n    </ScrollAreaPrimitive.ScrollAreaScrollbar>\n));\nScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;\n\nexport { ScrollArea, ScrollBar };\n",
+      "path": "components/ui/scroll-area/ScrollArea.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    ScrollAreaRoot as ScrollAreaRootPrimitive,\n    ScrollAreaViewport as ScrollAreaViewportPrimitive,\n    ScrollAreaCorner as ScrollAreaCornerPrimitive,\n} from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport ScrollBar from '@/components/ui/scroll-area/ScrollBar.vue'\n\ninterface ScrollAreaProps {\n    class?: string\n}\n\nconst props = defineProps<ScrollAreaProps>()\n\nconst classes = computed(() =>\n    cn('relative overflow-hidden', props.class)\n)\n</script>\n\n<template>\n    <ScrollAreaRootPrimitive :class=\"classes\">\n        <ScrollAreaViewportPrimitive class=\"h-full w-full rounded-[inherit]\">\n            <slot />\n        </ScrollAreaViewportPrimitive>\n        <ScrollBar />\n        <ScrollAreaCornerPrimitive />\n    </ScrollAreaRootPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/scroll-area/ScrollBar.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    ScrollAreaScrollbar as ScrollAreaScrollbarPrimitive,\n    ScrollAreaThumb as ScrollAreaThumbPrimitive,\n} from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface ScrollBarProps {\n    orientation?: 'vertical' | 'horizontal'\n    class?: string\n}\n\nconst props = withDefaults(defineProps<ScrollBarProps>(), {\n    orientation: 'vertical',\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(\n        'flex touch-none select-none transition-colors',\n        props.orientation === 'vertical' &&\n            'h-full w-3 border-l-3 border-brutal p-[1px]',\n        props.orientation === 'horizontal' &&\n            'h-3 flex-col border-t-3 border-brutal p-[1px]',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <ScrollAreaScrollbarPrimitive :orientation=\"orientation\" :class=\"classes\">\n        <ScrollAreaThumbPrimitive class=\"relative flex-1 bg-brutal-fg\" />\n    </ScrollAreaScrollbarPrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -37,7 +42,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -67,7 +76,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -77,16 +89,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

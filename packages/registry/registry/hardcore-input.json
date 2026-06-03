@@ -1,0 +1,112 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hardcore-input",
+  "type": "registry:ui",
+  "title": "Hardcore Input",
+  "description": "A highly customizable neo-brutalist Hardcore Input component built with Brutx design tokens for Vue 3.",
+  "dependencies": [],
+  "registryDependencies": [
+    "form"
+  ],
+  "files": [
+    {
+      "path": "components/ui/hardcore-input/HardcoreInput.vue",
+      "content": "<script setup lang=\"ts\">\nimport { ref, computed, toRef, inject, onUnmounted, useId } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { useAudioEngine } from '@/composables/useAudioEngine'\nimport { useLocale } from '@/composables/useLocale'\nimport { hardcoreInputVariants, hardcoreInputFaceVariants } from '@/components/ui/hardcore-input/hardcore-input-variants'\nimport { formFieldKey, type FormFieldContext } from '@/components/ui/form/form-context'\n\ninterface HardcoreInputProps {\n    modelValue?: string\n    sound?: boolean\n    rules?: Array<(val: string) => boolean | string>\n    shakeOnError?: boolean\n    type?: string\n    placeholder?: string\n    disabled?: boolean\n    readonly?: boolean\n    validateOn?: 'input' | 'blur' | 'submit'\n    class?: string\n}\n\nconst props = withDefaults(defineProps<HardcoreInputProps>(), {\n    modelValue: '',\n    sound: true,\n    rules: () => [],\n    shakeOnError: true,\n    type: 'text',\n    placeholder: '',\n    disabled: false,\n    readonly: false,\n    validateOn: 'blur',\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'update:modelValue': [value: string]\n    'validationChange': [state: 'default' | 'success' | 'error', message?: string]\n}>()\n\nconst getUniqueId = () => {\n    try {\n        const id = useId()\n        return id.replace(/:/g, '-')\n    } catch {\n        return Math.random().toString(36).substring(2, 9)\n    }\n}\n\nconst errorId = `input-error-${getUniqueId()}`\n\nconst validationState = ref<'default' | 'success' | 'error'>('default')\nconst errorMessage = ref<string>('')\nconst triggerShake = ref(false)\n\nconst audioEngine = useAudioEngine(toRef(props, 'sound'))\nconst { t } = useLocale()\n\nconst formField = inject<FormFieldContext | null>(formFieldKey, null)\n\nonUnmounted(() => {\n    audioEngine.dispose()\n})\n\nconst validate = (value: string) => {\n    if (props.rules.length === 0) {\n        if (validationState.value !== 'default') {\n            validationState.value = 'default'\n            errorMessage.value = ''\n            emit('validationChange', 'default')\n        }\n        return\n    }\n\n    let isOk = true\n    let errText = ''\n\n    for (const rule of props.rules) {\n        const result = rule(value)\n        if (result !== true) {\n            isOk = false\n            errText = typeof result === 'string' ? result : t('hardcoreInput.invalidInput')\n            break\n        }\n    }\n\n    const prevState = validationState.value\n\n    if (!isOk) {\n        validationState.value = 'error'\n        errorMessage.value = errText\n        \n        if (prevState !== 'error') {\n            audioEngine.playSound('fail')\n        }\n        \n        if (props.shakeOnError) {\n            triggerShake.value = false\n            setTimeout(() => {\n                triggerShake.value = true\n            }, 10)\n        }\n        emit('validationChange', 'error', errText)\n    } else {\n        validationState.value = 'success'\n        errorMessage.value = ''\n        \n        if (prevState !== 'success') {\n            audioEngine.playSound('success')\n        }\n        emit('validationChange', 'success')\n    }\n\n    if (formField) {\n        formField.error.value = !isOk ? errText : undefined\n    }\n}\n\nconst onInput = (e: Event) => {\n    const value = (e.target as HTMLInputElement).value\n    emit('update:modelValue', value)\n    \n    // 键盘打字音效\n    audioEngine.playSound('type')\n\n    if (props.validateOn === 'input') {\n        validate(value)\n    }\n}\n\nconst onBlur = () => {\n    if (props.validateOn === 'blur') {\n        validate(props.modelValue)\n    }\n}\n\nconst onAnimationEnd = () => {\n    triggerShake.value = false\n}\n\n// 暴露外部主动校验接口\nconst triggerValidate = () => {\n    validate(props.modelValue)\n}\n\ndefineExpose({\n    validate: triggerValidate,\n    validationState,\n    errorMessage,\n})\n\nconst containerClasses = computed(() =>\n    cn('relative w-full flex flex-col gap-1.5', props.class)\n)\n\nconst inputClasses = computed(() =>\n    cn(\n        hardcoreInputVariants({ validationState: validationState.value }),\n        triggerShake.value ? 'animate-shake' : ''\n    )\n)\n\nconst faceClasses = computed(() =>\n    cn(\n        hardcoreInputFaceVariants(),\n        validationState.value === 'success' ? 'bg-brutal-success' : '',\n        validationState.value === 'error' ? 'bg-brutal-destructive text-white animate-bounce-short' : ''\n    )\n)\n</script>\n\n<template>\n    <div :class=\"containerClasses\">\n        <div class=\"relative flex items-center w-full\">\n            <input\n                :type=\"type\"\n                :value=\"modelValue\"\n                :disabled=\"disabled\"\n                :readonly=\"readonly\"\n                :placeholder=\"placeholder\"\n                :class=\"inputClasses\"\n                :aria-invalid=\"validationState === 'error'\"\n                :aria-describedby=\"errorMessage ? errorId : undefined\"\n                @input=\"onInput\"\n                @blur=\"onBlur\"\n                @animationend=\"onAnimationEnd\"\n            />\n            \n            <!-- 右侧校验反馈表情 -->\n            <div class=\"absolute right-3 flex items-center z-10 pointer-events-none select-none\">\n                <slot>\n                    <div v-if=\"validationState !== 'default'\" :class=\"faceClasses\">\n                        <!-- 成功 (😎) SVG -->\n                        <svg v-if=\"validationState === 'success'\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\">\n                            <circle cx=\"12\" cy=\"12\" r=\"10\" fill=\"var(--brutal-accent, #FFE66D)\" stroke=\"currentColor\" stroke-width=\"2.5\" />\n                            <!-- 墨镜 -->\n                            <rect x=\"6\" y=\"8\" width=\"5\" height=\"4\" rx=\"1.5\" fill=\"black\" stroke=\"black\" stroke-width=\"1\" />\n                            <rect x=\"13\" y=\"8\" width=\"5\" height=\"4\" rx=\"1.5\" fill=\"black\" stroke=\"black\" stroke-width=\"1\" />\n                            <line x1=\"11\" y1=\"10\" x2=\"13\" y2=\"10\" stroke=\"black\" stroke-width=\"2\" />\n                            <!-- 微笑嘴巴 -->\n                            <path d=\"M8 15 Q12 19 16 15\" stroke=\"black\" stroke-width=\"2.5\" stroke-linecap=\"round\" fill=\"none\" />\n                        </svg>\n                        \n                        <!-- 错误 (😠) SVG -->\n                        <svg v-if=\"validationState === 'error'\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\">\n                            <circle cx=\"12\" cy=\"12\" r=\"10\" fill=\"var(--brutal-destructive, #EF476F)\" stroke=\"currentColor\" stroke-width=\"2.5\" />\n                            <!-- 倒八字愤怒眉毛 -->\n                            <line x1=\"6\" y1=\"8\" x2=\"10\" y2=\"10\" stroke=\"black\" stroke-width=\"2.5\" stroke-linecap=\"round\" />\n                            <line x1=\"18\" y1=\"8\" x2=\"14\" y2=\"10\" stroke=\"black\" stroke-width=\"2.5\" stroke-linecap=\"round\" />\n                            <!-- 怒气眼睛 -->\n                            <circle cx=\"8\" cy=\"12\" r=\"1.5\" fill=\"black\" />\n                            <circle cx=\"16\" cy=\"12\" r=\"1.5\" fill=\"black\" />\n                            <!-- 嘟起向下的嘴巴 -->\n                            <path d=\"M9 17 Q12 14 15 17\" stroke=\"black\" stroke-width=\"2.5\" stroke-linecap=\"round\" fill=\"none\" />\n                        </svg>\n                    </div>\n                </slot>\n            </div>\n        </div>\n        \n        <!-- 错误校验提示文案 -->\n        <p\n            v-if=\"validationState === 'error' && errorMessage\"\n            :id=\"errorId\"\n            class=\"text-xs font-black tracking-wide text-brutal-destructive animate-fade-in\"\n            aria-live=\"polite\"\n        >\n            {{ errorMessage }}\n        </p>\n    </div>\n</template>\n\n<style scoped>\n@keyframes input-shake {\n    0%, 100% { transform: translateX(0); }\n    15%, 45%, 75% { transform: translateX(-6px); }\n    30%, 60%, 90% { transform: translateX(6px); }\n}\n\n:deep(.animate-shake) {\n    animation: input-shake 0.35s ease-in-out;\n}\n\n@keyframes bounce-short {\n    0%, 100% { transform: translateY(0); }\n    50% { transform: translateY(-4px); }\n}\n\n:deep(.animate-bounce-short) {\n    animation: bounce-short 0.4s ease-in-out 2;\n}\n\n@keyframes fade-in {\n    from { opacity: 0; transform: translateY(-2px); }\n    to { opacity: 1; transform: translateY(0); }\n}\n\n:deep(.animate-fade-in) {\n    animation: fade-in 0.2s ease-out forwards;\n}\n\n@media (prefers-reduced-motion: reduce) {\n    :deep(.animate-shake),\n    :deep(.animate-bounce-short),\n    :deep(.animate-fade-in) {\n        animation: none !important;\n        transform: none !important;\n    }\n}\n</style>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/hardcore-input/hardcore-input-variants.ts",
+      "content": "import { cva } from 'class-variance-authority'\n\nexport const hardcoreInputVariants = cva(\n    [\n        'w-full',\n        'border-3 border-brutal',\n        'rounded-brutal',\n        'bg-brutal-bg text-brutal-fg',\n        'shadow-brutal',\n        'px-4 py-2',\n        'font-bold',\n        'transition-all duration-150',\n        'focus:outline-none focus-visible:ring-2 focus-visible:ring-brutal-ring focus-visible:ring-offset-2',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'placeholder:text-brutal-placeholder placeholder:font-normal',\n    ],\n    {\n        variants: {\n            validationState: {\n                default: '',\n                success: 'border-brutal-success',\n                error: 'border-brutal-destructive',\n            },\n        },\n        defaultVariants: {\n            validationState: 'default',\n        },\n    }\n)\n\nexport const hardcoreInputFaceVariants = cva(\n    [\n        'inline-flex items-center justify-center',\n        'border-3 border-brutal',\n        'rounded-brutal',\n        'w-10 h-10',\n        'text-lg',\n        'bg-brutal-accent',\n        'transition-transform duration-300',\n    ]\n)\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "composables/useAudioEngine.ts",
+      "content": "import { ref, type Ref } from 'vue'\n\nconst TYPE_SOUND_THROTTLE_MS = 50\nconst TYPE_BASE_FREQ = 220\nconst TYPE_FREQ_RANGE = 80\nconst TYPE_GAIN = 0.08\nconst TYPE_GAIN_END = 0.001\nconst TYPE_DURATION = 0.05\n\nconst SUCCESS_START_FREQ = 300\nconst SUCCESS_END_FREQ = 600\nconst SUCCESS_GAIN = 0.1\nconst SUCCESS_GAIN_END = 0.001\nconst SUCCESS_DURATION = 0.15\n\nconst FAIL_FREQ_1 = 150\nconst FAIL_FREQ_2 = 100\nconst FAIL_FREQ_SHIFT_TIME = 0.1\nconst FAIL_GAIN = 0.1\nconst FAIL_GAIN_END = 0.001\nconst FAIL_DURATION = 0.2\n\nexport function useAudioEngine(enabled: Ref<boolean>) {\n    let audioCtx: AudioContext | null = null\n    const lastTypeSoundTime = ref(0)\n\n    const getCtx = () => {\n        if (!audioCtx && typeof window !== 'undefined') {\n            const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext\n            if (AudioContextClass) {\n                audioCtx = new AudioContextClass()\n            }\n        }\n        return audioCtx\n    }\n\n    const playSound = (type: 'type' | 'success' | 'fail') => {\n        if (!enabled.value) return\n        if (type === 'type') {\n            const now = Date.now()\n            if (now - lastTypeSoundTime.value < TYPE_SOUND_THROTTLE_MS) return\n            lastTypeSoundTime.value = now\n        }\n        \n        const ctx = getCtx()\n        if (!ctx) return\n        \n        if (ctx.state === 'suspended') {\n            ctx.resume()\n        }\n\n        const osc = ctx.createOscillator()\n        const gain = ctx.createGain()\n        osc.connect(gain)\n        gain.connect(ctx.destination)\n\n        if (type === 'type') {\n            osc.type = 'triangle'\n            osc.frequency.setValueAtTime(TYPE_BASE_FREQ + Math.random() * TYPE_FREQ_RANGE, ctx.currentTime)\n            gain.gain.setValueAtTime(TYPE_GAIN, ctx.currentTime)\n            gain.gain.exponentialRampToValueAtTime(TYPE_GAIN_END, ctx.currentTime + TYPE_DURATION)\n            osc.start()\n            osc.stop(ctx.currentTime + TYPE_DURATION)\n        } else if (type === 'success') {\n            osc.type = 'sine'\n            osc.frequency.setValueAtTime(SUCCESS_START_FREQ, ctx.currentTime)\n            osc.frequency.exponentialRampToValueAtTime(SUCCESS_END_FREQ, ctx.currentTime + SUCCESS_DURATION)\n            gain.gain.setValueAtTime(SUCCESS_GAIN, ctx.currentTime)\n            gain.gain.exponentialRampToValueAtTime(SUCCESS_GAIN_END, ctx.currentTime + SUCCESS_DURATION)\n            osc.start()\n            osc.stop(ctx.currentTime + SUCCESS_DURATION)\n        } else if (type === 'fail') {\n            osc.type = 'square'\n            osc.frequency.setValueAtTime(FAIL_FREQ_1, ctx.currentTime)\n            osc.frequency.setValueAtTime(FAIL_FREQ_2, ctx.currentTime + FAIL_FREQ_SHIFT_TIME)\n            gain.gain.setValueAtTime(FAIL_GAIN, ctx.currentTime)\n            gain.gain.exponentialRampToValueAtTime(FAIL_GAIN_END, ctx.currentTime + FAIL_DURATION)\n            osc.start()\n            osc.stop(ctx.currentTime + FAIL_DURATION)\n        }\n    }\n\n    const dispose = () => {\n        audioCtx?.close()\n        audioCtx = null\n    }\n\n    return { playSound, dispose }\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "tailwind": {
+    "config": {
+      "theme": {
+        "extend": {
+          "borderWidth": {
+            "3": "var(--brutal-border-width, 3px)"
+          },
+          "borderColor": {
+            "brutal": "var(--brutal-border-color, #000000)"
+          },
+          "borderRadius": {
+            "brutal": "var(--brutal-radius, 0px)"
+          },
+          "colors": {
+            "brutal-bg": "var(--brutal-bg, #ffffff)",
+            "brutal-fg": "var(--brutal-fg, #000000)",
+            "brutal-primary": "var(--brutal-primary, #FF6B6B)",
+            "brutal-secondary": "var(--brutal-secondary, #4ECDC4)",
+            "brutal-accent": "var(--brutal-accent, #FFE66D)",
+            "brutal-destructive": "var(--brutal-destructive, #EF476F)",
+            "brutal-success": "var(--brutal-success, #7FB069)",
+            "brutal-muted": "var(--brutal-muted, #f3f4f6)",
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
+          },
+          "boxShadow": {
+            "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-sm": "calc(var(--brutal-shadow-offset-x, 4px) / 2) calc(var(--brutal-shadow-offset-y, 4px) / 2) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-lg": "calc(var(--brutal-shadow-offset-x, 4px) * 1.5) calc(var(--brutal-shadow-offset-y, 4px) * 1.5) 0px 0px var(--brutal-shadow-color, #000000)",
+            "brutal-xl": "calc(var(--brutal-shadow-offset-x, 4px) * 2) calc(var(--brutal-shadow-offset-y, 4px) * 2) 0px 0px var(--brutal-shadow-color, #000000)"
+          }
+        }
+      }
+    }
+  },
+  "cssVars": {
+    "light": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#000000",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#000000",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#ffffff",
+      "brutal-fg": "#000000",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#f3f4f6",
+      "brutal-ring": "#000000",
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
+    },
+    "dark": {
+      "brutal-border-width": "3px",
+      "brutal-border-color": "#ffffff",
+      "brutal-shadow-offset-x": "4px",
+      "brutal-shadow-offset-y": "4px",
+      "brutal-shadow-color": "#ffffff",
+      "brutal-radius": "0px",
+      "brutal-pressed-offset": "2px",
+      "brutal-bg": "#141414",
+      "brutal-fg": "#ffffff",
+      "brutal-primary": "#FF6B6B",
+      "brutal-secondary": "#4ECDC4",
+      "brutal-accent": "#FFE66D",
+      "brutal-destructive": "#EF476F",
+      "brutal-success": "#7FB069",
+      "brutal-muted": "#1e1e1e",
+      "brutal-ring": "#ffffff",
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
+    }
+  }
+}

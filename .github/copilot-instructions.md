@@ -1,33 +1,36 @@
-# GitHub Copilot System Rules for BrutxUI
+# GitHub Copilot BrutxUI 系统规则
 
-You are an expert React and Tailwind CSS developer tasked with generating high-fidelity components, pricing blocks, and utility CLI commands for the BrutxUI codebase. Follow these guidelines closely:
-
----
-
-## 🎨 Visual System Constraints
-
-Every element in BrutxUI is modeled on a high-contrast Neo-Brutalist design language:
-- **Thick Outlines:** Outlines must use `border-3 border-black` (or `dark:border-white`). Never drop down to thin slate lines.
-- **Flat Shadow Offsets:** Saturated, unblurred flat shadows only:
-  - `shadow-brutal` (4px offset)
-  - `shadow-brutal-sm` (2px offset)
-  - `shadow-brutal-lg` (6px offset)
-- **Sharp Corners:** Default to sharp unrounded edges via `rounded-none`, or global parameter classes like `rounded-brutal`.
-- **Physical Press Feedback:** Buttons translate down and right when active: `active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_#000] transition-all`.
-- **Contrast Accents:** Use saturated high-contrast colors: Coral `#FF6B6B`, Mint Teal `#4ECDC4`, Saturated Yellow `#FFE66D`.
+你是一名精通 Vue 3 和 Tailwind CSS 的开发者，负责为 BrutxUI 代码库生成高保真组件、定价块和实用 CLI 命令。请严格遵循以下准则：
 
 ---
 
-## 🧩 Component Blueprints & Architecture
+## 视觉系统约束
 
-1. **Class Variance Authority:** Define all variants via CVA.
-2. **Merge Helper:** Merge external classes via `cn(...)` from `@/lib/utils` or equivalent nesting depths.
-3. **Accessibility:** Keep Radix modal traps, focus loops, ARIA tags, and keyboard outline rings.
-4. **Display Name:** Declare displays on all exports (e.g. `Button.displayName = 'Button'`).
+BrutxUI 中的每个元素都基于高对比度 Neo-Brutalist 设计语言：
+- **粗边框：** 边框必须使用 `border-3 border-brutal`（使用 CSS 变量 `--brutal-border-color`，暗色模式自动切换）。切勿降级为细浅色线条。
+- **扁平阴影偏移：** 仅使用饱和、无模糊的扁平阴影：
+  - `shadow-brutal`（4px 偏移）
+  - `shadow-brutal-sm`（2px 偏移）
+  - `shadow-brutal-lg`（6px 偏移）
+  - `shadow-brutal-xl`（8px 偏移）
+- **锐利圆角：** 默认通过 `rounded-none` 实现锐利无圆角边缘，或使用全局参数类如 `rounded-brutal`。
+- **物理按压反馈：** 按钮在激活时向下位移：`active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none transition-all`。
+- **对比强调色：** 通过 CSS 变量使用饱和高对比度颜色：珊瑚红 `#FF6B6B`（`bg-brutal-primary`）、薄荷青 `#4ECDC4`（`bg-brutal-secondary`）、饱和黄 `#FFE66D`（`bg-brutal-accent`）。
 
 ---
 
-## 🔒 Security Requirements
+## 组件蓝图与架构
 
-1. **Path Safety:** When working on the CLI tool (`packages/cli`), avoid directory traversal vulnerabilities. Normalise paths and ensure all resolved destination folders pass `isSafePath`.
-2. **Duplication Guard:** When updating configuration stylesheets, ensure that the token utility sets are not duplicated.
+1. **Vue 3 SFC：** 所有组件使用 `<script setup lang="ts">` 配合 `defineProps<T>()` + `withDefaults()`。
+2. **类变体权限：** 通过 CVA 在与组件同目录的独立 `*-variants.ts` 文件中定义所有变体。
+3. **合并辅助工具：** 通过来自 `@/lib/utils` 或等效嵌套深度的 `cn(...)` 合并外部类。
+4. **计算属性类：** 始终使用 `computed()` 进行动态类合并——切勿在模板中调用 `cn()`。
+5. **无障碍：** 使用 reka-ui 处理模态框、对话框、弹出框和输入框，以保持标记健壮且完全无障碍。
+6. **导出：** 始终从 `src/index.ts` 导出新组件。
+
+---
+
+## 安全要求
+
+1. **路径安全：** 在开发 CLI 工具（`packages/cli`）时，避免目录穿越漏洞。规范化路径并确保所有解析的目标文件夹通过 `isSafePath` 检查。
+2. **去重守卫：** 更新配置样式表时，确保令牌工具集不重复。

@@ -3,9 +3,9 @@
   "name": "pricing-section",
   "type": "registry:ui",
   "title": "Pricing Section",
-  "description": "A highly customizable neo-brutalist Pricing Section component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Pricing Section component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "lucide-react"
+    "lucide-vue-next"
   ],
   "registryDependencies": [
     "button",
@@ -14,8 +14,8 @@
   ],
   "files": [
     {
-      "path": "components/ui/pricing-section.tsx",
-      "content": "import * as React from 'react';\nimport { Check } from 'lucide-react';\nimport { Button } from '@/components/ui/button';\nimport { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';\nimport { Badge } from '@/components/ui/badge';\n\nexport interface BrutalistPricingPlan {\n    name: string;\n    price: string;\n    description: string;\n    features: string[];\n    ctaText: string;\n    popular?: boolean;\n    variant: 'primary' | 'secondary' | 'accent' | 'default';\n}\n\nexport interface PricingSectionProps extends React.HTMLAttributes<HTMLDivElement> {\n    title?: string;\n    subtitle?: string;\n    plans?: BrutalistPricingPlan[];\n}\n\nconst defaultPlans: BrutalistPricingPlan[] = [\n    {\n        name: 'Indie Creator',\n        price: '$9',\n        description: 'For solo devs and side-project hackers building clean products.',\n        features: [\n            'Access to 24+ atomic components',\n            'Full registry copying workflow',\n            'Figma design assets',\n            'Community Support Channel',\n        ],\n        ctaText: 'Start Building',\n        variant: 'default',\n    },\n    {\n        name: 'Pro Developer',\n        price: '$29',\n        description: 'For growing creators, SaaS platforms, and professional agencies.',\n        features: [\n            'Access to all 36+ components',\n            'All copy-paste premium blocks',\n            'Advanced customizable variables',\n            '1 year of regular registry updates',\n            'Priority GitHub issue support',\n        ],\n        ctaText: 'Unlock Pro Access',\n        popular: true,\n        variant: 'primary',\n    },\n    {\n        name: 'Team Studio',\n        price: '$99',\n        description: 'For collaborative development groups and startups building scaled apps.',\n        features: [\n            'Unlimited user accounts',\n            'Custom internal branding theme presets',\n            'AI-ready prompts and generation guidelines',\n            'Direct Slack developer console support',\n            'SLA uptime assurance',\n        ],\n        ctaText: 'Contact Workspace Sales',\n        variant: 'secondary',\n    },\n];\n\nexport function PricingSection({\n    title = 'Simple, Transparent Brutalist Plans',\n    subtitle = 'Choose the subscription tier that matches your current development workflow. No hidden fees, instant cancel.',\n    plans = defaultPlans,\n    className,\n    ...props\n}: PricingSectionProps) {\n    return (\n        <section\n            className={`w-full py-12 md:py-24 bg-brutal-bg text-brutal-fg transition-colors duration-200 ${className || ''}`}\n            {...props}\n        >\n            <div className=\"container px-4 md:px-6 mx-auto space-y-12\">\n                <div className=\"flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto\">\n                    <div className=\"bg-brutal-secondary text-black px-3 py-1 border-3 border-brutal font-black text-xs uppercase tracking-wider rotate-[1.5deg]\">\n                        Flexible Pricing Plans\n                    </div>\n                    <h2 className=\"text-3xl font-black sm:text-4xl md:text-5xl tracking-tight leading-none\">\n                        {title}\n                    </h2>\n                    <p className=\"text-lg font-bold text-gray-700 dark:text-gray-300\">\n                        {subtitle}\n                    </p>\n                </div>\n\n                <div className=\"grid gap-8 md:grid-cols-2 lg:grid-cols-3 items-stretch max-w-6xl mx-auto pt-6\">\n                    {plans.map((plan, idx) => {\n                        return (\n                            <div key={idx} className=\"relative flex flex-col h-full\">\n                                {plan.popular && (\n                                    <div className=\"absolute top-[-16px] left-[50%] translate-x-[-50%] z-20\">\n                                        <Badge variant=\"accent\" className=\"text-xs font-black uppercase tracking-wider px-3 py-1 animate-pulse border-3 border-brutal\">\n                                            Most Popular Tier\n                                        </Badge>\n                                    </div>\n                                )}\n\n                                <Card className={`flex flex-col h-full border-3 border-brutal rounded-none shadow-brutal hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-lg transition-all duration-150 ${plan.popular ? 'bg-yellow-50/20' : 'bg-white dark:bg-gray-800'}`}>\n                                    <CardHeader className=\"space-y-2 pb-6 border-b-3 border-brutal\">\n                                        <CardTitle className=\"text-2xl font-black leading-none\">{plan.name}</CardTitle>\n                                        <div className=\"flex items-baseline space-x-1\">\n                                            <span className=\"text-5xl font-black tracking-tight\">{plan.price}</span>\n                                            <span className=\"text-sm font-bold text-gray-500 dark:text-gray-400\">/ lifetime</span>\n                                        </div>\n                                        <CardDescription className=\"font-bold text-sm text-gray-600 dark:text-gray-300 pt-2 min-h-[48px]\">\n                                            {plan.description}\n                                        </CardDescription>\n                                    </CardHeader>\n\n                                    <CardContent className=\"flex-grow pt-6 space-y-4\">\n                                        <p className=\"font-black text-xs uppercase tracking-wider text-gray-500\">What's included:</p>\n                                        <ul className=\"space-y-3\">\n                                            {plan.features.map((feature, fIdx) => (\n                                                <li key={fIdx} className=\"flex items-start space-x-3 text-sm font-bold\">\n                                                    <div className=\"h-5 w-5 shrink-0 rounded-full bg-brutal-success border-2 border-brutal flex items-center justify-center\">\n                                                        <Check className=\"h-3 w-3 stroke-[4] text-black\" />\n                                                    </div>\n                                                    <span className=\"text-gray-700 dark:text-gray-300 leading-tight\">{feature}</span>\n                                                </li>\n                                            ))}\n                                        </ul>\n                                    </CardContent>\n\n                                    <CardFooter className=\"pt-6 border-t-3 border-brutal mt-auto bg-gray-50 dark:bg-gray-900/50 p-6\">\n                                        <Button\n                                            className=\"w-full font-black text-base py-6\"\n                                            variant={plan.variant}\n                                        >\n                                            {plan.ctaText}\n                                        </Button>\n                                    </CardFooter>\n                                </Card>\n                            </div>\n                        );\n                    })}\n                </div>\n            </div>\n        </section>\n    );\n}\n",
+      "path": "components/ui/pricing-section/PricingSection.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { Check } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\nimport Button from '@/components/ui/button/Button.vue'\nimport Card from '@/components/ui/card/Card.vue'\nimport CardHeader from '@/components/ui/card/CardHeader.vue'\nimport CardContent from '@/components/ui/card/CardContent.vue'\nimport CardTitle from '@/components/ui/card/CardTitle.vue'\nimport CardDescription from '@/components/ui/card/CardDescription.vue'\nimport CardFooter from '@/components/ui/card/CardFooter.vue'\nimport Badge from '@/components/ui/badge/Badge.vue'\n\nexport interface BrutalistPricingPlan {\n    name: string\n    price: string\n    description: string\n    features: string[]\n    ctaText: string\n    popular?: boolean\n    variant: 'primary' | 'secondary' | 'default'\n}\n\ninterface PricingSectionProps {\n    title?: string\n    subtitle?: string\n    plans?: BrutalistPricingPlan[]\n    class?: string\n}\n\nconst props = withDefaults(defineProps<PricingSectionProps>(), {\n    title: 'Simple, Transparent Brutalist Plans',\n    subtitle: '',\n    plans: () => [],\n    class: '',\n})\n\nconst emit = defineEmits<{\n    'plan-select': [planName: string]\n}>()\n\nconst rootClasses = computed(() => cn('w-full max-w-5xl mx-auto', props.class))\n\nfunction getPlanCardClasses(plan: BrutalistPricingPlan) {\n    return cn(plan.popular && 'bg-brutal-accent/20')\n}\n</script>\n\n<template>\n    <div :class=\"rootClasses\">\n        <div class=\"text-center mb-10\">\n            <h2 class=\"text-3xl font-black tracking-tight\">\n{{ title }}\n</h2>\n            <p v-if=\"subtitle\" class=\"mt-2 text-brutal-muted-foreground font-medium\">\n{{ subtitle }}\n</p>\n        </div>\n\n        <div class=\"grid grid-cols-1 md:grid-cols-3 gap-6\">\n            <div v-for=\"plan in plans\" :key=\"plan.name\" class=\"relative\">\n                <div v-if=\"plan.popular\" class=\"absolute -top-3 left-1/2 -translate-x-1/2 z-10 rotate-[1.5deg]\">\n                    <Badge variant=\"primary\" class=\"animate-pulse\">\nMost Popular Tier\n</Badge>\n                </div>\n                <Card :variant=\"plan.variant\" :class=\"getPlanCardClasses(plan)\">\n                    <CardHeader>\n                        <CardTitle class=\"text-xl\">\n{{ plan.name }}\n</CardTitle>\n                        <CardDescription>{{ plan.description }}</CardDescription>\n                    </CardHeader>\n                    <CardContent>\n                        <div class=\"mb-6\">\n                            <span class=\"text-4xl font-black\">{{ plan.price }}</span>\n                            <span class=\"text-sm font-bold text-brutal-muted-foreground\">/ lifetime</span>\n                        </div>\n                        <ul class=\"space-y-3\">\n                            <li v-for=\"feature in plan.features\" :key=\"feature\" class=\"flex items-center gap-2\">\n                                <div class=\"flex h-5 w-5 items-center justify-center bg-brutal-success text-brutal-fg\">\n                                    <Check class=\"h-3 w-3 stroke-[3]\" />\n                                </div>\n                                <span class=\"text-sm font-medium\">{{ feature }}</span>\n                            </li>\n                        </ul>\n                    </CardContent>\n                    <CardFooter>\n                        <Button :variant=\"plan.variant === 'default' ? 'outline' : plan.variant\" class=\"w-full\" @click=\"emit('plan-select', plan.name)\">\n{{ plan.ctaText }}\n</Button>\n                    </CardFooter>\n                </Card>\n            </div>\n        </div>\n    </div>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -41,7 +41,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -71,7 +75,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -81,16 +88,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }

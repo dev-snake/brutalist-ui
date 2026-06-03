@@ -3,16 +3,56 @@
   "name": "dropdown-menu",
   "type": "registry:ui",
   "title": "Dropdown Menu",
-  "description": "A highly customizable neo-brutalist Dropdown Menu component built with Brutx design tokens.",
+  "description": "A highly customizable neo-brutalist Dropdown Menu component built with Brutx design tokens for Vue 3.",
   "dependencies": [
-    "@radix-ui/react-dropdown-menu",
-    "lucide-react"
+    "reka-ui",
+    "lucide-vue-next"
   ],
   "registryDependencies": [],
   "files": [
     {
-      "path": "components/ui/dropdown-menu.tsx",
-      "content": "import * as React from 'react';\nimport * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';\nimport { Check, ChevronRight, Circle } from 'lucide-react';\nimport { cn } from '@/lib/utils';\n\nconst DropdownMenu = DropdownMenuPrimitive.Root;\nconst DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;\nconst DropdownMenuGroup = DropdownMenuPrimitive.Group;\nconst DropdownMenuPortal = DropdownMenuPrimitive.Portal;\nconst DropdownMenuSub = DropdownMenuPrimitive.Sub;\nconst DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;\n\nconst DropdownMenuSubTrigger = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & {\n        inset?: boolean;\n    }\n>(({ className, inset, children, ...props }, ref) => (\n    <DropdownMenuPrimitive.SubTrigger\n        ref={ref}\n        className={cn(\n            'flex cursor-pointer select-none items-center px-3 py-2',\n            'font-bold outline-none',\n            'focus:bg-brutal-accent focus:text-brutal-fg data-[state=open]:bg-brutal-accent data-[state=open]:text-brutal-fg',\n            inset && 'pl-8',\n            className\n        )}\n        {...props}\n    >\n        {children}\n        <ChevronRight className=\"ml-auto h-4 w-4 stroke-[3]\" />\n    </DropdownMenuPrimitive.SubTrigger>\n));\nDropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;\n\nconst DropdownMenuSubContent = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>\n>(({ className, ...props }, ref) => (\n    <DropdownMenuPrimitive.SubContent\n        ref={ref}\n        className={cn(\n            'z-50 min-w-[8rem] overflow-hidden p-1',\n            'bg-brutal-bg text-brutal-fg border-3 border-brutal rounded-brutal shadow-brutal',\n            'data-[state=open]:animate-in data-[state=closed]:animate-out',\n            'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n            'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n            'data-[side=bottom]:slide-in-from-top-2',\n            'data-[side=left]:slide-in-from-right-2',\n            'data-[side=right]:slide-in-from-left-2',\n            'data-[side=top]:slide-in-from-bottom-2',\n            className\n        )}\n        {...props}\n    />\n));\nDropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayName;\n\nconst DropdownMenuContent = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.Content>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>\n>(({ className, sideOffset = 6, ...props }, ref) => (\n    <DropdownMenuPrimitive.Portal>\n        <DropdownMenuPrimitive.Content\n            ref={ref}\n            sideOffset={sideOffset}\n            className={cn(\n                'z-50 min-w-[8rem] overflow-hidden p-1',\n                'bg-brutal-bg text-brutal-fg border-3 border-brutal rounded-brutal shadow-brutal',\n                'data-[state=open]:animate-in data-[state=closed]:animate-out',\n                'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n                'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n                'data-[side=bottom]:slide-in-from-top-2',\n                'data-[side=left]:slide-in-from-right-2',\n                'data-[side=right]:slide-in-from-left-2',\n                'data-[side=top]:slide-in-from-bottom-2',\n                className\n            )}\n            {...props}\n        />\n    </DropdownMenuPrimitive.Portal>\n));\nDropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;\n\nconst DropdownMenuItem = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.Item>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {\n        inset?: boolean;\n    }\n>(({ className, inset, ...props }, ref) => (\n    <DropdownMenuPrimitive.Item\n        ref={ref}\n        className={cn(\n            'relative flex cursor-pointer select-none items-center px-3 py-2',\n            'font-bold outline-none transition-colors',\n            'focus:bg-brutal-accent focus:text-brutal-fg',\n            'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n            'hover:bg-brutal-muted',\n            inset && 'pl-8',\n            className\n        )}\n        {...props}\n    />\n));\nDropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;\n\nconst DropdownMenuCheckboxItem = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>\n>(({ className, children, checked, ...props }, ref) => (\n    <DropdownMenuPrimitive.CheckboxItem\n        ref={ref}\n        className={cn(\n            'relative flex cursor-pointer select-none items-center py-2 pl-8 pr-3',\n            'font-bold outline-none transition-colors',\n            'focus:bg-brutal-accent focus:text-brutal-fg',\n            'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n            className\n        )}\n        checked={checked}\n        {...props}\n    >\n        <span className=\"absolute left-2 flex h-4 w-4 items-center justify-center\">\n            <DropdownMenuPrimitive.ItemIndicator>\n                <Check className=\"h-4 w-4 stroke-[3]\" />\n            </DropdownMenuPrimitive.ItemIndicator>\n        </span>\n        {children}\n    </DropdownMenuPrimitive.CheckboxItem>\n));\nDropdownMenuCheckboxItem.displayName = DropdownMenuPrimitive.CheckboxItem.displayName;\n\nconst DropdownMenuRadioItem = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>\n>(({ className, children, ...props }, ref) => (\n    <DropdownMenuPrimitive.RadioItem\n        ref={ref}\n        className={cn(\n            'relative flex cursor-pointer select-none items-center py-2 pl-8 pr-3',\n            'font-bold outline-none transition-colors',\n            'focus:bg-brutal-accent focus:text-brutal-fg',\n            'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n            className\n        )}\n        {...props}\n    >\n        <span className=\"absolute left-2 flex h-4 w-4 items-center justify-center\">\n            <DropdownMenuPrimitive.ItemIndicator>\n                <Circle className=\"h-2 w-2 fill-current\" />\n            </DropdownMenuPrimitive.ItemIndicator>\n        </span>\n        {children}\n    </DropdownMenuPrimitive.RadioItem>\n));\nDropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName;\n\nconst DropdownMenuLabel = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.Label>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> & {\n        inset?: boolean;\n    }\n>(({ className, inset, ...props }, ref) => (\n    <DropdownMenuPrimitive.Label\n        ref={ref}\n        className={cn('px-3 py-2 text-sm font-black tracking-wide', inset && 'pl-8', className)}\n        {...props}\n    />\n));\nDropdownMenuLabel.displayName = DropdownMenuPrimitive.Label.displayName;\n\nconst DropdownMenuSeparator = React.forwardRef<\n    React.ElementRef<typeof DropdownMenuPrimitive.Separator>,\n    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>\n>(({ className, ...props }, ref) => (\n    <DropdownMenuPrimitive.Separator\n        ref={ref}\n        className={cn('-mx-1 my-1 h-[3px] bg-[var(--brutal-border-color,#000)]', className)}\n        {...props}\n    />\n));\nDropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;\n\nconst DropdownMenuShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {\n    return (\n        <span\n            className={cn('ml-auto text-xs tracking-widest opacity-60 font-bold', className)}\n            {...props}\n        />\n    );\n};\nDropdownMenuShortcut.displayName = 'DropdownMenuShortcut';\n\nexport {\n    DropdownMenu,\n    DropdownMenuTrigger,\n    DropdownMenuContent,\n    DropdownMenuItem,\n    DropdownMenuCheckboxItem,\n    DropdownMenuRadioItem,\n    DropdownMenuLabel,\n    DropdownMenuSeparator,\n    DropdownMenuShortcut,\n    DropdownMenuGroup,\n    DropdownMenuPortal,\n    DropdownMenuSub,\n    DropdownMenuSubContent,\n    DropdownMenuSubTrigger,\n    DropdownMenuRadioGroup,\n};\n",
+      "path": "components/ui/dropdown-menu/DropdownMenuCheckboxItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    DropdownMenuCheckboxItem as DropdownMenuCheckboxItemPrimitive,\n    DropdownMenuItemIndicator as DropdownMenuItemIndicatorPrimitive,\n} from 'reka-ui'\nimport { Check } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuCheckboxItemProps {\n    modelValue?: boolean | 'indeterminate'\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuCheckboxItemProps>()\n\nconst emit = defineEmits<{\n    'update:modelValue': [value: boolean | 'indeterminate']\n}>()\n\nconst classes = computed(() =>\n    cn(\n        'relative flex cursor-pointer select-none items-center py-2 pl-8 pr-3',\n        'font-bold outline-none transition-colors',\n        'focus:bg-brutal-accent focus:text-brutal-fg',\n        'focus-visible:ring-2 focus-visible:ring-brutal-ring',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DropdownMenuCheckboxItemPrimitive :model-value=\"modelValue\" :class=\"classes\" @update:model-value=\"emit('update:modelValue', $event)\">\n        <span class=\"absolute left-2 flex h-4 w-4 items-center justify-center\">\n            <DropdownMenuItemIndicatorPrimitive>\n                <Check class=\"h-4 w-4 stroke-[3]\" />\n            </DropdownMenuItemIndicatorPrimitive>\n        </span>\n        <slot />\n    </DropdownMenuCheckboxItemPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    DropdownMenuPortal as DropdownMenuPortalPrimitive,\n    DropdownMenuContent as DropdownMenuContentPrimitive,\n} from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuContentProps {\n    sideOffset?: number\n    class?: string\n}\n\nconst props = withDefaults(defineProps<DropdownMenuContentProps>(), {\n    sideOffset: 6,\n    class: '',\n})\n\nconst classes = computed(() =>\n    cn(\n        'z-50 min-w-[8rem] overflow-hidden p-1',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal shadow-brutal rounded-brutal',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n        'data-[side=bottom]:slide-in-from-top-2',\n        'data-[side=left]:slide-in-from-right-2',\n        'data-[side=right]:slide-in-from-left-2',\n        'data-[side=top]:slide-in-from-bottom-2',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DropdownMenuPortalPrimitive>\n        <DropdownMenuContentPrimitive :side-offset=\"sideOffset\" :class=\"classes\">\n            <slot />\n        </DropdownMenuContentPrimitive>\n    </DropdownMenuPortalPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DropdownMenuItem as DropdownMenuItemPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuItemProps {\n    inset?: boolean\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuItemProps>()\n\nconst classes = computed(() =>\n    cn(\n        'relative flex cursor-pointer select-none items-center px-3 py-2',\n        'font-bold outline-none transition-colors',\n        'focus:bg-brutal-accent focus:text-brutal-fg',\n        'focus-visible:ring-2 focus-visible:ring-brutal-ring',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n        props.inset && 'pl-8',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DropdownMenuItemPrimitive :class=\"classes\">\n        <slot />\n    </DropdownMenuItemPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuLabel.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DropdownMenuLabel as DropdownMenuLabelPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuLabelProps {\n    inset?: boolean\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuLabelProps>()\n\nconst classes = computed(() =>\n    cn(\n        'px-3 py-2 text-sm font-black tracking-wide',\n        props.inset && 'pl-8',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DropdownMenuLabelPrimitive :class=\"classes\">\n        <slot />\n    </DropdownMenuLabelPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuRadioItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport {\n    DropdownMenuRadioItem as DropdownMenuRadioItemPrimitive,\n    DropdownMenuItemIndicator as DropdownMenuItemIndicatorPrimitive,\n} from 'reka-ui'\nimport { Circle } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuRadioItemProps {\n    value: string\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuRadioItemProps>()\n\nconst classes = computed(() =>\n    cn(\n        'relative flex cursor-pointer select-none items-center py-2 pl-8 pr-3',\n        'font-bold outline-none transition-colors',\n        'focus:bg-brutal-accent focus:text-brutal-fg',\n        'focus-visible:ring-2 focus-visible:ring-brutal-ring',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DropdownMenuRadioItemPrimitive :value=\"value\" :class=\"classes\">\n        <span class=\"absolute left-2 flex h-4 w-4 items-center justify-center\">\n            <DropdownMenuItemIndicatorPrimitive>\n                <Circle class=\"h-2 w-2 fill-current\" />\n            </DropdownMenuItemIndicatorPrimitive>\n        </span>\n        <slot />\n    </DropdownMenuRadioItemPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DropdownMenuSeparator as DropdownMenuSeparatorPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuSeparatorProps {\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuSeparatorProps>()\n\nconst classes = computed(() =>\n    cn('-mx-1 my-1 h-[3px] bg-brutal-fg', props.class)\n)\n</script>\n\n<template>\n    <DropdownMenuSeparatorPrimitive :class=\"classes\" />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuShortcut.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuShortcutProps {\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuShortcutProps>()\n\nconst classes = computed(() =>\n    cn('ml-auto text-xs tracking-widest opacity-60 font-bold', props.class)\n)\n</script>\n\n<template>\n    <span :class=\"classes\">\n        <slot />\n    </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuSubContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DropdownMenuSubContent as DropdownMenuSubContentPrimitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuSubContentProps {\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuSubContentProps>()\n\nconst classes = computed(() =>\n    cn(\n        'z-50 min-w-[8rem] overflow-hidden p-1',\n        'bg-brutal-bg text-brutal-fg border-3 border-brutal shadow-brutal rounded-brutal',\n        'data-[state=open]:animate-in data-[state=closed]:animate-out',\n        'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',\n        'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',\n        'data-[side=bottom]:slide-in-from-top-2',\n        'data-[side=left]:slide-in-from-right-2',\n        'data-[side=right]:slide-in-from-left-2',\n        'data-[side=top]:slide-in-from-bottom-2',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DropdownMenuSubContentPrimitive :class=\"classes\">\n        <slot />\n    </DropdownMenuSubContentPrimitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/ui/dropdown-menu/DropdownMenuSubTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport { computed } from 'vue'\nimport { DropdownMenuSubTrigger as DropdownMenuSubTriggerPrimitive } from 'reka-ui'\nimport { ChevronRight } from 'lucide-vue-next'\nimport { cn } from '@/lib/utils'\n\ninterface DropdownMenuSubTriggerProps {\n    inset?: boolean\n    class?: string\n}\n\nconst props = defineProps<DropdownMenuSubTriggerProps>()\n\nconst classes = computed(() =>\n    cn(\n        'flex cursor-pointer select-none items-center px-3 py-2',\n        'font-bold outline-none',\n        'focus:bg-brutal-accent focus:text-brutal-fg data-[state=open]:bg-brutal-accent data-[state=open]:text-brutal-fg',\n        'active:translate-y-[var(--brutal-pressed-offset,2px)] active:shadow-none',\n        'focus-visible:ring-2 focus-visible:ring-brutal-ring',\n        props.inset && 'pl-8',\n        props.class\n    )\n)\n</script>\n\n<template>\n    <DropdownMenuSubTriggerPrimitive :class=\"classes\">\n        <slot />\n        <ChevronRight class=\"ml-auto h-4 w-4 stroke-[3]\" />\n    </DropdownMenuSubTriggerPrimitive>\n</template>\n",
       "type": "registry:ui"
     }
   ],
@@ -38,7 +78,11 @@
             "brutal-destructive": "var(--brutal-destructive, #EF476F)",
             "brutal-success": "var(--brutal-success, #7FB069)",
             "brutal-muted": "var(--brutal-muted, #f3f4f6)",
-            "brutal-ring": "var(--brutal-ring, #000000)"
+            "brutal-ring": "var(--brutal-ring, #000000)",
+            "brutal-info": "var(--brutal-info, #4A90D9)",
+            "brutal-muted-foreground": "var(--brutal-muted-foreground, #4B5563)",
+            "brutal-overlay": "var(--brutal-overlay, rgba(0, 0, 0, 0.5))",
+            "brutal-placeholder": "var(--brutal-placeholder, #9CA3AF)"
           },
           "boxShadow": {
             "brutal": "var(--brutal-shadow-offset-x, 4px) var(--brutal-shadow-offset-y, 4px) 0px 0px var(--brutal-shadow-color, #000000)",
@@ -68,7 +112,10 @@
       "brutal-success": "#7FB069",
       "brutal-muted": "#f3f4f6",
       "brutal-ring": "#000000",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#4A90D9",
+      "brutal-muted-foreground": "#4B5563",
+      "brutal-overlay": "rgba(0, 0, 0, 0.5)",
+      "brutal-placeholder": "#9CA3AF"
     },
     "dark": {
       "brutal-border-width": "3px",
@@ -78,16 +125,19 @@
       "brutal-shadow-color": "#ffffff",
       "brutal-radius": "0px",
       "brutal-pressed-offset": "2px",
-      "brutal-bg": "#111827",
+      "brutal-bg": "#141414",
       "brutal-fg": "#ffffff",
       "brutal-primary": "#FF6B6B",
       "brutal-secondary": "#4ECDC4",
       "brutal-accent": "#FFE66D",
       "brutal-destructive": "#EF476F",
       "brutal-success": "#7FB069",
-      "brutal-muted": "#1f2937",
+      "brutal-muted": "#1e1e1e",
       "brutal-ring": "#ffffff",
-      "brutal-info": "#4A90D9"
+      "brutal-info": "#3B82F6",
+      "brutal-muted-foreground": "#9CA3AF",
+      "brutal-overlay": "rgba(0, 0, 0, 0.7)",
+      "brutal-placeholder": "#6B7280"
     }
   }
 }
